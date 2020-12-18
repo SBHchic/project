@@ -1680,12 +1680,12 @@ public class NormalStarforce {
 		long beforeRun = System.currentTimeMillis(); // 메서드를 돌리기 전의 시간
 
 		// 변수 수정해야하는 부분
-		int level = 140; // 아이템 레벨
+		int level = 200; // 아이템 레벨
 		int fromStarforce = 0; // 시작 스타포스
-		int toStarforce = 23; // 도달 스타포스
-		byte succededCatch = 0; // 스타캐치 여부 (0 : 스타포스캐치x, 1 : 합연산, 2 : 곱연산)
+		int toStarforce = 17; // 도달 스타포스
+		byte succededCatch = 1; // 스타캐치 여부 (0 : 스타포스캐치x, 1 : 합연산, 2 : 곱연산)
 		boolean ignoreDestroy = false; // 파괴방지 여부
-		int countItem = 1000000; // 아이템의 개수 (표본)
+		int countItem = 100000; // 아이템의 개수 (표본)
 		boolean discountPCRoom = false; // PC방 할인
 		byte discountMVPGrade = 0; //MVP 등급 할인 (0 : x, 1 : 실버, 2 : 골드, 3 : 다이아, 레드)
 		byte mapleEvent = 0; // 0 : x, 1 : 30퍼 할인, 2: 1+1, 3. 15 16 100퍼
