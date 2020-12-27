@@ -1,4 +1,4 @@
-package Project.Starforce;
+package project.starforce;
 
 //import java.math.BigInteger; // 10만배열도 거뜬히 가능한 수준이라 사용할 가치를 느끼지 못함
 //import java.time.*; // runtime을 위해 사용 (12.9 15:40) - 수정 : runtime을 나타낼 때 LocalTime 클래스를 사용하지 않고 System.currentTimeMillis()를 사용하기 때문에 import할 이유 없음.

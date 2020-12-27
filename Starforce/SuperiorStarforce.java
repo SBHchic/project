@@ -1,4 +1,4 @@
-package Project.Starforce;
+package project.starforce;
 
 // 할인, 이벤트 사용불가 + 파괴방지 x + 실패하면 무조건 하락
 // 슈페리얼 아이템 : 헬리시움 (80제), 노바 (110제), 타일런트 (150제)
