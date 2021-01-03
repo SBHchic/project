@@ -13,14 +13,16 @@ abstract class Item {
     long starforcePrice = 0;
     int upgradePercent = 0;
     byte variableStarforce = 0;
-    int chanceTime = 0;
+	int chanceTime = 0;
+	byte succededCatch;
     int sumOfStarforceCatch; // 스타포스캐치 합연산
     float multipleOfStarforceCatch; // 스타포스캐치 곱연산
 
     // 생성자
     Item(int level, int fromStarforce, byte succededCatch){
         this.level = level;
-        this.starforce = fromStarforce;
+		this.starforce = fromStarforce;
+		this.succededCatch = succededCatch;
         switch (succededCatch){
 			case 0: // 스타포스캐치 해제
 			this.sumOfStarforceCatch = 0;
@@ -152,9 +154,14 @@ class NormalItem extends Item {
 	boolean ignoreDestroy; // 파괴방지 여부
 	int maxStarforce;
 	byte mapleEvent = 0;
+	boolean roomOfPC;
 	float discountPCRoom = 0f;
+	byte gradeOfMVP;
 	float[] discountMVPGrade = {0f, 0.03f, 0.05f, 0.1f}; //실버 : 3%, 골드 : 5%, 다이아,레드 : 10%
-    float discountMVP = 0f;
+	float discountMVP = 0f;
+	int toadToStarforce = 0;
+	boolean toadHammer = false;
+	boolean toadIgnoreDestroy;
     
     // 생성자
     NormalItem(int level, int fromStarforce, byte succededCatch){
@@ -164,7 +171,9 @@ class NormalItem extends Item {
 
     NormalItem(int level, int fromStarforce, byte succededCatch, byte mapleEvent, boolean discountPCRoom, byte discountMVPGrade) {
         this(level, fromStarforce, succededCatch);
-        this.mapleEvent = mapleEvent;
+		this.mapleEvent = mapleEvent;
+		roomOfPC = discountPCRoom;
+		gradeOfMVP = discountMVPGrade;
         if (discountPCRoom == true) {
 			this.discountPCRoom = 0.05f;
 		}
@@ -185,6 +194,14 @@ class NormalItem extends Item {
 				destroyPercent[i] = destroyPercent[10];
 			}
         }
+	}
+
+	NormalItem(int level, int fromStarforce, byte succededCatch, byte mapleEvent, boolean discountPCRoom, byte discountMVPGrade , boolean ignoreDestroy, int toadToStarforce){
+		this(level, fromStarforce, succededCatch, mapleEvent, discountPCRoom, discountMVPGrade, ignoreDestroy);
+		if (0 < toadToStarforce && toadToStarforce <= 25){
+			toadHammer = true;
+			this.toadToStarforce = toadToStarforce;
+		} 
 	}
 
     // 메서드
@@ -240,11 +257,1233 @@ class NormalItem extends Item {
         this.upgradeCount += ti.upgradeCount;
         this.destroyCount += ti.destroyCount;
         this.sumUpgradePrice += ti.sumUpgradePrice;
-        this.chanceTime += super.chanceTime;
+        this.chanceTime += ti.chanceTime;
     }
     
-    static NormalItem goTo(NormalItem ni, int toStarforce) {
-        return ni;
+    static NormalItem goTo(NormalItem ni, int toStarforce, boolean toadIgnoreDestroy) {
+		ni.toadIgnoreDestroy = toadIgnoreDestroy;
+        if (ni.starforce >= toStarforce || ni.starforce < 0 || ni.maxStarforce <= toStarforce || ni.maxStarforce <= ni.starforce) { 
+			throw new RuntimeException("유효하지 않은 강화입니다.");
+		} else {
+			switch(ni.mapleEvent){
+				case 0: // 이벤트 x
+				do {
+					if (ni.toadHammer == true && ni.starforce == 0){
+						ToadItem ti = new ToadItem(ni.level, ni.starforce, ni.succededCatch, ni.mapleEvent, ni.roomOfPC, ni.gradeOfMVP, ni.toadIgnoreDestroy);
+						ti.goTo(ni.toadToStarforce);
+						ni.fromToadItemToNormalItem(ti);
+					} else{
+						ni.upgradeCount++;
+						int percent = (int)(Math.random() * 100000);
+						if (ni.starforce < 3) {
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce + 1)/25))*(1 - ni.discountMVP - ni.discountPCRoom)/100);
+							ni.upgradePercent = (int)(((95 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch); 
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+							} 
+						} else if (ni.starforce < 10) {
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce) + 1)/25)*(1 - ni.discountMVP - ni.discountPCRoom)/100);
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+							} 
+						} else if (ni.starforce == 10) {
+							ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							}
+						} else if (ni.starforce < 12) { 
+							ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) { 
+									ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 12) { 
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)/100
+												+(long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							} else {
+								ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							}
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[0]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 13) {
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)/100
+												+(long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							} else {
+								ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							}
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[1]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 14) {
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)/100
+												+(long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							} else {
+								ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							}
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[2]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 15) {
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100
+												+(long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)*(1 - ni.discountMVP - ni.discountPCRoom))/100;;
+							} else {
+								ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)*(1 - ni.discountMVP - ni.discountPCRoom))/100;;
+							}
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[3]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							}
+						} else if (ni.starforce == 16) {
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100
+												+(long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							} else {
+								ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							}
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[3]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 17) {
+							ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[4]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce < 20) {
+							ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[5]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 20) {
+							ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[6]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							}
+						} else if (ni.starforce == 21) {
+							ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[6]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 22) {
+							ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
+							ni.upgradePercent = (int)((3000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[7]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 23) {
+							ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
+							ni.upgradePercent = (int)((2000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[8]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 24) {
+							ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
+							ni.upgradePercent = (int)((1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[9]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+							}
+						}
+					}
+				} while(ni.starforce != toStarforce);
+				ni.upgradeCount += ni.chanceTime;
+				break;
+
+				case 1: // 30 퍼센트 할인 (곱연산) 
+				do {
+					if (ni.toadHammer == true && ni.starforce == 0){
+						ToadItem ti = new ToadItem(ni.level, ni.starforce, ni.succededCatch, ni.mapleEvent, ni.roomOfPC, ni.gradeOfMVP, toadIgnoreDestroy);
+						ti.goTo(ni.toadToStarforce);
+						ni.fromToadItemToNormalItem(ti);
+					} else {
+						ni.upgradeCount++;
+						int percent = (int)(Math.random() * 100000); 
+						if (ni.starforce < 3) {
+							ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * (ni.starforce + 1)/25)*(1 - ni.discountMVP - ni.discountPCRoom)*0.7/100);
+							ni.upgradePercent = (int)(((95 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch); 
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+							}
+						} else if (ni.starforce < 10) {
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce) + 1)/25)*(1 - ni.discountMVP - ni.discountPCRoom)*0.7/100);
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+							}
+						} else if (ni.starforce == 10) {
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							}
+						} else if (ni.starforce < 12) { 
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) { 
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 12) { 
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
+												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+							} else {
+								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+							}
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[0]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 13) {
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
+												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+							} else {
+								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+							}
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[1]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 14) {
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
+												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+							} else {
+								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+							}
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[2]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 15) {
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100
+												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+							} else {
+								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+							}
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[3]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} 
+						} else if (ni.starforce == 16) {
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100
+												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+							} else {
+								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+							}
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[3]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 17) {
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[4]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce < 20) {
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[5]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 20) {
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[6]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} 
+						} else if (ni.starforce == 21) {
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[6]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 22) {
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
+							ni.upgradePercent = (int)((3000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[7]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 23) {
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
+							ni.upgradePercent = (int)((2000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[8]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 24) {
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
+							ni.upgradePercent = (int)((1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[9]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+							}
+						}
+					}
+				} while(ni.starforce != toStarforce);
+				ni.upgradeCount += ni.chanceTime;
+				break;
+
+				case 2: // 10성까지 스타포스 1+1 
+				do {
+					if (ni.toadHammer == true && ni.starforce == 0){
+						ToadItem ti = new ToadItem(ni.level, ni.starforce, ni.succededCatch, ni.mapleEvent, ni.roomOfPC, ni.gradeOfMVP, toadIgnoreDestroy);
+						ti.goTo(ni.toadToStarforce);
+						ni.fromToadItemToNormalItem(ti);
+					} else {
+						ni.upgradeCount++;
+						int percent = (int)(Math.random() * 100000); 
+						if (ni.starforce < 3) {
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce + 1)/25))*(1 - ni.discountMVP - ni.discountPCRoom)/100);
+							ni.upgradePercent = (int)(((95 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch); 
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.starforce++; 
+							} 
+						} else if (ni.starforce < 10) {
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce) + 1)/25)*(1 - ni.discountMVP - ni.discountPCRoom)/100);
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.starforce++;
+							} 
+						} else if (ni.starforce == 10) {
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} 
+						} else if (ni.starforce < 12) { 
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) { 
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.starforce++; 
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 12) { 
+							// 
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
+												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							} else {
+								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							}
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[0]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 13) {
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
+												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							} else {
+								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							}
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[1]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 14) {
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
+												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							} else {
+								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							}
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[2]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 15) {
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100
+												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;;
+							} else {
+								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;;
+							}
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[3]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} 
+						} else if (ni.starforce == 16) {
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100
+												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							} else {
+								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							}
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[3]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 17) {
+							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[4]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce < 20) {
+							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[5]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 20) {
+							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[6]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} 
+						} else if (ni.starforce == 21) {
+							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[6]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 22) {
+							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.upgradePercent = (int)((3000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[7]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 23) {
+							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.upgradePercent = (int)((2000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[8]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 24) {
+							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.upgradePercent = (int)((1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[9]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+							}
+						}
+					}
+				} while(ni.starforce < toStarforce);
+				ni.upgradeCount += ni.chanceTime;
+				break;
+
+				case 3: // 5의배수 100퍼센트 강화 성공 (15성 까지)
+				do {
+					if (ni.toadHammer == true && ni.starforce == 0){
+						ToadItem ti = new ToadItem(ni.level, ni.starforce, ni.succededCatch, ni.mapleEvent, ni.roomOfPC, ni.gradeOfMVP, toadIgnoreDestroy);
+						ti.goTo(ni.toadToStarforce);
+						ni.fromToadItemToNormalItem(ti);
+					} else {
+						ni.upgradeCount++;
+						int percent = (int)(Math.random() * 100000); 
+						if (ni.starforce < 3) {
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce + 1)/25))*(1 - ni.discountMVP - ni.discountPCRoom)/100);
+							ni.upgradePercent = (int)(((95 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch); 
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+							} 
+						} else if (ni.starforce < 10) {
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce) + 1)/25)*(1 - ni.discountMVP - ni.discountPCRoom)/100);
+							if (ni.starforce == 5) { 
+								ni.upgradePercent = 100000;
+							}else {
+								ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							}
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+							} 
+						} else if (ni.starforce == 10) { 
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+								ni.sumUpgradePrice += ni.starforcePrice;
+								ni.starforce++;
+								ni.variableStarforce = 0;
+						} else if (ni.starforce < 12) { 
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) { 
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 12) { 
+							// 
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
+												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							} else {
+								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							}
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[0]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 13) {
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
+												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							} else {
+								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							}
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[1]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 14) {
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
+												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							} else {
+								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							}
+							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[2]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 15) { 
+							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							ni.sumUpgradePrice += ni.starforcePrice;
+							ni.starforce++;
+							ni.variableStarforce = 0;
+						} else if (ni.starforce == 16) {
+							if (ni.ignoreDestroy == true) {
+								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100
+												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							} else {
+								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							}
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[3]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 17) {
+							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[4]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce < 20) {
+							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[5]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 20) {
+							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[6]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} 
+						} else if (ni.starforce == 21) {
+							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[6]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 22) {
+							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.upgradePercent = (int)((3000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[7]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 23) {
+							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.upgradePercent = (int)((2000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[8]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+								if (ni.variableStarforce == -2) {
+									ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.starforce++;
+									ni.variableStarforce = 0;
+									ni.chanceTime++;
+								}
+							}
+						} else if (ni.starforce == 24) {
+							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.upgradePercent = (int)((1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
+							ni.sumUpgradePrice += ni.starforcePrice;
+							if (percent < ni.upgradePercent) {
+								ni.starforce++;
+								ni.variableStarforce = 0;
+							} else if (percent < ni.upgradePercent + ni.destroyPercent[9]) {
+								ni.starforce = 0;
+								ni.destroyCount++;
+							} else {
+								ni.starforce--;
+								ni.variableStarforce--;
+							}
+						}
+					}
+				} while(ni.starforce != toStarforce);
+				ni.upgradeCount += ni.chanceTime;
+				break;
+			}
+			return ni;
+		}
     }
 
 }
@@ -252,7 +1491,7 @@ class NormalItem extends Item {
 class ToadItem extends NormalItem{
 
     // 인스턴스 변수
-    int toadToStarforce;
+	int toadToStarforce;
 
     // 생성자
     ToadItem(int level, int fromStarforce, byte succededCatch, byte mapleEvent, boolean discountPCRoom, byte discountMVPGrade, boolean toadIgnoreDestroy){
@@ -262,7 +1501,7 @@ class ToadItem extends NormalItem{
         } else {
             this.level -= 10;
         }
-        this.ignoreDestroy = toadIgnoreDestroy;
+        ignoreDestroy = toadIgnoreDestroy;
 		if (ignoreDestroy == true) {
 			for (int i = 0; i < 4; i++) {
 				destroyPercent[i] = destroyPercent[10];
@@ -279,7 +1518,7 @@ class ToadItem extends NormalItem{
         } else {
 			switch(mapleEvent){
 				case 0: // 이벤트 x
-				do {;
+				do {
 					upgradeCount++;
 					int percent = (int)(Math.random() * 100000);
 					if (starforce < 3) {
@@ -1763,7 +3002,7 @@ class SuperiorItem extends Item {
 class ResultInfo{
 
     // 인스턴스 변수
-    int count = 0;
+    static int count = 0;
     int serialNo;
 	String item = "";
 	int level;
@@ -1787,10 +3026,13 @@ class ResultInfo{
     int minChanceTimeCount;
     int maxChanceTimeCount;
 	long averageChanceTimeCount;
+	boolean toadHammer;
+	int toadToStarforce;
+	boolean toadIgnoreDestroy;
     
     // 인스턴스 초기화 블럭
     {
-        count++;
+        ++count;
         serialNo = count;
     }
 
@@ -1809,6 +3051,12 @@ class ResultInfo{
 			this.ignoreDestroy = ni.ignoreDestroy; // 파괴방지 여부
 			this.countItem = itemArr.length; // 아이템의 개수 (표본)
 			this.mapleEvent = ni.mapleEvent; // 0 : x, 1 : 30퍼 할인, 2: 1+1, 3. 15 16 100퍼
+			this.succededCatch = ni.succededCatch;
+			discountPCRoom = ni.roomOfPC;
+			discountMVPGrade = ni.gradeOfMVP;
+			this.toadHammer = ni.toadHammer;
+			this.toadToStarforce = ni.toadToStarforce;
+			this.toadIgnoreDestroy = ni.toadIgnoreDestroy;
 		} else if (itemArr[0] instanceof SuperiorItem){
 			SuperiorItem si = (SuperiorItem)itemArr[0];
 			this.item = "슈페리얼";
@@ -1820,9 +3068,19 @@ class ResultInfo{
 
 	void printProperty(){
 		System.out.println("==== " + this.level + "제 아이템의 " + this.countItem + "개 " + this.fromStarforce + "성 -> " + this.toStarforce + "성까지의 강화 ====");
-		System.out.println("추가 설명 : 스타캐치 " + Item.starCatchToString(this.succededCatch) + ", 파괴방지 : " + NormalItem.booleanToString(this.ignoreDestroy)
-		+ ", PC방 할인 : " + NormalItem.booleanToString(this.discountPCRoom) + ", MVP 등급 : " + NormalItem.MVPGradeToString(this.discountMVPGrade));
-		System.out.println("메이플 이벤트 적용 : " + NormalItem.mapleEventToString(this.mapleEvent));
+		System.out.print("추가 설명 : 스타캐치 " + Item.starCatchToString(this.succededCatch));
+		if ((this.item).equals("노말")){
+			System.out.println(", 파괴방지 : " + NormalItem.booleanToString(this.ignoreDestroy)
+				+ ", PC방 할인 : " + NormalItem.booleanToString(this.discountPCRoom) + ", MVP 등급 : " + NormalItem.MVPGradeToString(this.discountMVPGrade));
+			System.out.print("토드여부 : " + NormalItem.booleanToString(this.toadHammer)); 
+			if (this.toadHammer == true) {
+				System.out.print(" 토드템 0성 -> " + this.toadToStarforce + "성, 토드템 파괴방지 : " + NormalItem.booleanToString(this.toadIgnoreDestroy));
+			}
+		}
+		System.out.println();
+		if ((this.item).equals("노말")){
+			System.out.println("메이플 이벤트 적용 : " + NormalItem.mapleEventToString(this.mapleEvent));
+		}
 		System.out.println(this.countItem + "개의 아이템 중 스타포스 강화 최소비용은 " + this.minSumUpgradePrice + "00메소 입니다.");
 		System.out.println(this.countItem + "개의 아이템 중 스타포스 강화 최대비용은 " + this.maxSumUpgradePrice + "00메소 입니다.");
 		System.out.println(this.countItem + "개의 아이템의 평균적인 스타포스 강화 비용은 " + this.averageSumUpgradePrice + "00메소 입니다.");
@@ -1838,10 +3096,21 @@ class ResultInfo{
 	}
 
 	public String toString(){
+		if (this.item.equals("노말")){
+			if (this.toadHammer == true){
+				return this.serialNo + ") : " + this.countItem + "개 " + this.level + "제 " + this.item + " 아이템 " + this.fromStarforce + "성 -> " + this.toStarforce + "성" + "\n"
+				 + "스타캐치 : " + Item.starCatchToString(this.succededCatch) + ", 파괴방지 : " + NormalItem.booleanToString(this.ignoreDestroy)
+				 + ", PC방 할인 : " + NormalItem.booleanToString(this.discountPCRoom) + ", MVP 등급 : " + NormalItem.MVPGradeToString(this.discountMVPGrade) + "\n"
+				 + ", 토드 여부 : " + NormalItem.booleanToString(this.toadHammer) + ", 토드템 0성 -> " + this.toadToStarforce + "성, 토드템 파괴방지 : " + NormalItem.booleanToString(this.toadIgnoreDestroy) + "\n"
+				 + "메이플 이벤트 적용 : " + NormalItem.mapleEventToString(this.mapleEvent) + "\n\n";
+			}
+			return this.serialNo + ") : " + this.countItem + "개 " + this.level + "제 " + this.item + " 아이템 " + this.fromStarforce + "성 -> " + this.toStarforce + "성" + "\n"
+			 + "스타캐치 : " + Item.starCatchToString(this.succededCatch) + ", 파괴방지 : " + NormalItem.booleanToString(this.ignoreDestroy)
+			 + ", PC방 할인 : " + NormalItem.booleanToString(this.discountPCRoom) + ", MVP 등급 : " + NormalItem.MVPGradeToString(this.discountMVPGrade) + "\n"
+			 + "메이플 이벤트 적용 : " + NormalItem.mapleEventToString(this.mapleEvent) + "\n\n";
+		}
 		return this.serialNo + ") : " + this.countItem + "개 " + this.level + "제 " + this.item + " 아이템 " + this.fromStarforce + "성 -> " + this.toStarforce + "성" + "\n"
-		 + "스타캐치 : " + Item.starCatchToString(this.succededCatch) + ", 파괴방지 : " + NormalItem.booleanToString(this.ignoreDestroy)
-		 + ", PC방 할인 : " + NormalItem.booleanToString(this.discountPCRoom) + ", MVP 등급 : " + NormalItem.MVPGradeToString(this.discountMVPGrade) + "\n"
-		 + "메이플 이벤트 적용 : " + NormalItem.mapleEventToString(this.mapleEvent) + "\n\n";
+		 + "스타캐치 : " + Item.starCatchToString(this.succededCatch) + "\n\n";
 	}
 	
 }
@@ -1878,10 +3147,11 @@ public class Starforce {
             	    argArr1 = input1.split(" ");
 
     	            System.out.println("선택적으로 필요한 옵션을 입력하세요");
-        	        System.out.println("양식 : 파괴방지여부 이벤트 피시방할인 MVP등급별할인");
-            	    System.out.println("참고1) 파괴방지여부, 피시방 할인 : true: O, false: X");
+        	        System.out.println("양식 : 파괴방지여부 이벤트 피시방할인 MVP등급별할인 토드템강화 토드템파괴방지여부");
+            	    System.out.println("참고1) 파괴방지여부, 피시방 할인, 토드템 파괴방지여부 : true: O, false: X");
                 	System.out.println("참고2) 이벤트 : 0: X 1: 30%할인, 2: 1+1, 3: 5배수");
-	                System.out.println("참고3) MVP등급 : 0: X 1: 실버, 2: 골드, 3: 다이아,레드");
+					System.out.println("참고3) MVP등급 : 0: X 1: 실버, 2: 골드, 3: 다이아,레드");
+					System.out.println("참고4) 토드템 강화 : 0: 토드미사용, 1~25: 1~25성까지 토드템 강화");
     	            String[] argArr2 = null;
         	        String input2 = s.nextLine();
             	    input2 = input2.trim();
@@ -1891,18 +3161,21 @@ public class Starforce {
     	            for (int i = 0; i < normal.length; i++){
         	            normal[i] = new NormalItem(Integer.parseInt(argArr1[2]), Integer.parseInt(argArr1[3]),
             	        Byte.parseByte(argArr1[4]), Byte.parseByte(argArr2[1]), Boolean.parseBoolean(argArr2[2]) ,
-                        Byte.parseByte(argArr2[3]), Boolean.parseBoolean(argArr2[0]));
-                    	NormalItem.goTo(normal[i], Integer.parseInt(argArr1[1]));
+                        Byte.parseByte(argArr2[3]), Boolean.parseBoolean(argArr2[0]), Integer.parseInt(argArr2[4]));
+                    	NormalItem.goTo(normal[i], Integer.parseInt(argArr1[1]), Boolean.parseBoolean(argArr2[5]));
 	                }
 					ResultInfo ri = new ResultInfo();
 					ri.fromStarforce = Integer.parseInt(argArr1[3]);
-					ri.succededCatch = Byte.parseByte(argArr1[4]);
-					ri.discountPCRoom = Boolean.parseBoolean(argArr2[2]);
-					ri.discountMVPGrade = Byte.parseByte(argArr2[3]);
+					ri.toadIgnoreDestroy = Boolean.parseBoolean(argArr2[5]);
 					ri.savedProperty(normal);
         	        System.out.println("==== " + Integer.parseInt(argArr1[2]) + "제 아이템의 " + normal.length + "개 " + Integer.parseInt(argArr1[3]) + "성 -> " + Integer.parseInt(argArr1[1]) + "성까지의 강화 ====");
 	        		System.out.println("추가 설명 : 스타캐치 " + Item.starCatchToString(Byte.parseByte(argArr1[4])) + ", 파괴방지 : " + NormalItem.booleanToString(Boolean.parseBoolean(argArr2[0]))
 										 + ", PC방 할인 : " + NormalItem.booleanToString(Boolean.parseBoolean(argArr2[2])) + ", MVP 등급 : " + NormalItem.MVPGradeToString(Byte.parseByte(argArr2[3])));
+					System.out.print("토드여부 : " + NormalItem.booleanToString(ri.toadHammer)); 
+					if (ri.toadHammer == true) {
+						System.out.print(" 토드템 0성 -> " + ri.toadToStarforce + "성, 토드템 파괴방지 : " + NormalItem.booleanToString(ri.toadIgnoreDestroy));
+					}
+					System.out.println();
 		        	System.out.println("메이플 이벤트 적용 : " + NormalItem.mapleEventToString(Byte.parseByte(argArr2[1])));
 
 		        	System.out.println(Item.sumUpgradePriceMinMax(normal, ri));
