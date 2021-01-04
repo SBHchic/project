@@ -10,7 +10,6 @@ abstract class Item {
     int upgradeCount = 0;
     int destroyCount = 0;
     long sumUpgradePrice = 0;
-    long starforcePrice = 0;
     int upgradePercent = 0;
     byte variableStarforce = 0;
 	int chanceTime = 0;
@@ -276,31 +275,27 @@ class NormalItem extends Item {
 						ni.upgradeCount++;
 						int percent = (int)(Math.random() * 100000);
 						if (ni.starforce < 3) {
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce + 1)/25))*(1 - ni.discountMVP - ni.discountPCRoom)/100);
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce + 1)/25))*(1 - ni.discountMVP - ni.discountPCRoom)/100);
 							ni.upgradePercent = (int)(((95 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch); 
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 							} 
 						} else if (ni.starforce < 10) {
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce) + 1)/25)*(1 - ni.discountMVP - ni.discountPCRoom)/100);
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce) + 1)/25)*(1 - ni.discountMVP - ni.discountPCRoom)/100);
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 							} 
 						} else if (ni.starforce == 10) {
-							ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							ni.sumUpgradePrice += (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
 							}
 						} else if (ni.starforce < 12) { 
-							ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							ni.sumUpgradePrice += (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -308,8 +303,7 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) { 
-									ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
@@ -317,13 +311,12 @@ class NormalItem extends Item {
 							}
 						} else if (ni.starforce == 12) { 
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)/100
+								ni.sumUpgradePrice += (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)/100
 												+(long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							} else {
-								ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+								ni.sumUpgradePrice += (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							}
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -334,8 +327,7 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
@@ -343,13 +335,12 @@ class NormalItem extends Item {
 							}
 						} else if (ni.starforce == 13) {
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)/100
+								ni.sumUpgradePrice += (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)/100
 												+(long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							} else {
-								ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+								ni.sumUpgradePrice += (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							}
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -360,8 +351,7 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
@@ -369,13 +359,12 @@ class NormalItem extends Item {
 							}
 						} else if (ni.starforce == 14) {
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)/100
+								ni.sumUpgradePrice += (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)/100
 												+(long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							} else {
-								ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+								ni.sumUpgradePrice += (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							}
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -386,8 +375,7 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
@@ -395,13 +383,12 @@ class NormalItem extends Item {
 							}
 						} else if (ni.starforce == 15) {
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100
+								ni.sumUpgradePrice += (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100
 												+(long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)*(1 - ni.discountMVP - ni.discountPCRoom))/100;;
 							} else {
-								ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)*(1 - ni.discountMVP - ni.discountPCRoom))/100;;
+								ni.sumUpgradePrice += (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)*(1 - ni.discountMVP - ni.discountPCRoom))/100;;
 							}
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -411,13 +398,12 @@ class NormalItem extends Item {
 							}
 						} else if (ni.starforce == 16) {
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100
+								ni.sumUpgradePrice += (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100
 												+(long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							} else {
-								ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+								ni.sumUpgradePrice += (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							}
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -428,17 +414,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 17) {
-							ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
+							ni.sumUpgradePrice += (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -449,17 +433,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce < 20) {
-							ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
+							ni.sumUpgradePrice += (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -470,17 +452,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 20) {
-							ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
+							ni.sumUpgradePrice += (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -489,9 +469,8 @@ class NormalItem extends Item {
 								ni.destroyCount++;
 							}
 						} else if (ni.starforce == 21) {
-							ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
+							ni.sumUpgradePrice += (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -502,17 +481,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 22) {
-							ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
+							ni.sumUpgradePrice += (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
 							ni.upgradePercent = (int)((3000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -523,17 +500,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 23) {
-							ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
+							ni.sumUpgradePrice += (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
 							ni.upgradePercent = (int)((2000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -544,17 +519,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 24) {
-							ni.starforcePrice = (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
+							ni.sumUpgradePrice += (long)(1000+ Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200)/100;
 							ni.upgradePercent = (int)((1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -581,31 +554,27 @@ class NormalItem extends Item {
 						ni.upgradeCount++;
 						int percent = (int)(Math.random() * 100000); 
 						if (ni.starforce < 3) {
-							ni.starforcePrice = (long)((1000+ Math.pow((double)ni.level, 3.0) * (ni.starforce + 1)/25)*(1 - ni.discountMVP - ni.discountPCRoom)*0.7/100);
+							ni.sumUpgradePrice += (long)((1000+ Math.pow((double)ni.level, 3.0) * (ni.starforce + 1)/25)*(1 - ni.discountMVP - ni.discountPCRoom)*0.7/100);
 							ni.upgradePercent = (int)(((95 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch); 
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 							}
 						} else if (ni.starforce < 10) {
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce) + 1)/25)*(1 - ni.discountMVP - ni.discountPCRoom)*0.7/100);
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce) + 1)/25)*(1 - ni.discountMVP - ni.discountPCRoom)*0.7/100);
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 							}
 						} else if (ni.starforce == 10) {
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
 							}
 						} else if (ni.starforce < 12) { 
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -613,8 +582,7 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) { 
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
@@ -622,13 +590,12 @@ class NormalItem extends Item {
 							}
 						} else if (ni.starforce == 12) { 
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
+								ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
 												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
 							} else {
-								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+								ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
 							}
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -639,8 +606,7 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
@@ -648,13 +614,12 @@ class NormalItem extends Item {
 							}
 						} else if (ni.starforce == 13) {
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
+								ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
 												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
 							} else {
-								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+								ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
 							}
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -665,8 +630,7 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
@@ -674,13 +638,12 @@ class NormalItem extends Item {
 							}
 						} else if (ni.starforce == 14) {
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
+								ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
 												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
 							} else {
-								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+								ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
 							}
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -691,8 +654,7 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
@@ -700,13 +662,12 @@ class NormalItem extends Item {
 							}
 						} else if (ni.starforce == 15) {
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100
+								ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100
 												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
 							} else {
-								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+								ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
 							}
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -716,13 +677,12 @@ class NormalItem extends Item {
 							} 
 						} else if (ni.starforce == 16) {
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100
+								ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100
 												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
 							} else {
-								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
+								ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
 							}
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -733,17 +693,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 17) {
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -754,17 +712,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom)*0.7)/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce < 20) {
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -775,17 +731,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 20) {
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -794,9 +748,8 @@ class NormalItem extends Item {
 								ni.destroyCount++;
 							} 
 						} else if (ni.starforce == 21) {
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -807,17 +760,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 22) {
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
 							ni.upgradePercent = (int)((3000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -828,17 +779,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 23) {
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
 							ni.upgradePercent = (int)((2000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -849,17 +798,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 24) {
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*0.7)/100;
 							ni.upgradePercent = (int)((1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -886,34 +833,30 @@ class NormalItem extends Item {
 						ni.upgradeCount++;
 						int percent = (int)(Math.random() * 100000); 
 						if (ni.starforce < 3) {
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce + 1)/25))*(1 - ni.discountMVP - ni.discountPCRoom)/100);
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce + 1)/25))*(1 - ni.discountMVP - ni.discountPCRoom)/100);
 							ni.upgradePercent = (int)(((95 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch); 
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.starforce++; 
 							} 
 						} else if (ni.starforce < 10) {
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce) + 1)/25)*(1 - ni.discountMVP - ni.discountPCRoom)/100);
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce) + 1)/25)*(1 - ni.discountMVP - ni.discountPCRoom)/100);
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.starforce++;
 							} 
 						} else if (ni.starforce == 10) {
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.starforce++;
 								ni.variableStarforce = 0;
 							} 
 						} else if (ni.starforce < 12) { 
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -921,8 +864,7 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) { 
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 									ni.starforce++;
 									ni.starforce++; 
 									ni.variableStarforce = 0;
@@ -930,15 +872,13 @@ class NormalItem extends Item {
 								}
 							}
 						} else if (ni.starforce == 12) { 
-							// 
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
+								ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
 												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							} else {
-								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+								ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							}
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -949,8 +889,7 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
@@ -958,13 +897,12 @@ class NormalItem extends Item {
 							}
 						} else if (ni.starforce == 13) {
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
+								ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
 												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							} else {
-								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+								ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							}
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -975,8 +913,7 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
@@ -984,13 +921,12 @@ class NormalItem extends Item {
 							}
 						} else if (ni.starforce == 14) {
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
+								ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
 												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							} else {
-								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+								ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							}
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1001,8 +937,7 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
@@ -1010,13 +945,12 @@ class NormalItem extends Item {
 							}
 						} else if (ni.starforce == 15) {
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100
+								ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100
 												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;;
 							} else {
-								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;;
+								ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;;
 							}
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1026,13 +960,12 @@ class NormalItem extends Item {
 							} 
 						} else if (ni.starforce == 16) {
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100
+								ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100
 												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							} else {
-								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+								ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							}
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1043,17 +976,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 17) {
-							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1064,17 +995,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce < 20) {
-							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1085,17 +1014,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 20) {
-							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1104,9 +1031,8 @@ class NormalItem extends Item {
 								ni.destroyCount++;
 							} 
 						} else if (ni.starforce == 21) {
-							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1117,17 +1043,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 22) {
-							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 							ni.upgradePercent = (int)((3000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1138,17 +1062,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 23) {
-							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 							ni.upgradePercent = (int)((2000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1159,17 +1081,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 24) {
-							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 							ni.upgradePercent = (int)((1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1196,32 +1116,28 @@ class NormalItem extends Item {
 						ni.upgradeCount++;
 						int percent = (int)(Math.random() * 100000); 
 						if (ni.starforce < 3) {
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce + 1)/25))*(1 - ni.discountMVP - ni.discountPCRoom)/100);
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce + 1)/25))*(1 - ni.discountMVP - ni.discountPCRoom)/100);
 							ni.upgradePercent = (int)(((95 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch); 
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 							} 
 						} else if (ni.starforce < 10) {
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce) + 1)/25)*(1 - ni.discountMVP - ni.discountPCRoom)/100);
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * (ni.starforce) + 1)/25)*(1 - ni.discountMVP - ni.discountPCRoom)/100);
 							if (ni.starforce == 5) { 
 								ni.upgradePercent = 100000;
 							}else {
 								ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
 							}
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 							} 
 						} else if (ni.starforce == 10) { 
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-								ni.sumUpgradePrice += ni.starforcePrice;
-								ni.starforce++;
-								ni.variableStarforce = 0;
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							ni.starforce++;
+							ni.variableStarforce = 0;
 						} else if (ni.starforce < 12) { 
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1229,23 +1145,20 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) { 
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 12) { 
-							// 
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
+								ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
 												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							} else {
-								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+								ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							}
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1256,8 +1169,7 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
@@ -1265,13 +1177,12 @@ class NormalItem extends Item {
 							}
 						} else if (ni.starforce == 13) {
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
+								ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
 												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							} else {
-								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+								ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							}
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1282,8 +1193,7 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
@@ -1291,13 +1201,12 @@ class NormalItem extends Item {
 							}
 						} else if (ni.starforce == 14) {
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
+								ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))/100
 												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							} else {
-								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+								ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							}
 							ni.upgradePercent = (int)(((100 - (5 * ni.starforce)) * 1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1308,27 +1217,24 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/400))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 15) { 
-							ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-							ni.sumUpgradePrice += ni.starforcePrice;
+							ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							ni.starforce++;
 							ni.variableStarforce = 0;
 						} else if (ni.starforce == 16) {
 							if (ni.ignoreDestroy == true) {
-								ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100
+								ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100
 												+(long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							} else {
-								ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
+								ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 							}
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1339,17 +1245,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 17) {
-							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1360,17 +1264,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)((1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))*(1 - ni.discountMVP - ni.discountPCRoom))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce < 20) {
-							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1381,17 +1283,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 20) {
-							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1400,9 +1300,8 @@ class NormalItem extends Item {
 								ni.destroyCount++;
 							} 
 						} else if (ni.starforce == 21) {
-							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 							ni.upgradePercent = (int)((30000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1413,17 +1312,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 22) {
-							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 							ni.upgradePercent = (int)((3000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1434,17 +1331,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 23) {
-							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 							ni.upgradePercent = (int)((2000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1455,17 +1350,15 @@ class NormalItem extends Item {
 								ni.starforce--;
 								ni.variableStarforce--;
 								if (ni.variableStarforce == -2) {
-									ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
-									ni.sumUpgradePrice += ni.starforcePrice;
+									ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 									ni.starforce++;
 									ni.variableStarforce = 0;
 									ni.chanceTime++;
 								}
 							}
 						} else if (ni.starforce == 24) {
-							ni.starforcePrice = (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
+							ni.sumUpgradePrice += (long)(1000+ (Math.pow((double)ni.level, 3.0) * Math.pow(((double)(ni.starforce) + 1), 2.7)/200))/100;
 							ni.upgradePercent = (int)((1000 + ni.sumOfStarforceCatch) * ni.multipleOfStarforceCatch);
-							ni.sumUpgradePrice += ni.starforcePrice;
 							if (percent < ni.upgradePercent) {
 								ni.starforce++;
 								ni.variableStarforce = 0;
@@ -1522,31 +1415,27 @@ class ToadItem extends NormalItem{
 					upgradeCount++;
 					int percent = (int)(Math.random() * 100000);
 					if (starforce < 3) {
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * (starforce + 1)/25))*(1 - discountMVP - discountPCRoom)/100);
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * (starforce + 1)/25))*(1 - discountMVP - discountPCRoom)/100);
 						upgradePercent = (int)(((95 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch); 
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 						} 
 					} else if (starforce < 10) {
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * (starforce) + 1)/25)*(1 - discountMVP - discountPCRoom)/100);
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * (starforce) + 1)/25)*(1 - discountMVP - discountPCRoom)/100);
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 						} 
 					} else if (starforce == 10) {
-						starforcePrice = (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
+						sumUpgradePrice += (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
 						}
 					} else if (starforce < 12) { 
-						starforcePrice = (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
+						sumUpgradePrice += (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1554,8 +1443,7 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) { 
-								starforcePrice = (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
@@ -1563,13 +1451,12 @@ class ToadItem extends NormalItem{
 						}
 					} else if (starforce == 12) { 
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)/100
+							sumUpgradePrice += (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)/100
 											+(long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
 						} else {
-							starforcePrice = (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
+							sumUpgradePrice += (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
 						}
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1580,8 +1467,7 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
@@ -1589,13 +1475,12 @@ class ToadItem extends NormalItem{
 						}
 					} else if (starforce == 13) {
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)/100
+							sumUpgradePrice += (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)/100
 											+(long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
 						} else {
-							starforcePrice = (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
+							sumUpgradePrice += (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
 						}
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1606,8 +1491,7 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
@@ -1615,13 +1499,12 @@ class ToadItem extends NormalItem{
 						}
 					} else if (starforce == 14) {
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)/100
+							sumUpgradePrice += (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)/100
 											+(long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
 						} else {
-							starforcePrice = (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
+							sumUpgradePrice += (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
 						}
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1632,8 +1515,7 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400)*(1 - discountMVP - discountPCRoom))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
@@ -1641,13 +1523,12 @@ class ToadItem extends NormalItem{
 						}
 					} else if (starforce == 15) {
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100
+							sumUpgradePrice += (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100
 											+(long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)*(1 - discountMVP - discountPCRoom))/100;;
 						} else {
-							starforcePrice = (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)*(1 - discountMVP - discountPCRoom))/100;;
+							sumUpgradePrice += (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)*(1 - discountMVP - discountPCRoom))/100;;
 						}
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1657,13 +1538,12 @@ class ToadItem extends NormalItem{
 						}
 					} else if (starforce == 16) {
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100
+							sumUpgradePrice += (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100
 											+(long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)*(1 - discountMVP - discountPCRoom))/100;
 						} else {
-							starforcePrice = (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)*(1 - discountMVP - discountPCRoom))/100;
+							sumUpgradePrice += (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)*(1 - discountMVP - discountPCRoom))/100;
 						}
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1674,17 +1554,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)*(1 - discountMVP - discountPCRoom))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)*(1 - discountMVP - discountPCRoom))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 17) {
-						starforcePrice = (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
+						sumUpgradePrice += (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1695,17 +1573,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)*(1 - discountMVP - discountPCRoom))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)*(1 - discountMVP - discountPCRoom))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce < 20) {
-						starforcePrice = (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
+						sumUpgradePrice += (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1716,17 +1592,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 20) {
-						starforcePrice = (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
+						sumUpgradePrice += (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1735,9 +1609,8 @@ class ToadItem extends NormalItem{
 							destroyCount++;
 						}
 					} else if (starforce == 21) {
-						starforcePrice = (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
+						sumUpgradePrice += (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1748,17 +1621,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 22) {
-						starforcePrice = (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
+						sumUpgradePrice += (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
 						upgradePercent = (int)((3000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1769,17 +1640,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 23) {
-						starforcePrice = (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
+						sumUpgradePrice += (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
 						upgradePercent = (int)((2000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1790,17 +1659,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 24) {
-						starforcePrice = (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
+						sumUpgradePrice += (long)(1000+ Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200)/100;
 						upgradePercent = (int)((1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1821,31 +1688,27 @@ class ToadItem extends NormalItem{
 					upgradeCount++;
 					int percent = (int)(Math.random() * 100000); 
 					if (starforce < 3) {
-						starforcePrice = (long)((1000+ Math.pow((double)level, 3.0) * (starforce + 1)/25)*(1 - discountMVP - discountPCRoom)*0.7/100);
+						sumUpgradePrice += (long)((1000+ Math.pow((double)level, 3.0) * (starforce + 1)/25)*(1 - discountMVP - discountPCRoom)*0.7/100);
 						upgradePercent = (int)(((95 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch); 
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 						}
 					} else if (starforce < 10) {
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * (starforce) + 1)/25)*(1 - discountMVP - discountPCRoom)*0.7/100);
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * (starforce) + 1)/25)*(1 - discountMVP - discountPCRoom)*0.7/100);
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 						}
 					} else if (starforce == 10) {
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
 						}
 					} else if (starforce < 12) { 
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1853,8 +1716,7 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) { 
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
@@ -1862,13 +1724,12 @@ class ToadItem extends NormalItem{
 						}
 					} else if (starforce == 12) { 
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))/100
+							sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))/100
 											+(long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
 						} else {
-							starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
+							sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
 						}
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1879,8 +1740,7 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
@@ -1888,13 +1748,12 @@ class ToadItem extends NormalItem{
 						}
 					} else if (starforce == 13) {
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))/100
+							sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))/100
 											+(long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
 						} else {
-							starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
+							sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
 						}
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1905,8 +1764,7 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
@@ -1914,13 +1772,12 @@ class ToadItem extends NormalItem{
 						}
 					} else if (starforce == 14) {
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))/100
+							sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))/100
 											+(long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
 						} else {
-							starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
+							sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
 						}
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1931,8 +1788,7 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom)*0.7)/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
@@ -1940,13 +1796,12 @@ class ToadItem extends NormalItem{
 						}
 					} else if (starforce == 15) {
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100
+							sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100
 											+(long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom)*0.7)/100;
 						} else {
-							starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom)*0.7)/100;
+							sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom)*0.7)/100;
 						}
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1956,13 +1811,12 @@ class ToadItem extends NormalItem{
 						} 
 					} else if (starforce == 16) {
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100
+							sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100
 											+(long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom)*0.7)/100;
 						} else {
-							starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom)*0.7)/100;
+							sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom)*0.7)/100;
 						}
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1973,17 +1827,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom)*0.7)/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom)*0.7)/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 17) {
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -1994,17 +1846,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom)*0.7)/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom)*0.7)/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce < 20) {
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2015,17 +1865,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 20) {
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2034,9 +1882,8 @@ class ToadItem extends NormalItem{
 							destroyCount++;
 						} 
 					} else if (starforce == 21) {
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2047,17 +1894,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 22) {
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
 						upgradePercent = (int)((3000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2068,17 +1913,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 23) {
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
 						upgradePercent = (int)((2000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2089,17 +1932,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 24) {
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*0.7)/100;
 						upgradePercent = (int)((1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2120,34 +1961,30 @@ class ToadItem extends NormalItem{
 					upgradeCount++;
 					int percent = (int)(Math.random() * 100000); 
 					if (starforce < 3) {
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * (starforce + 1)/25))*(1 - discountMVP - discountPCRoom)/100);
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * (starforce + 1)/25))*(1 - discountMVP - discountPCRoom)/100);
 						upgradePercent = (int)(((95 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch); 
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							starforce++; 
 						} 
 					} else if (starforce < 10) {
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * (starforce) + 1)/25)*(1 - discountMVP - discountPCRoom)/100);
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * (starforce) + 1)/25)*(1 - discountMVP - discountPCRoom)/100);
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							starforce++;
 						} 
 					} else if (starforce == 10) {
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							starforce++;
 							variableStarforce = 0;
 						} 
 					} else if (starforce < 12) { 
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2155,8 +1992,7 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) { 
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 								starforce++;
 								starforce++; 
 								variableStarforce = 0;
@@ -2164,15 +2000,13 @@ class ToadItem extends NormalItem{
 							}
 						}
 					} else if (starforce == 12) { 
-						// 
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))/100
+							sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))/100
 											+(long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 						} else {
-							starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
+							sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 						}
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2183,8 +2017,7 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
@@ -2192,13 +2025,12 @@ class ToadItem extends NormalItem{
 						}
 					} else if (starforce == 13) {
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))/100
+							sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))/100
 											+(long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 						} else {
-							starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
+							sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 						}
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2209,8 +2041,7 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
@@ -2218,13 +2049,12 @@ class ToadItem extends NormalItem{
 						}
 					} else if (starforce == 14) {
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))/100
+							sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))/100
 											+(long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 						} else {
-							starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
+							sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 						}
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2235,8 +2065,7 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
@@ -2244,13 +2073,12 @@ class ToadItem extends NormalItem{
 						}
 					} else if (starforce == 15) {
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100
+							sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100
 											+(long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;;
 						} else {
-							starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;;
+							sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;;
 						}
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2260,13 +2088,12 @@ class ToadItem extends NormalItem{
 						} 
 					} else if (starforce == 16) {
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100
+							sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100
 											+(long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;
 						} else {
-							starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;
+							sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;
 						}
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2277,17 +2104,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 17) {
-						starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
+						sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2298,17 +2123,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce < 20) {
-						starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
+						sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2319,17 +2142,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 20) {
-						starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
+						sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2338,9 +2159,8 @@ class ToadItem extends NormalItem{
 							destroyCount++;
 						} 
 					} else if (starforce == 21) {
-						starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
+						sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2351,17 +2171,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 22) {
-						starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
+						sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 						upgradePercent = (int)((3000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2372,17 +2190,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 23) {
-						starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
+						sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 						upgradePercent = (int)((2000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2393,17 +2209,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 24) {
-						starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
+						sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 						upgradePercent = (int)((1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2424,32 +2238,28 @@ class ToadItem extends NormalItem{
 					upgradeCount++;
 					int percent = (int)(Math.random() * 100000); 
 					if (starforce < 3) {
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * (starforce + 1)/25))*(1 - discountMVP - discountPCRoom)/100);
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * (starforce + 1)/25))*(1 - discountMVP - discountPCRoom)/100);
 						upgradePercent = (int)(((95 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch); 
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 						} 
 					} else if (starforce < 10) {
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * (starforce) + 1)/25)*(1 - discountMVP - discountPCRoom)/100);
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * (starforce) + 1)/25)*(1 - discountMVP - discountPCRoom)/100);
 						if (starforce == 5) { 
 							upgradePercent = 100000;
 						}else {
 							upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
 						}
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 						} 
 					} else if (starforce == 10) { 
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
-							sumUpgradePrice += starforcePrice;
-							starforce++;
-							variableStarforce = 0;
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
+						starforce++;
+						variableStarforce = 0;
 					} else if (starforce < 12) { 
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2457,23 +2267,20 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) { 
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 12) { 
-						// 
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))/100
+							sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))/100
 											+(long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 						} else {
-							starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
+							sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 						}
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2484,8 +2291,7 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
@@ -2493,13 +2299,12 @@ class ToadItem extends NormalItem{
 						}
 					} else if (starforce == 13) {
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))/100
+							sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))/100
 											+(long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 						} else {
-							starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
+							sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 						}
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2510,8 +2315,7 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
@@ -2519,13 +2323,12 @@ class ToadItem extends NormalItem{
 						}
 					} else if (starforce == 14) {
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))/100
+							sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))/100
 											+(long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 						} else {
-							starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
+							sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 						}
 						upgradePercent = (int)(((100 - (5 * starforce)) * 1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2536,27 +2339,24 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/400))*(1 - discountMVP - discountPCRoom))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 15) { 
-						starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;
-						sumUpgradePrice += starforcePrice;
+						sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;
 						starforce++;
 						variableStarforce = 0;
 					} else if (starforce == 16) {
 						if (ignoreDestroy == true) {
-							starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100
+							sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100
 											+(long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;
 						} else {
-							starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;
+							sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;
 						}
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2567,17 +2367,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 17) {
-						starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
+						sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2588,17 +2386,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)((1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))*(1 - discountMVP - discountPCRoom))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce < 20) {
-						starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
+						sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2609,17 +2405,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 20) {
-						starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
+						sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2628,9 +2422,8 @@ class ToadItem extends NormalItem{
 							destroyCount++;
 						} 
 					} else if (starforce == 21) {
-						starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
+						sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 						upgradePercent = (int)((30000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2641,17 +2434,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 22) {
-						starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
+						sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 						upgradePercent = (int)((3000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2662,17 +2453,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 23) {
-						starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
+						sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 						upgradePercent = (int)((2000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2683,17 +2472,15 @@ class ToadItem extends NormalItem{
 							starforce--;
 							variableStarforce--;
 							if (variableStarforce == -2) {
-								starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
-								sumUpgradePrice += starforcePrice;
+								sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 								starforce++;
 								variableStarforce = 0;
 								chanceTime++;
 							}
 						}
 					} else if (starforce == 24) {
-						starforcePrice = (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
+						sumUpgradePrice += (long)(1000+ (Math.pow((double)level, 3.0) * Math.pow(((double)(starforce) + 1), 2.7)/200))/100;
 						upgradePercent = (int)((1000 + sumOfStarforceCatch) * multipleOfStarforceCatch);
-						sumUpgradePrice += starforcePrice;
 						if (percent < upgradePercent) {
 							starforce++;
 							variableStarforce = 0;
@@ -2715,7 +2502,8 @@ class ToadItem extends NormalItem{
 
 class SuperiorItem extends Item {
 
-    // 인스턴스 변수
+	// 인스턴스 변수
+	long starforcePrice;
     long[] pricePerLevel = {59560,0,185079,0,0,558322}; // 레벨당 강화 비용 (헬리시움, 노바, 타일런트 순)
     int[] destroyPercent = {1800, 3000, 4200, 6000, 9500, 13000, 16300, 48500, 49000, 49500}; 
     int maxStarforce; // 현재 레벨에서 가능한 최대 스타포스
@@ -3076,11 +2864,11 @@ class ResultInfo{
 			if (this.toadHammer == true) {
 				System.out.print(" 토드템 0성 -> " + this.toadToStarforce + "성, 토드템 파괴방지 : " + NormalItem.booleanToString(this.toadIgnoreDestroy));
 			}
+			System.out.println();
+			System.out.print("메이플 이벤트 적용 : " + NormalItem.mapleEventToString(this.mapleEvent));
 		}
 		System.out.println();
-		if ((this.item).equals("노말")){
-			System.out.println("메이플 이벤트 적용 : " + NormalItem.mapleEventToString(this.mapleEvent));
-		}
+
 		System.out.println(this.countItem + "개의 아이템 중 스타포스 강화 최소비용은 " + this.minSumUpgradePrice + "00메소 입니다.");
 		System.out.println(this.countItem + "개의 아이템 중 스타포스 강화 최대비용은 " + this.maxSumUpgradePrice + "00메소 입니다.");
 		System.out.println(this.countItem + "개의 아이템의 평균적인 스타포스 강화 비용은 " + this.averageSumUpgradePrice + "00메소 입니다.");
@@ -3106,7 +2894,7 @@ class ResultInfo{
 			}
 			return this.serialNo + ") : " + this.countItem + "개 " + this.level + "제 " + this.item + " 아이템 " + this.fromStarforce + "성 -> " + this.toStarforce + "성" + "\n"
 			 + "스타캐치 : " + Item.starCatchToString(this.succededCatch) + ", 파괴방지 : " + NormalItem.booleanToString(this.ignoreDestroy)
-			 + ", PC방 할인 : " + NormalItem.booleanToString(this.discountPCRoom) + ", MVP 등급 : " + NormalItem.MVPGradeToString(this.discountMVPGrade) + "\n"
+			 + ", PC방 할인 : " + NormalItem.booleanToString(this.discountPCRoom) + ", MVP 등급 : " + NormalItem.MVPGradeToString(this.discountMVPGrade) + ", 토드 여부 : " + NormalItem.booleanToString(this.toadHammer) + "\n"
 			 + "메이플 이벤트 적용 : " + NormalItem.mapleEventToString(this.mapleEvent) + "\n\n";
 		}
 		return this.serialNo + ") : " + this.countItem + "개 " + this.level + "제 " + this.item + " 아이템 " + this.fromStarforce + "성 -> " + this.toStarforce + "성" + "\n"
@@ -3136,74 +2924,126 @@ public class Starforce {
             }
             switch(menu){
 				case 1:
-				while(true){
+				Case1Loop: while(true){
 					System.out.println("노말 아이템 강화 메뉴입니다.");
  	            	System.out.println("양식 : 아이템개수 목표스타포스 레벨 시작스타포스 스타캐치여부");
    	            	System.out.println("참고) 스타캐치여부 : 0: 스타캐치X, 1: 합연산(4.5%p), 2: 곱연산(1.045배)");
-   	            	System.out.println("아이템의 정보를 입력하세요.");
+   	            	System.out.println("아이템의 정보를 입력하세요.(정확히 입력해주세요!)");
    	        	    String[] argArr1 = null;
    	    	        String input1 = s.nextLine();
     	            input1 = input1.trim();
             	    argArr1 = input1.split(" ");
 
-    	            System.out.println("선택적으로 필요한 옵션을 입력하세요");
-        	        System.out.println("양식 : 파괴방지여부 이벤트 피시방할인 MVP등급별할인 토드템강화 토드템파괴방지여부");
-            	    System.out.println("참고1) 파괴방지여부, 피시방 할인, 토드템 파괴방지여부 : true: O, false: X");
+    	            System.out.println("옵션을 모두 입력하세요.(정확히 입력해주세요!)");
+        	        System.out.println("양식 : 파괴방지여부 이벤트 피시방할인 MVP등급별할인");
+            	    System.out.println("참고1) 파괴방지여부, 피시방 할인 : true: O, false: X");
                 	System.out.println("참고2) 이벤트 : 0: X 1: 30%할인, 2: 1+1, 3: 5배수");
 					System.out.println("참고3) MVP등급 : 0: X 1: 실버, 2: 골드, 3: 다이아,레드");
-					System.out.println("참고4) 토드템 강화 : 0: 토드미사용, 1~25: 1~25성까지 토드템 강화");
     	            String[] argArr2 = null;
         	        String input2 = s.nextLine();
             	    input2 = input2.trim();
-                	argArr2 = input2.split(" ");
+					argArr2 = input2.split(" ");
+					while(true){
+						System.out.print("토드시스템을 사용하시겠습니까?(yes or no) >> ");
+						String input3 = s.nextLine().trim();
+						if (input3.equalsIgnoreCase("yes")) { // 토드시스템 사용
+							boolean toadHammer = true;
+							System.out.println("토드 옵션을 입력하세요.(정확히 입력해주세요!)");
+							System.out.println("양식 : 토드템목표스타포스 토드템파괴방지여부");
+							System.out.println("참고) 토드템 파괴방지여부 : true: O, false: X");
+							String[] argArr3 = null;
+							String input4 = s.nextLine().trim();
+							argArr3 = input4.split(" ");
 
-	                NormalItem[] normal = new NormalItem[Integer.parseInt(argArr1[0])];
-    	            for (int i = 0; i < normal.length; i++){
-        	            normal[i] = new NormalItem(Integer.parseInt(argArr1[2]), Integer.parseInt(argArr1[3]),
-            	        Byte.parseByte(argArr1[4]), Byte.parseByte(argArr2[1]), Boolean.parseBoolean(argArr2[2]) ,
-                        Byte.parseByte(argArr2[3]), Boolean.parseBoolean(argArr2[0]), Integer.parseInt(argArr2[4]));
-                    	NormalItem.goTo(normal[i], Integer.parseInt(argArr1[1]), Boolean.parseBoolean(argArr2[5]));
-	                }
-					ResultInfo ri = new ResultInfo();
-					ri.fromStarforce = Integer.parseInt(argArr1[3]);
-					ri.toadIgnoreDestroy = Boolean.parseBoolean(argArr2[5]);
-					ri.savedProperty(normal);
-        	        System.out.println("==== " + Integer.parseInt(argArr1[2]) + "제 아이템의 " + normal.length + "개 " + Integer.parseInt(argArr1[3]) + "성 -> " + Integer.parseInt(argArr1[1]) + "성까지의 강화 ====");
-	        		System.out.println("추가 설명 : 스타캐치 " + Item.starCatchToString(Byte.parseByte(argArr1[4])) + ", 파괴방지 : " + NormalItem.booleanToString(Boolean.parseBoolean(argArr2[0]))
-										 + ", PC방 할인 : " + NormalItem.booleanToString(Boolean.parseBoolean(argArr2[2])) + ", MVP 등급 : " + NormalItem.MVPGradeToString(Byte.parseByte(argArr2[3])));
-					System.out.print("토드여부 : " + NormalItem.booleanToString(ri.toadHammer)); 
-					if (ri.toadHammer == true) {
-						System.out.print(" 토드템 0성 -> " + ri.toadToStarforce + "성, 토드템 파괴방지 : " + NormalItem.booleanToString(ri.toadIgnoreDestroy));
+							System.out.println("강화 진행중...");
+
+							NormalItem[] normal = new NormalItem[Integer.parseInt(argArr1[0])];
+    	        		    for (int i = 0; i < normal.length; i++){
+        	    		        normal[i] = new NormalItem(Integer.parseInt(argArr1[2]), Integer.parseInt(argArr1[3]),
+            			        Byte.parseByte(argArr1[4]), Byte.parseByte(argArr2[1]), Boolean.parseBoolean(argArr2[2]) ,
+								Byte.parseByte(argArr2[3]), Boolean.parseBoolean(argArr2[0]), Integer.parseInt(argArr3[0]));
+								normal[i].toadHammer = toadHammer;
+                		    	NormalItem.goTo(normal[i], Integer.parseInt(argArr1[1]), Boolean.parseBoolean(argArr3[1]));
+	            		    }
+							ResultInfo ri = new ResultInfo();
+							ri.fromStarforce = Integer.parseInt(argArr1[3]);
+							ri.toadIgnoreDestroy = Boolean.parseBoolean(argArr3[1]);
+							ri.savedProperty(normal);
+
+							System.out.println("==== " + ri.level + "제 아이템의 " + normal.length + "개 " + ri.fromStarforce + "성 -> " + ri.toStarforce + "성까지의 강화 ====");
+	        				System.out.println("추가 설명 : 스타캐치 " + Item.starCatchToString(ri.succededCatch) + ", 파괴방지 : " + NormalItem.booleanToString(ri.ignoreDestroy)
+												 + ", PC방 할인 : " + NormalItem.booleanToString(ri.discountPCRoom) + ", MVP 등급 : " + NormalItem.MVPGradeToString(ri.discountMVPGrade));
+							System.out.print("토드여부 : " + NormalItem.booleanToString(ri.toadHammer)); 
+							System.out.print(" 토드템 0성 -> " + ri.toadToStarforce + "성, 토드템 파괴방지 : " + NormalItem.booleanToString(ri.toadIgnoreDestroy));
+							System.out.println();
+		    		    	System.out.println("메이플 이벤트 적용 : " + NormalItem.mapleEventToString(ri.mapleEvent));
+
+		    		    	System.out.println(Item.sumUpgradePriceMinMax(normal, ri));
+    	    				System.out.println(Item.averageSumUpgradePrice(normal, ri));
+        					System.out.println(Item.upgradeCountMinMax(normal, ri));
+        					System.out.println(Item.averageUpgradeCount(normal, ri));
+        					System.out.println(Item.destroyCountMinMax(normal, ri));
+	        				System.out.println(Item.averageDestroyCount(normal, ri));
+    	    				System.out.println(Item.chanceTimeCountMinMax(normal, ri));
+        					System.out.println(Item.averageChanceTimeCount(normal, ri));
+							list.add(ri);
+							break;
+						} else if (input3.equalsIgnoreCase("no")) { // 토드 시스템 사용 X
+							System.out.println("토드시스템을 사용하지 않습니다.");
+							System.out.println("강화 진행중...");
+							NormalItem[] normal = new NormalItem[Integer.parseInt(argArr1[0])];
+    	        		    for (int i = 0; i < normal.length; i++){
+        	    		        normal[i] = new NormalItem(Integer.parseInt(argArr1[2]), Integer.parseInt(argArr1[3]),
+            			        Byte.parseByte(argArr1[4]), Byte.parseByte(argArr2[1]), Boolean.parseBoolean(argArr2[2]) ,
+                		        Byte.parseByte(argArr2[3]), Boolean.parseBoolean(argArr2[0]));
+                		    	NormalItem.goTo(normal[i], Integer.parseInt(argArr1[1]), false);
+	            		    }
+							ResultInfo ri = new ResultInfo();
+							ri.fromStarforce = Integer.parseInt(argArr1[3]);
+							ri.savedProperty(normal);
+							System.out.println("==== " + ri.level + "제 아이템의 " + normal.length + "개 " + ri.fromStarforce + "성 -> " + ri.toStarforce + "성까지의 강화 ====");
+	        				System.out.println("추가 설명 : 스타캐치 " + Item.starCatchToString(ri.succededCatch) + ", 파괴방지 : " + NormalItem.booleanToString(ri.ignoreDestroy)
+												 + ", PC방 할인 : " + NormalItem.booleanToString(ri.discountPCRoom) + ", MVP 등급 : " + NormalItem.MVPGradeToString(ri.discountMVPGrade));
+							System.out.print("토드여부 : " + NormalItem.booleanToString(ri.toadHammer)); 
+							System.out.println();
+		    		    	System.out.println("메이플 이벤트 적용 : " + NormalItem.mapleEventToString(ri.mapleEvent));
+
+		    		    	System.out.println(Item.sumUpgradePriceMinMax(normal, ri));
+    	    				System.out.println(Item.averageSumUpgradePrice(normal, ri));
+        					System.out.println(Item.upgradeCountMinMax(normal, ri));
+        					System.out.println(Item.averageUpgradeCount(normal, ri));
+        					System.out.println(Item.destroyCountMinMax(normal, ri));
+	        				System.out.println(Item.averageDestroyCount(normal, ri));
+    	    				System.out.println(Item.chanceTimeCountMinMax(normal, ri));
+        					System.out.println(Item.averageChanceTimeCount(normal, ri));
+							list.add(ri);
+							break;
+						} else {
+							System.out.println("잘못 입력하셨습니다.");
+						}
 					}
 					System.out.println();
-		        	System.out.println("메이플 이벤트 적용 : " + NormalItem.mapleEventToString(Byte.parseByte(argArr2[1])));
-
-		        	System.out.println(Item.sumUpgradePriceMinMax(normal, ri));
-    	    		System.out.println(Item.averageSumUpgradePrice(normal, ri));
-        			System.out.println(Item.upgradeCountMinMax(normal, ri));
-        			System.out.println(Item.averageUpgradeCount(normal, ri));
-        			System.out.println(Item.destroyCountMinMax(normal, ri));
-	        		System.out.println(Item.averageDestroyCount(normal, ri));
-    	    		System.out.println(Item.chanceTimeCountMinMax(normal, ri));
-        			System.out.println(Item.averageChanceTimeCount(normal, ri));
-					list.add(ri);
-				
-					System.out.println();
 					System.out.println("해당 시뮬레이션이 저장되었습니다.");
-					System.out.print("계속 진행하시겠습니까? (yes or no)");
-					String decision = s.nextLine().trim();
-					if (decision.equals("no")){
-						break;
+					while(true){
+						System.out.print("계속 진행하시겠습니까? (yes or no) >> ");
+						String decision = s.nextLine().trim();
+						if (decision.equalsIgnoreCase("no")){
+							break Case1Loop;
+						} else if (decision.equalsIgnoreCase("yes")){
+							break;
+						} else {
+							System.out.println("잘못 입력하셨습니다.");
+						}
 					}
 				}
                 break;
 
 				case 2:
-				while(true){
+				Case2Loop: while(true){
 					System.out.println("슈페리얼 아이템 강화 메뉴입니다.");
  	            	System.out.println("양식 : 아이템개수 목표스타포스 레벨 시작스타포스 스타캐치여부");
    	            	System.out.println("참고) 스타캐치여부 : 0: 스타캐치X, 1: 합연산(4.5%p), 2: 곱연산(1.045배)");
-   	            	System.out.println("아이템의 정보를 입력하세요.");
+   	            	System.out.println("아이템의 정보를 입력하세요.(정확히 입력해주세요!)");
    	        	    String[] argArr1 = null;
    	    	        String input1 = s.nextLine();
     	            input1 = input1.trim();
@@ -3234,34 +3074,57 @@ public class Starforce {
 				
 					System.out.println();
 					System.out.println("해당 시뮬레이션이 저장되었습니다.");
-					System.out.print("계속 진행하시겠습니까? (yes or no)");
-					String decision = s.nextLine().trim();
-					if (decision.equals("no")){
-						break;
+					while(true){
+						System.out.print("계속 진행하시겠습니까? (yes or no) >> ");
+						String decision = s.nextLine().trim();
+						if (decision.equalsIgnoreCase("no")){
+							break Case2Loop;
+						} else if (decision.equalsIgnoreCase("yes")){
+							break;
+						} else {
+							System.out.println("잘못 입력하셨습니다.");
+						}
 					}
 				}
 				break;
 				
 				case 3:
-				while (true){
+				Case3Loop : while (true){
+					boolean out = true;
 					System.out.println("최근 시뮬레이션 결과목록입니다.");
-					System.out.println(list);
-					System.out.println("어떤 결과를 보시겠습니까? (목록순 번호 기입)");
-					String selection = s.nextLine();
-					Object obj = list.get(Integer.parseInt(selection)-1);
-					if (obj instanceof ResultInfo){
-						ResultInfo tmp = (ResultInfo)obj;
-						tmp.printProperty();
+					while (out) {
+						System.out.println(list);
+						System.out.print("어떤 결과를 보시겠습니까? (목록 번호 입력) >> ");
+						try {
+							int selection = Integer.parseInt(s.nextLine()) -1;
+							if (0 <= selection && selection < list.size()){
+								Object obj = list.get(selection);
+								if (obj instanceof ResultInfo){
+									ResultInfo tmp = (ResultInfo)obj;
+									tmp.printProperty();
+									out = false;
+								}
+							} else {
+								System.out.println("잘못 입력하셨습니다.");
+							}
+						} catch (Exception e){
+							System.out.println("잘못 입력하셨습니다.");
+						}
 					}
-					System.out.print("목록을 계속 보시겠습니까? (yes or no)");
-					String decision = s.nextLine().trim();
-					if (decision.equals("no")){
-						break;
+					while(true){
+						System.out.print("목록을 계속 보시겠습니까? (yes or no)");
+						String decision = s.nextLine().trim();
+						if (decision.equalsIgnoreCase("no")){
+							break Case3Loop;
+						} else if (decision.equalsIgnoreCase("yes")){
+							break;
+						} else {
+							System.out.println("잘못 입력하셨습니다.");
+						}
 					}
 				}
 				break;
             }
-
         }
         s.close();
     }
