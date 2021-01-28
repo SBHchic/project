@@ -28,7 +28,26 @@
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
 				<li><a href="main.jsp">메인</a></li>
-				<li><a href="boardQnA.jsp">게시판</a></li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">아이템 강화<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="normalStarforceForm.jsp">일반 아이템</a></li>
+						<li><a href="superiorStarforceForm.jsp">슈페리얼 아이템</a></li>
+					</ul>
+				</li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">강화 성공 확률<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="numberOfItems.jsp">아이템 개수 기준</a></li>
+						<li><a href="meso.jsp">메소 기준</a></li>
+					</ul>
+				</li>
+				<li><a href="#">길드원</a></li>
+				<li><a href="boardQnA.jsp">QnA</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">

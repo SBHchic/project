@@ -29,14 +29,13 @@
 			</button>
 			<a class="navbar-brand" href="main.jsp">[리부트]얼음요새</a>
 		</div>
+		<%
+			if(userID.equals("") || userID == null){
+		%>
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
 				<li class="active"><a href="main.jsp">메인</a></li>
-				<li><a href="boardQnA.jsp">게시판</a></li>
 			</ul>
-			<%
-				if(userID.equals("") || userID == null){
-			%>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle"
@@ -48,9 +47,34 @@
 					</ul>
 				</li>
 			</ul>
-			<%	
-				} else {
-			%>
+		</div>
+		<%	
+			} else {
+		%>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="main.jsp">메인</a></li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">아이템 강화<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="normalStarforceForm.jsp">일반 아이템</a></li>
+						<li><a href="superiorStarforceForm.jsp">슈페리얼 아이템</a></li>
+					</ul>
+				</li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">강화 성공 확률<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="numberOfItems.jsp">아이템 개수 기준</a></li>
+						<li><a href="meso.jsp">메소 기준</a></li>
+					</ul>
+				</li>
+				<li><a href="#">길드원</a></li>
+				<li><a href="boardQnA.jsp">QnA</a></li>
+			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle"
@@ -65,13 +89,19 @@
 			<%		
 				}
 			%>
-			
 		</div>
 	</nav>
 	<div class="container">
 		<main role="main">
 			<div class="jumbotron">
 				<h2>[리부트] 얼음요새에 오신것을 환영합니다.</h2>
+				<%
+					if(userID.equals("") || userID == null){
+				%>
+				<p>로그인을 하시면 더 많은 기능을 사용할 수 있습니다.</p>
+				<%
+					}
+				%>
 				<img src="images/1597588319167.jpg" style="width: 100%; heigth: auto;">
 			</div>
 		</main>
