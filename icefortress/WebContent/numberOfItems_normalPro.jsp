@@ -5,7 +5,7 @@
 <% request.setCharacterEncoding("UTF-8");%>
 
 <%
-  // 사용자가 입력한 정보들
+  // ???? ??? ???
   int numberOfItems = Integer.parseInt(request.getParameter("numberOfItems"));
   int level  = Integer.parseInt(request.getParameter("level"));
   int numberOfRealItems = Integer.parseInt(request.getParameter("numberOfRealItems"));
@@ -35,8 +35,8 @@
 	  }
 	  subresult = NumberOfItems_Normal.succededCount(normalArr, starforce);
 	  result = NumberOfItems_Normal.result(normalArr, fromStarforce, starforce);
-	  result += "제한 - 본템 개수 : " + numberOfRealItems + "<br>" + "<br>";
-	  result += "성공 확률 : " + subresult + "%";
+	  result += "?? - ?? ?? : " + numberOfRealItems + "<br>" + "<br>";
+	  result += "?? ?? : " + subresult + "%";
 	  out.println(result);
   } else {
 	  NumberOfItems_Normal[] normalArr = new NumberOfItems_Normal[numberOfItems];
@@ -46,8 +46,8 @@
 	  }
 	  subresult = NumberOfItems_Normal.succededCount(normalArr, starforce);
 	  result = NumberOfItems_Normal.result(normalArr, fromStarforce, starforce);
-	  result += "제한 - 본템 개수 : " + numberOfRealItems + ", 토드템 개수 : " + numberOfToadItems + "<br>" + "<br>";
-	  result += "성공 확률 : " + subresult + "%";
+	  result += "?? - ?? ?? : " + numberOfRealItems + ", ??? ?? : " + numberOfToadItems + "<br>" + "<br>";
+	  result += "?? ?? : " + subresult + "%";
 	  out.println(result);
   }
 %>
