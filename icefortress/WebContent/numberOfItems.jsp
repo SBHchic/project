@@ -62,25 +62,25 @@
 		</div>
 	</nav>
 	<div class="container">
-		<div class="col-lg-4"></div>
-		<div class="col-lg-4">
+		<div class="col-lg-2"></div>
+		<div class="col-lg-8">
 			<div class="jumbotron" style="padding-top: 20px;">
 				<h3 style="text-align: center;">아이템 개수 기준 강화 성공 확률</h3>
 				<fieldset class="mb-3">
              	<legend style="text-align: center;">어떤 아이템을 강화하시겠습니까?</legend>
-              		<div class="form-check">
-  		        	    <input type="radio" name="radios" class="form-check-input" id="normalitem" checked>
+              		<div class="mb-3 form-check">
+  		        	    <input type="radio" name="radios" class="form-check-input" id="normalItem" checked>
         		        <label class="form-check-label" for="disabledRadio1">노말 아이템</label>
               		</div>
               		<div class="mb-3 form-check">
-                		<input type="radio" name="radios" class="form-check-input" id="superioritem" >
+                		<input type="radio" name="radios" class="form-check-input" id="superiorItem" >
                 		<label class="form-check-label" for="disabledRadio2">슈페리얼 아이템</label>
               		</div>
             	</fieldset>
             	<input id="firstSubmit" type="submit" class="btn btn-primary pull-right" value="확인">
 			</div>
 		</div>
-		<div class="col-lg-4"></div>
+		<div class="col-lg-2"></div>
 	</div>
 </body>
 </html>
