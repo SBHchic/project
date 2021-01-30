@@ -27,7 +27,7 @@
   boolean result = true;
   if (numberOfItems <= 0 || level <= 0 || numberOfRealItems <= 0 || starforce <= 0 || fromStarforce < 0){
 	  result = false;
-  } else if (fromStarforce >= starforce || NumberOfItems_Normal.maxItemStarforce(level) <= starforce){
+  } else if (fromStarforce >= starforce || NumberOfItems_Normal.maxItemStarforce(level) < starforce){
 	  result = false;
   } else if (toad) {
 	  if (NumberOfItems_Normal.maxItemStarforce(NumberOfItems_Normal.toadItemLevel(level)) <= toadToStarforce || toadToStarforce > (starforce + 1) || numberOfToadItems <= 0 || toadToStarforce <= 0) {
