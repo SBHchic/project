@@ -5,7 +5,7 @@
 <% request.setCharacterEncoding("UTF-8");%>
 
 <%
-  // ???? ??? ???
+  // 사용자가 입력한 정보들
   int numberOfItems = Integer.parseInt(request.getParameter("numberOfItems"));
   int level  = Integer.parseInt(request.getParameter("level"));
   int numberOfRealItems = Integer.parseInt(request.getParameter("numberOfRealItems"));
@@ -18,16 +18,11 @@
   int numberOfToadItems = 0;
   int toadToStarforce = 0;
   boolean toadIgnoreDestroy = false;
-  if (toad){
-	  numberOfToadItems = Integer.parseInt(request.getParameter("numberOfToadItems"));
-	  toadToStarforce = Integer.parseInt(request.getParameter("toadToStarforce"));
-	  toadIgnoreDestroy = Boolean.parseBoolean(request.getParameter("toadIgnoreDestroy"));  
-  }
   
   double subresult = 0;
   String result ="";
   
-  if (!toad) {
+  if (toad == false) {
 	  NumberOfItems_Normal[] normalArr = new NumberOfItems_Normal[numberOfItems];
 	  for (int i = 0; i < normalArr.length; i++){
 	     	normalArr[i] = new NumberOfItems_Normal(level, fromStarforce, succededCatch, mapleEvent, ignoreDestroy);
@@ -35,10 +30,14 @@
 	  }
 	  subresult = NumberOfItems_Normal.succededCount(normalArr, starforce);
 	  result = NumberOfItems_Normal.result(normalArr, fromStarforce, starforce);
-	  result += "?? - ?? ?? : " + numberOfRealItems + "<br>" + "<br>";
-	  result += "?? ?? : " + subresult + "%";
+	  result += "제한 - 본템 개수 : " + numberOfRealItems + "개 <br>" + "<br>";
+	  result += "성공 확률 : " + subresult + "%";
 	  out.println(result);
-  } else {
+  } else if (toad == true){
+	  numberOfToadItems = Integer.parseInt(request.getParameter("numberOfToadItems"));
+	  toadToStarforce = Integer.parseInt(request.getParameter("toadToStarforce"));
+	  toadIgnoreDestroy = Boolean.parseBoolean(request.getParameter("toadIgnoreDestroy"));
+	  
 	  NumberOfItems_Normal[] normalArr = new NumberOfItems_Normal[numberOfItems];
 	  for (int i = 0; i < normalArr.length; i++){
 	     	normalArr[i] = new NumberOfItems_Normal(level, fromStarforce, succededCatch, mapleEvent, ignoreDestroy, toadToStarforce);
@@ -46,8 +45,8 @@
 	  }
 	  subresult = NumberOfItems_Normal.succededCount(normalArr, starforce);
 	  result = NumberOfItems_Normal.result(normalArr, fromStarforce, starforce);
-	  result += "?? - ?? ?? : " + numberOfRealItems + ", ??? ?? : " + numberOfToadItems + "<br>" + "<br>";
-	  result += "?? ?? : " + subresult + "%";
+	  result += "제한 - 본템 개수 : " + numberOfRealItems + "개, 토드템 개수 : " + numberOfToadItems + "개 <br>" + "<br>";
+	  result += "성공 확률 : " + subresult + "%";
 	  out.println(result);
   }
 %>
