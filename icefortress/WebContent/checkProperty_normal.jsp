@@ -29,8 +29,8 @@
 	  result = false;
   } else if (fromStarforce >= starforce || NumberOfItems_Normal.maxItemStarforce(level) < starforce){
 	  result = false;
-  } else if (toad) {
-	  if (NumberOfItems_Normal.maxItemStarforce(NumberOfItems_Normal.toadItemLevel(level)) <= toadToStarforce || toadToStarforce > (starforce + 1) || numberOfToadItems <= 0 || toadToStarforce <= 0) {
+  } else if (toad == true) {
+	  if (NumberOfItems_Normal.maxItemStarforce(NumberOfItems_Normal.toadItemLevel(level)) < toadToStarforce || toadToStarforce > (starforce + 1) || numberOfToadItems <= 0 || toadToStarforce <= 0) {
 		  result = false;
 	  }
   }
