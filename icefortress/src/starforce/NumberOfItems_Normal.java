@@ -6,6 +6,7 @@ abstract class Item {
     int level;
     int starforce;
     int destroyCount = 0;
+    long sumUpgradePrice = 0;
     int upgradePercent = 0;
     byte variableStarforce = 0;
 	byte succededCatch;
@@ -124,7 +125,7 @@ public class NumberOfItems_Normal extends Item {
 		}
     }
 
-    void fromToadItemToNumberOfItems_Normal(ToadItem ti){ // 토드템에서 본템으로 토드할때 옮겨오는 값들
+    void fromToadItemToNumberOfItems_Normal(NumberOfItems_ToadItem ti){ // 토드템에서 본템으로 토드할때 옮겨오는 값들
         this.starforce = --ti.starforce;
         this.toadDestroyCount += ti.destroyCount;
     }
@@ -166,7 +167,7 @@ public class NumberOfItems_Normal extends Item {
 				case 0: // 이벤트 x
 				do {
 					if (ni.toadHammer == true && ni.starforce == 0){
-						ToadItem ti = new ToadItem(ni.level, ni.starforce, ni.succededCatch, ni.mapleEvent, ni.toadIgnoreDestroy);
+						NumberOfItems_ToadItem ti = new NumberOfItems_ToadItem(ni.level, ni.starforce, ni.succededCatch, ni.mapleEvent, ni.toadIgnoreDestroy);
 						ti.goTo(ni.toadToStarforce, numberOfToadItems);
 						ni.fromToadItemToNumberOfItems_Normal(ti);
 					} else{
@@ -386,7 +387,7 @@ public class NumberOfItems_Normal extends Item {
 				case 1: // 10성까지 스타포스 1+1 
 				do {
 					if (ni.toadHammer == true && ni.starforce == 0){
-						ToadItem ti = new ToadItem(ni.level, ni.starforce, ni.succededCatch, ni.mapleEvent, toadIgnoreDestroy);
+						NumberOfItems_ToadItem ti = new NumberOfItems_ToadItem(ni.level, ni.starforce, ni.succededCatch, ni.mapleEvent, toadIgnoreDestroy);
 						ti.goTo(ni.toadToStarforce, numberOfToadItems);
 						ni.fromToadItemToNumberOfItems_Normal(ti);
 					} else {
@@ -610,7 +611,7 @@ public class NumberOfItems_Normal extends Item {
 				case 2: // 5의배수 100퍼센트 강화 성공 (15성 까지)
 				do {
 					if (ni.toadHammer == true && ni.starforce == 0){
-						ToadItem ti = new ToadItem(ni.level, ni.starforce, ni.succededCatch, ni.mapleEvent, toadIgnoreDestroy);
+						NumberOfItems_ToadItem ti = new NumberOfItems_ToadItem(ni.level, ni.starforce, ni.succededCatch, ni.mapleEvent, toadIgnoreDestroy);
 						ti.goTo(ni.toadToStarforce, numberOfToadItems);
 						ni.fromToadItemToNumberOfItems_Normal(ti);
 					} else {
@@ -827,13 +828,13 @@ public class NumberOfItems_Normal extends Item {
 		}
 }
 
-class ToadItem extends NumberOfItems_Normal{
+class NumberOfItems_ToadItem extends NumberOfItems_Normal{
 
     // 인스턴스 변수
 	int toadToStarforce;
 
     // 생성자
-    ToadItem(int level, int fromStarforce, byte succededCatch, byte mapleEvent, boolean toadIgnoreDestroy){
+    NumberOfItems_ToadItem(int level, int fromStarforce, byte succededCatch, byte mapleEvent, boolean toadIgnoreDestroy){
         super(level, fromStarforce, succededCatch, mapleEvent);
         if (this.level <= 110) {
             this.level -= 20;
