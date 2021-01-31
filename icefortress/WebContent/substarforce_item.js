@@ -161,7 +161,7 @@ function checkNormalItem() {
 	};
 	$.ajax({
 		type:"post",
-		url:"checkProperty_normal.jsp",
+		url:"checkProperty_normal_item.jsp",
 		data:query,
 		success:function(data){
 			if(data == false){
@@ -221,7 +221,7 @@ function checkSuperiorItem() {
 	};
 	$.ajax({
 		type:"post",
-		url:"checkProperty_superior.jsp",
+		url:"checkProperty_superior_item.jsp",
 		data:query,
 		success:function(data){
 			if(data == false){
