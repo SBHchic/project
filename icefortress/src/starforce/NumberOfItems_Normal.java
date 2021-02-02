@@ -5,10 +5,12 @@ abstract class Item {
     // 인스턴스 변수
     int level;
     int starforce;
+    int upgradeCount = 0;
     int destroyCount = 0;
     long sumUpgradePrice = 0;
     int upgradePercent = 0;
     byte variableStarforce = 0;
+    int chanceTime = 0;
 	byte succededCatch;
     int sumOfStarforceCatch; // 스타포스캐치 합연산
     float multipleOfStarforceCatch; // 스타포스캐치 곱연산
@@ -37,17 +39,129 @@ abstract class Item {
     }
 
     // 메서드
-    static String starCatchToString(byte succededCatch) { // 스타캐치 출력 편의성
+    public static String starCatchToString(byte succededCatch) { // 스타캐치 출력 편의성
 		
 		if(succededCatch == 0){
-			return "x";
+			return "X";
 		} else if (succededCatch == 1){
 			return "합연산(4.5%p)";
 		} else {
 			return "곱연산(1.045배)";
         }
     }
-
+    
+    public static long sumUpgradePriceMin(Item[] itemArr) { // 최소 강화 비용을 구하는 메서드
+    	long min = itemArr[0].sumUpgradePrice;
+    	for (int i = 1; i < itemArr.length; i++) {
+    		if (min > itemArr[i].sumUpgradePrice) {
+    			min = itemArr[i].sumUpgradePrice;
+    		}
+    	}
+    	return min;
+    }
+    
+    public static long sumUpgradePriceMax(Item[] itemArr) { // 최대 강화 비용을 구하는 메서드
+    	long max = itemArr[0].sumUpgradePrice;
+    	for (int i = 1; i < itemArr.length; i++) {
+    		if (max < itemArr[i].sumUpgradePrice) {
+    			max = itemArr[i].sumUpgradePrice;
+    		}
+    	}
+    	return max;
+    }
+    
+    public static long sumUpgradePriceAverage(Item[] itemArr) { // 평균 강화 비용을 구하는 메서드
+    	long totalsum = 0;
+    	for (int i = 0; i < itemArr.length; i++) {
+    		totalsum += itemArr[i].sumUpgradePrice;
+    	}
+    	return totalsum/itemArr.length;
+    }
+    
+    public static int upgradeCountMin(Item[] itemArr) { // 최소 강화 횟수를 구하는 메서드
+    	int min = itemArr[0].upgradeCount;
+    	for (int i = 1; i < itemArr.length; i++) {
+    		if (min > itemArr[i].upgradeCount) {
+    			min = itemArr[i].upgradeCount;
+    		}
+    	}
+    	return min;
+    }
+    
+    public static int upgradeCountMax(Item[] itemArr) { // 최대 강화 횟수를 구하는 메서드
+    	int max = itemArr[0].upgradeCount;
+    	for (int i = 1; i < itemArr.length; i++) {
+    		if (max < itemArr[i].upgradeCount) {
+    			max = itemArr[i].upgradeCount;
+    		}
+    	}
+    	return max;
+    }
+    
+     public static long upgradeCountAverage(Item[] itemArr) { // 평균 강화 횟수를 구하는 메서드
+    	long totalsum = 0;
+    	for (int i = 0; i < itemArr.length; i++) {
+    		totalsum += itemArr[i].upgradeCount;
+    	}
+    	return totalsum/itemArr.length;
+    }
+    
+     public static int destroyCountMin(Item[] itemArr) { // 최소 파괴 횟수를 구하는 메서드
+    	int min = itemArr[0].destroyCount;
+    	for (int i = 1; i < itemArr.length; i++) {
+    		if (min > itemArr[i].destroyCount) {
+    			min = itemArr[i].destroyCount;
+    		}
+    	}
+    	return min;
+    }
+    
+     public static int destroyCountMax(Item[] itemArr) { // 최대 파괴 횟수를 구하는 메서드
+    	int max = itemArr[0].destroyCount;
+    	for (int i = 1; i < itemArr.length; i++) {
+    		if (max < itemArr[i].destroyCount) {
+    			max = itemArr[i].destroyCount;
+    		}
+    	}
+    	return max;
+    }
+    
+     public static long destroyCountAverage(Item[] itemArr) { // 평균 파괴 횟수를 구하는 메서드
+    	long totalsum = 0;
+    	for (int i = 0; i < itemArr.length; i++) {
+    		totalsum += itemArr[i].destroyCount;
+    	}
+    	return totalsum/itemArr.length;
+    }
+    
+     public static int chanceTimeMin(Item[] itemArr) { // 최소 찬스타임 횟수를 구하는 메서드
+    	int min = itemArr[0].chanceTime;
+    	for (int i = 1; i < itemArr.length; i++) {
+    		if (min > itemArr[i].chanceTime) {
+    			min = itemArr[i].chanceTime;
+    		}
+    	}
+    	return min;
+    }
+    
+     public static int chanceTimeMax(Item[] itemArr) { // 최대 찬스타임 횟수를 구하는 메서드
+    	int max = itemArr[0].chanceTime;
+    	for (int i = 1; i < itemArr.length; i++) {
+    		if (max < itemArr[i].chanceTime) {
+    			max = itemArr[i].chanceTime;
+    		}
+    	}
+    	return max;
+    }
+    
+     public static long chanceTimeAverage(Item[] itemArr) { // 평균 찬스타임 횟수를 구하는 메서드
+    	long totalsum = 0;
+    	for (int i = 0; i < itemArr.length; i++) {
+    		totalsum += itemArr[i].chanceTime;
+    	}
+    	return totalsum/itemArr.length;
+    }
+    
 }
 
 public class NumberOfItems_Normal extends Item {
