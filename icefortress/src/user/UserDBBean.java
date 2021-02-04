@@ -247,4 +247,33 @@ public class UserDBBean {
         }
 		return -1; // 데이터베이스 오류
     }
+    
+    // 세션의 등급을 확인하는 메서드
+    public int checkGrade(String userID) {
+    	Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs= null;
+        try {
+			conn = getConnection();
+
+            pstmt = conn.prepareStatement(
+            	"select grade from member where userID = ?");
+            pstmt.setString(1, userID);
+            rs = pstmt.executeQuery();
+            
+			if(rs.next()){
+				return rs.getInt("grade"); // 세션에 있는 아이디의 등급을 가져옴
+			} else {
+				return -1; // 비로그인 상태(세션이 없는 상태)인 경우
+			}
+			
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) try { rs.close(); } catch(SQLException sqle) {}
+            if (pstmt != null) try { pstmt.close(); } catch(SQLException sqle) {}
+            if (conn != null) try { conn.close(); } catch(SQLException sqle) {}
+        }
+		return -2; // 데이터베이스 오류
+    }
 }
