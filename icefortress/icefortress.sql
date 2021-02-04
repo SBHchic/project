@@ -72,4 +72,16 @@ desc superiorStarforce;
 
 select * from superiorStarforce;
 
+create table boardQnA(
+	boardQnA_ID int,
+	boardQnA_ReplyID int,
+	boardQnA_CommentID int,
+	boardQnA_Title varchar(50),
+	userID varchar(20) not null,
+	boardQnA_Reg_Date datetime,
+	boardQnA_Content varchar(2048) not null
+);
 
+desc boardQnA;
+
+select * from boardQnA;
