@@ -76,6 +76,7 @@ create table boardQnA(
 	boardQnA_ID int,
 	boardQnA_ReplyID int,
 	boardQnA_CommentID int,
+	boardQnA_CommentID_Re int,
 	boardQnA_Title varchar(50),
 	userID varchar(20) not null,
 	boardQnA_Reg_Date datetime,
