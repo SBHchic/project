@@ -5,6 +5,7 @@ public class BoardQnADataBean {
 	private int boardQnA_ID;
 	private int boardQnA_ReplyID; // 답글 번호
 	private int boardQnA_CommentID; // 댓글 번호
+	private int boardQnA_CommentID_Re; // 대댓글 번호
 	private String boardQnA_Title;
 	private String userID;
 	private String boardQnA_Reg_Date;
@@ -27,6 +28,12 @@ public class BoardQnADataBean {
 	}
 	public void setBoardQnA_CommentID(int boardQnA_CommentID) {
 		this.boardQnA_CommentID = boardQnA_CommentID;
+	}
+	public int getBoardQnA_CommentID_Re() {
+		return boardQnA_CommentID_Re;
+	}
+	public void setBoardQnA_CommentID_Re(int boardQnA_CommentID_Re) {
+		this.boardQnA_CommentID_Re = boardQnA_CommentID_Re;
 	}
 	public String getBoardQnA_Title() {
 		return boardQnA_Title;
