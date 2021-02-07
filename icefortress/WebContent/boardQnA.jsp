@@ -185,37 +185,39 @@
 					}
 					if (startPage > pageBlock) {
 			%>
-			<div class="btn-group me-2" role="group" aria-label="First group">
-            	<button id="previousButton" name="<%=startPage-1 %>" onclick="p(this)" type="button" class="btn btn-secondary">&lt;&lt;</button>
-          	</div>
+			<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style="width: 500px; margin: auto;">
+				<div class="btn-group me-2" role="group" aria-label="First group">
+            		<button id="previousButton" name="<%=startPage-1 %>" onclick="p(this)" type="button" class="btn btn-primary" style="color:#fff; background-color: #6c757d; border-color: #6c757d">&lt;&lt;</button>
+          		</div>
 			<%
 					}
 					for (int i = startPage; i <= endPage; i++){
 			%>
-			<div class="btn-group me-2" role="group" aria-label="Second group">		
+				<div class="btn-group me-2" role="group" aria-label="Second group">		
 			<%
 						if(pageNumber == i) {
 			%>
-				<button id="pageNumbers" name="<%=i %>" onclick="p(this)" type="button" class="btn btn-secondary-point"></button>
+					<button id="pageNumbers" name="<%=i %>" onclick="p(this)" type="button" class="btn btn-primary" style="color:#fff; background-color: #343a40; border-color: #343a40"></button>
 			<%
 						} else {
 			%>
-				<button id="pageNumbers" name="<%=i %>" onclick="p(this)" type="button" class="btn btn-secondary"></button>
+					<button id="pageNumbers" name="<%=i %>" onclick="p(this)" type="button" class="btn btn-primary" style="color:#fff; background-color: #6c757d; border-color: #6c757d"></button>
 			<%
 						}
 					}
 			%>
-			</div>
+				</div>
 			<%
 					if (endPage > pageCount) {
 			%>
-			<div class="btn-group me-2" role="group" aria-label="Third group">
-            	<button id="nextButton" name="<%=endPage + 1 %>" onclick="p(this)" type="button" class="btn btn-secondary">&gt;&gt;</button>
-          	</div>
+				<div class="btn-group me-2" role="group" aria-label="Third group">
+            		<button id="nextButton" name="<%=endPage + 1 %>" onclick="p(this)" type="button" class="btn btn-primary" style="color:#fff; background-color: #6c757d; border-color: #6c757d">&gt;&gt;</button>
+          		</div>
 			<%
 					}
 				}
-			%><br>
+			%>
+			</div>
 			<a href="writeQnAForm.jsp" class="btn btn-primary pull-right">글쓰기</a>
 		</div>
 	</div>
