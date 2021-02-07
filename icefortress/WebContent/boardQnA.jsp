@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="board.BoardQnADataBean" %>
-<%@ page import="board.BoardQnADBBean" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="user.UserDBBean" %>
+<%@ page import="board.BoardQnADataBean"%>
+<%@ page import="board.BoardQnADBBean"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="user.UserDBBean"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,14 +15,14 @@
 <script src="boardQnA.js"></script>
 <title>[리부트]얼음요새</title>
 <style type="text/css">
-	a, a:hover {
-		color: #000000;
-		text-decoration: none;
-	}
+a, a:hover {
+	color: #000000;
+	text-decoration: none;
+}
 </style>
 </head>
 <body>
-<%
+	<%
 	String userID = "";
 	int grade = -1;
 	UserDBBean manager = null;
@@ -34,11 +34,11 @@
 	
 	if (grade == -1){
 %>
-<script>
-	alert("로그인 이후 사용이 가능합니다.");
-	window.history.back();
-</script>
-<%
+	<script>
+		alert("로그인 이후 사용이 가능합니다.");
+		window.history.back();
+	</script>
+	<%
 	}
 	
 	int pageNumber = 1;
@@ -117,8 +117,7 @@
 					<ul class="dropdown-menu">
 						<li><a href="modify.jsp">회원정보 수정</a></li>
 						<li><a id="logout" href="#">로그아웃</a></li>
-					</ul>
-				</li>
+					</ul></li>
 			</ul>
 		</div>
 		<%
@@ -140,30 +139,89 @@
 					</tr>
 				</thead>
 				<tbody>
-				<%
-					int boardID = 0;
+					<%
+					int boardID = start;
+					int replyCount = 0;
 					for (int i = 0; i < list.size(); i++){
-				%>
+						if (list.get(i).getBoardQnA_ReplyID() > 0) { // 답글인 경우
+							replyCount++;
+							if (i == 0){ // 첫번째 글이면서 글의 첫 답글인 경우
+								if (manager2.viewWritten(list.get(i).getBoardQnA_ID(), 0) != null){ // 글이 존재하는 경우
+					%>
 					<tr>
-					<%
-						if (list.get(i).getBoardQnA_ReplyID() > 0) {
-					%>
 						<td><%=boardID %>-<%=list.get(i).getBoardQnA_ReplyID() %></td>
-					<%
-						} else {
-					%>
-						<td><%=start+i %></td>
-					<%
-							boardID = start+i;
-						}
-					%>
 						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>"><%=list.get(i).getBoardQnA_Title() %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getBoardQnA_Reg_Date() %></td>
 					</tr>
-				<%
-					}
-				%>
+					<%
+								} else { // 글이 존재하지 않는 경우
+					%>
+					<tr>
+						<td><%=start+i %></td>
+						<td colspan="3">삭제된 글입니다.</td>
+					</tr>
+					<%
+									boardID = start+i;
+					%>
+					<tr>
+						<td><%=boardID %>-<%=list.get(i).getBoardQnA_ReplyID() %></td>
+						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>"><%=list.get(i).getBoardQnA_Title() %></a></td>
+						<td><%=list.get(i).getUserID() %></td>
+						<td><%=list.get(i).getBoardQnA_Reg_Date() %></td>
+					</tr>
+					<%
+								} 
+							} else if (replyCount == 1) { // 첫번째 글이 아니면서 첫 답글인 경우
+								if(!(list.get(i-1).getBoardQnA_ID() == list.get(i).getBoardQnA_ID())){ // 위의 글과 글 일련번호가 같을때
+					%>
+					<tr>
+						<td><%=boardID %>-<%=list.get(i).getBoardQnA_ReplyID() %></td>
+						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>"><%=list.get(i).getBoardQnA_Title() %></a></td>
+						<td><%=list.get(i).getUserID() %></td>
+						<td><%=list.get(i).getBoardQnA_Reg_Date() %></td>
+					</tr>
+					<%
+								} else { // 위의 글과 일련번호가 다를때
+					%>
+					<tr>
+						<td><%=start+i %></td>
+						<td colspan="3">삭제된 글입니다.</td>
+					</tr>
+					<%
+									boardID = start+i;
+					%>
+					<tr>
+						<td><%=boardID %>-<%=list.get(i).getBoardQnA_ReplyID() %></td>
+						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>"><%=list.get(i).getBoardQnA_Title() %></a></td>
+						<td><%=list.get(i).getUserID() %></td>
+						<td><%=list.get(i).getBoardQnA_Reg_Date() %></td>
+					</tr>
+					<%
+								}
+							} else { // 첫번째 글이 아니면서 첫 답글이 아닌 경우
+					%>
+					<tr>
+						<td><%=boardID %>-<%=list.get(i).getBoardQnA_ReplyID() %></td>
+						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>"><%=list.get(i).getBoardQnA_Title() %></a></td>
+						<td><%=list.get(i).getUserID() %></td>
+						<td><%=list.get(i).getBoardQnA_Reg_Date() %></td>
+					</tr>
+					<%
+							}
+						} else { // 답글이 아닌 경우
+					%>
+					<tr>
+						<td><%=start+i %></td>
+						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>"><%=list.get(i).getBoardQnA_Title() %></a></td>
+						<td><%=list.get(i).getUserID() %></td>
+						<td><%=list.get(i).getBoardQnA_Reg_Date() %></td>
+					</tr>
+					<%
+							boardID = start+i;
+							replyCount = 0;
+						}
+					%>
 				</tbody>
 			</table>
 			<%
@@ -187,33 +245,37 @@
 			%>
 			<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style="width: 500px; margin: auto;">
 				<div class="btn-group me-2" role="group" aria-label="First group">
-            		<button id="previousButton" name="<%=startPage-1 %>" onclick="p(this)" type="button" class="btn btn-primary" style="color:#fff; background-color: #6c757d; border-color: #6c757d">&lt;&lt;</button>
-          		</div>
-			<%
+					<button id="previousButton" name="<%=startPage-1 %>" onclick="p(this)" type="button" class="btn btn-primary"
+						style="color: #fff; background-color: #6c757d; border-color: #6c757d">&lt;&lt;</button>
+				</div>
+				<%
 					}
 					for (int i = startPage; i <= endPage; i++){
 			%>
-				<div class="btn-group me-2" role="group" aria-label="Second group">		
-			<%
+				<div class="btn-group me-2" role="group" aria-label="Second group">
+					<%
 						if(pageNumber == i) {
 			%>
-					<button id="pageNumbers" name="<%=i %>" onclick="p(this)" type="button" class="btn btn-primary" style="color:#fff; background-color: #343a40; border-color: #343a40"></button>
-			<%
+					<button id="pageNumbers" name="<%=i %>" onclick="p(this)" type="button" class="btn btn-primary"
+						style="color: #fff; background-color: #343a40; border-color: #343a40"></button>
+					<%
 						} else {
 			%>
-					<button id="pageNumbers" name="<%=i %>" onclick="p(this)" type="button" class="btn btn-primary" style="color:#fff; background-color: #6c757d; border-color: #6c757d"></button>
-			<%
+					<button id="pageNumbers" name="<%=i %>" onclick="p(this)" type="button" class="btn btn-primary"
+						style="color: #fff; background-color: #6c757d; border-color: #6c757d"></button>
+					<%
 						}
 					}
 			%>
 				</div>
-			<%
+				<%
 					if (endPage > pageCount) {
 			%>
 				<div class="btn-group me-2" role="group" aria-label="Third group">
-            		<button id="nextButton" name="<%=endPage + 1 %>" onclick="p(this)" type="button" class="btn btn-primary" style="color:#fff; background-color: #6c757d; border-color: #6c757d">&gt;&gt;</button>
-          		</div>
-			<%
+					<button id="nextButton" name="<%=endPage + 1 %>" onclick="p(this)" type="button" class="btn btn-primary"
+						style="color: #fff; background-color: #6c757d; border-color: #6c757d">&gt;&gt;</button>
+				</div>
+				<%
 					}
 				}
 			%>
