@@ -51,7 +51,7 @@ public class BoardQnADBBean {
         return ""; // 데이터베이스 오류
     }
     
-    public int getNext() { // 게시글 번호를 매겨줌 (boardQnA_ID)
+    public int getNextWrittenID() { // 게시글 번호를 매겨줌 (boardQnA_ID)
     	Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -81,13 +81,37 @@ public class BoardQnADBBean {
         	conn = getConnection();
         	
         	pstmt = conn.prepareStatement("insert into boardQnA values (?, 0, 0, 0, ?, ?, ?, ?)");
-        	pstmt.setInt(1, getNext());
+        	pstmt.setInt(1, getNextWrittenID());
         	pstmt.setString(2, boardQnA_Title);
         	pstmt.setString(3, userID);
         	pstmt.setString(4, getDate());
         	pstmt.setString(5, boardQnA_Content);
         	pstmt.executeUpdate();
         	return 1; // 작성 성공
+        } catch (Exception e) {
+        	e.printStackTrace();
+        } finally {
+    		if (pstmt != null) try { pstmt.close(); } catch(SQLException sqle) {}
+            if (conn != null) try { conn.close(); } catch(SQLException sqle) {}
+    	}
+        return -1; // 데이터베이스 오류
+    }
+    
+    // 글을 수정하는 메서드
+    public int update(BoardQnADataBean update, String boardQnA_Title, String boardQnA_Content) {
+    	Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+        	conn = getConnection();
+        	
+        	pstmt = conn.prepareStatement("update boardQnA set boardQnA_Title = ?, boardQnA_Content = ?, boardQnA_Reg_Date = ? where boardQnA_ID = ? and boardQnA_ReplyID = ? and boardQnA_CommentID = 0");
+        	pstmt.setString(1, boardQnA_Title);
+        	pstmt.setString(2, boardQnA_Content);
+        	pstmt.setString(3, getDate());
+        	pstmt.setInt(4, update.getBoardQnA_ID());
+        	pstmt.setInt(5, update.getBoardQnA_ReplyID());
+        	pstmt.executeUpdate();
+        	return 1; // 수정 성공
         } catch (Exception e) {
         	e.printStackTrace();
         } finally {
@@ -227,6 +251,39 @@ public class BoardQnADBBean {
             if (conn != null) try { conn.close(); } catch(SQLException sqle) {}
     	}
     	return written; 
+    }
+    
+    public ArrayList<BoardQnADataBean> getCommentList(BoardQnADataBean written) {
+    	Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        ArrayList<BoardQnADataBean> list = new ArrayList<BoardQnADataBean>();
+    	try {
+    		conn = getConnection();
+    		String SQL = "select * from boardQnA where boardQnA_ID = ? and boardQnA_CommentID > 0 and boardQnA_CommentID_Re >= 0 order by boardQnA_CommentID asc, boardQnA_CommentID_Re asc";
+    		pstmt = conn.prepareStatement(SQL);
+    		pstmt.setInt(1, written.getBoardQnA_ID());
+    		rs = pstmt.executeQuery();
+    		while (rs.next()) {
+    			BoardQnADataBean tmp = new BoardQnADataBean();
+        		tmp.setBoardQnA_ID(rs.getInt(1));
+        		tmp.setBoardQnA_ReplyID(rs.getInt(2));
+        		tmp.setBoardQnA_CommentID(rs.getInt(3));
+        		tmp.setBoardQnA_CommentID_Re(rs.getInt(4));
+        		tmp.setBoardQnA_Title(rs.getString(5));
+        		tmp.setUserID(rs.getString(6));
+        		tmp.setBoardQnA_Reg_Date(rs.getString(7));
+        		tmp.setBoardQnA_Content(rs.getString(8));
+        		list.add(tmp);
+    		}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	} finally {
+    		if (rs != null) try { rs.close(); } catch(SQLException sqle) {}
+    		if (pstmt != null) try { pstmt.close(); } catch(SQLException sqle) {}
+            if (conn != null) try { conn.close(); } catch(SQLException sqle) {}
+    	}
+    	return list;
     }
     
     // 글을 읽을 접근권한이 있는지 확인
