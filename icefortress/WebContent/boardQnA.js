@@ -27,6 +27,35 @@ $(document).ready(function(){
 		}
 	});
 	
+	// boardQnA_updateWrittenForm.jsp 에서 수정버튼을 눌렀을 때
+	$("#submit_update").click(function(){
+		checkWrite();
+		
+		if (status) {
+			var tmp = $("#submit_update").attr("name");
+			var arr = tmp.split(",");
+			var query = {
+					boardQnA_ID:arr[0],
+					boardQnA_ReplyID:arr[1],
+					boardQnA_Title:$("#boardQnA_Title").val(),
+					boardQnA_Content:$("#boardQnA_Content").val()
+			};
+			$.ajax({
+				type:"post",
+				url:"boardQnA_updateWrittenPro.jsp",
+				data:query,
+				success:function(data){
+					if (data == 1){
+						location.href("boardQnA_view.jsp?boardQnA_ID="+boardQnA_ID+"&boardQnA_ReplyID="+boardQnA_ReplyID);
+					} else {
+						alert("수정에 실패했습니다.");
+						window.history.back();
+					}
+				}
+			});
+		}
+	});
+	
 	// writeQnAForm.jsp, boardQnA_view.jsp 에서 사용
 	// 이전버튼을 눌렀을 때
 	$("#previous").click(function(){
@@ -53,9 +82,8 @@ function checkWrite(){
     }
 }
 
-// 페이지 번호를 선택했을 때 수행
-function p(pageBtn) {
-	var page = pageBtn.name;
-	var query = "boardQnA.jsp?pageNumber=" + page;
-	location.href(query);
+function commentReply(commentID) {
+	var hidden = commentID.name;
+	var query = hidden+"re";
+	$("#"+query).toggle();
 }
