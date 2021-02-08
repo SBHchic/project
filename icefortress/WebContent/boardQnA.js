@@ -56,6 +56,88 @@ $(document).ready(function(){
 		}
 	});
 	
+	//boardQnA_view.jsp 에서 삭제버튼을 눌렀을 때
+	$("#deleteWritten").click(function(){
+		if(confirm("정말로 삭제하시겠습니까?") == true){
+			var tmp = $("#deleteWritten").attr("name");
+			var arr = tmp.split(",");
+			var query = {
+					boardQnA_ID:arr[0],
+					boardQnA_ReplyID:arr[1]
+			};
+			$.ajax({
+				type:"post",
+				url:"boardQnA_deleteWrittenPro.jsp",
+				data:query,
+				success:function(data){
+					if (data == 1){
+						location.href("boardQnA.jsp");
+					} else if (data == 0){
+						alert("접근 권한이 없습니다.");
+						window.history.back();
+					} else {
+						alert("삭제에 실패했습니다.");
+						window.history.back();
+					}
+				}
+			});
+		} else {
+			return;
+		}
+	});
+	
+	//boardQnA_view.jsp에서 등록버튼을 눌렀을 때 (댓글)
+	$("#writeComment").click(function(){
+		checkCommentWrite();
+		
+		if (status) {
+			var query = {
+					boardQnA_ID:boardQnA_ID,
+					boardQnA_ReplyID:boardQnA_ReplyID,
+					boardQnA_Content:$("#boardQnA_Content").val()
+			};
+			$.ajax({
+				type:"post",
+				url:"boardQnA_writeCommentPro.jsp",
+				data:query,
+				success:function(data){
+					if (data == 1){
+						location.reload();
+					} else {
+						alert("작성에 실패했습니다.");
+						window.history.back();
+					}
+				}
+			});
+		}
+	});
+	
+	// boardQnA_writeReplyForm.jsp 에서 답글쓰기 버튼을 눌렀을 때
+	$("#submit_writeReply").click(function(){
+		checkWrite();
+		
+		if (status) {
+			var query = {
+					boardQnA_Title:$("#boardQnA_Title").val(),
+					boardQnA_Content:$("#boardQnA_Content").val(),
+					boardQnA_ID:$("#submit_writeReply").attr("name")
+			};
+			$.ajax({
+				type:"post",
+				url:"boardQnA_writeReplyPro.jsp",
+				data:query,
+				success:function(data){
+					if (data == 1){
+						location.href("boardQnA.jsp");
+					} else {
+						alert("작성에 실패했습니다.");
+						window.history.back();
+					}
+				}
+			});
+		}
+	});
+	
 	// writeQnAForm.jsp, boardQnA_view.jsp 에서 사용
 	// 이전버튼을 눌렀을 때
 	$("#previous").click(function(){
@@ -82,8 +164,85 @@ function checkWrite(){
     }
 }
 
+function checkCommentWrite(){
+	status = true;
+	
+	if(!$("#boardQnA_Content").val()) {// 댓글 내용을 입력하지 않으면 수행
+        alert("글 내용을 입력하세요");
+        $("#boardQnA_Content").focus();
+        status = false;
+        return false; // 사용자가 서비스를 요청한 시점으로 돌아감
+    }
+}
+
+// 답글버튼을 눌렀을 때 수행
 function commentReply(commentID) {
 	var hidden = commentID.name;
 	var query = hidden+"re";
 	$("#"+query).toggle();
+}
+
+// 댓글을 삭제할 경우 수행
+function deleteComment(deleteObject){
+	if(confirm("정말로 삭제하시겠습니까?") == true){
+		var tmp = deleteObject.name;
+		var arr = tmp.split(",");
+		var query = {
+					boardQnA_ID:arr[0],
+					boardQnA_ReplyID:arr[1],
+					boardQnA_CommentID:arr[2],
+					boardQnA_CommentID_Re:arr[3]
+					
+		};
+		$.ajax({
+			type:"post",
+			url:"boardQnA_deleteCommentPro.jsp",
+			data:query,
+			success:function(data){
+				if (data == 1){
+					location.reload();
+				} else if (data == 0){
+					alert("접근 권한이 없습니다.");
+					window.history.back();
+				} else {
+					alert("삭제에 실패했습니다.");
+					window.history.back();
+				}
+			}
+		});
+	} else {
+		return;
+	}
+}
+
+// 대댓글을 등록할 경우 수행
+function writeCommentReply(commentReply){
+	var tmp = commentReply.name;
+	var arr = tmp.split(",");
+	
+	if(!$("#boardQnA_ContentRe_"+tmp).val()){ // 댓글 내용을 입력하지 않았을 경우
+		alert("댓글 내용을 입력하세요.");
+		("#boardQnA_ContentRe_"+tmp).focus();
+		return false;
+	} else {
+		var query = {
+					boardQnA_ID:arr[0],
+					boardQnA_ReplyID:arr[1],
+					boardQnA_CommentID:arr[2],
+					boardQnA_Content:$("#boardQnA_ContentRe_"+tmp).val()
+		};
+		$.ajax({
+			type:"post",
+			url:"boardQnA_writeCommentReplyPro.jsp",
+			data:query,
+			success:function(data){
+				if (data == 1){
+					location.reload();
+				} else {
+					alert("작성에 실패했습니다.");
+					window.history.back();
+				}
+			}
+		});
+	}
 }
