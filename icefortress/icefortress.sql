@@ -80,25 +80,12 @@ create table boardQnA(
 	boardQnA_Title varchar(50),
 	userID varchar(20) not null,
 	boardQnA_Reg_Date datetime,
-	boardQnA_Content varchar(2048) not null
+	boardQnA_Content varchar(2048) not null,
+	available tinyint default 1,
+	boardQnA_DeleteReg_Date datetime
 );
 
 desc boardQnA;
 
 select * from boardQnA;
 
-create table deleteBoardQnA(
-	boardQnA_ID int,
-	boardQnA_ReplyID int,
-	boardQnA_CommentID int,
-	boardQnA_CommentID_Re int,
-	boardQnA_Title varchar(50),
-	userID varchar(20) not null,
-	boardQnA_Reg_Date datetime,
-	boardQnA_Content varchar(2048) not null,
-	boardQnA_DeleteReg_Date datetime
-);
-
-desc deleteBoardQnA;
-
-select * from deleteBoardQnA;
