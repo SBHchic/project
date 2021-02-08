@@ -221,6 +221,7 @@ a, a:hover {
 							boardID = start+i;
 							replyCount = 0;
 						}
+					}
 					%>
 				</tbody>
 			</table>
