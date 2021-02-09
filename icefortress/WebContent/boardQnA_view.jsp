@@ -131,7 +131,7 @@
 			<table class="table table-striped" style="text-align: center; border: 1px solid #dddddd">
 				<thead>
 					<tr>
-						<th colspan="6" style="background-color: #eeeeee; text-align: center"><%=boardQnADataBean.getBoardQnA_Title().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></th>
+						<th colspan="6" style="background-color: #eeeeee; text-align: center"><%=boardQnADataBean.getBoardQnA_Title().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")%></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -187,32 +187,67 @@
 								%>
 								<li style="list-style: none">
 									<div>
-										<div id="comment">
-											<div id="idplace">
-												<!-- 답글을 눌렀을때 정보를 얻기 위해서는 ID,CommentID를 알면 될듯
+										<div
+											id="comment_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>">
+											<div>
+												<div id="idplace">
+													<!-- 답글을 눌렀을때 정보를 얻기 위해서는 ID,CommentID를 알면 될듯
 												이부분의 답글작성부분만 보이게 하려면 위의 div 아이디를 CommentID로 설정하고
 												아래의 div 아이디를 같은 아이디 + re로 설정한 다음 onclick과 js를 이용하면 될듯
 											 -->
-												<strong> <span><%=commentList.get(i).getUserID()%></span>
-												</strong> <span><%=commentList.get(i).getBoardQnA_Reg_Date()%></span>
-												<%
-												if (userID.equals(commentList.get(i).getUserID()) || grade > 1) {
-												%>
-												<span style="float: right"><a href="javascript:;"
-													name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
-													onclick="deleteComment(this)">[삭제]</a></span>
-												<%
-												}
-												%>
-											</div>
-											<div id="contentplace">
-												<span><%=commentList.get(i).getBoardQnA_Content().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")%></span>
-											</div>
-											<div id="buttonplace" style="text-align: right">
-												<a name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>" href="javascript:;" onclick="commentReply(this)">[답글]</a>
+													<strong> <span><%=commentList.get(i).getUserID()%></span>
+													</strong> <span><%=commentList.get(i).getBoardQnA_Reg_Date()%></span>
+													<%
+													if (userID.equals(commentList.get(i).getUserID())) {
+													%>
+													<span style="float: right"><a href="javascript:;"
+														name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+														onclick="deleteComment(this)">[삭제]</a></span> <span style="float: right"><a
+														name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+														href="javascript:;" onclick="update(this)">[수정]</a></span>
+													<%
+													} else if (grade > 1) {
+													%>
+													<span style="float: right"><a href="javascript:;"
+														name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+														onclick="deleteComment(this)">[삭제]</a></span>
+													<%
+													}
+													%>
+												</div>
+												<div id="contentplace">
+													<span><%=commentList.get(i).getBoardQnA_Content().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")%></span>
+												</div>
+												<div id="buttonplace" style="text-align: right">
+													<a
+														name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>"
+														href="javascript:;" onclick="commentReply(this)">[답글]</a>
+												</div>
 											</div>
 										</div>
-										<div id="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>re" hidden>
+										<div
+											id="commentUpdate_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+											hidden>
+											<form>
+												<table class="table table-sm" style="border: 1px solid #dddddd">
+													<tr>
+														<td style="width: 20%; text-align: center; vertical-align: middle"><strong> <span><%=userID%></span></strong></td>
+														<td style="width: 60%; align: center"><textarea class="form-control"
+																id="boardQnA_Content_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+																maxlength="2048"><%=commentList.get(i).getBoardQnA_Content()%></textarea></td>
+														<td style="width: 20%; text-align: center; vertical-align: middle"><a
+															name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+															href="javascript:;" onclick="updateComment(this)" class="btn btn-primary"
+															style="color: #fff; background-color: #212529; border-color: #212529">수정</a> <a class="btn btn-primary"
+															name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+															href="javascript:;" onclick="update(this)">취소</a></td>
+													</tr>
+												</table>
+											</form>
+										</div>
+										<div
+											id="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>re"
+											hidden>
 											<form>
 												<table class="table table-sm" style="border: 1px solid #dddddd">
 													<tr>
@@ -220,10 +255,13 @@
 															<!-- 대댓글 작성창 --> <strong> <span><%=userID%></span>
 														</strong>
 														</td>
-														<td style="width: 60%; align: center"><textarea class="form-control" id="boardQnA_ContentRe_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>" maxlength="2048"></textarea></td>
-														<td style="width: 20%; text-align: center; vertical-align: middle">
-															<a name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>" href="javascript:;" onclick="writeCommentReply(this)">등록</a>
-														</td>
+														<td style="width: 60%; align: center"><textarea class="form-control"
+																id="boardQnA_ContentRe_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>"
+																maxlength="2048"></textarea></td>
+														<td style="width: 20%; text-align: center; vertical-align: middle"><a class="btn btn-primary"
+															style="color: #fff; background-color: #212529; border-color: #212529"
+															name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>"
+															href="javascript:;" onclick="writeCommentReply(this)">등록</a></td>
 													</tr>
 												</table>
 											</form>
@@ -247,19 +285,26 @@
 												<span>삭제된 댓글입니다.</span>
 											</div>
 											<div id="buttonplace" style="text-align: right">
-												<a name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>" href="javascript:;" onclick="commentReply(this)">[답글]</a>
+												<a
+													name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>"
+													href="javascript:;" onclick="commentReply(this)">[답글]</a>
 											</div>
 										</div>
-										<div id="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>re" hidden>
+										<div
+											id="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>re"
+											hidden>
 											<form>
 												<table class="table table-sm" style="border: 1px solid #dddddd">
 													<tr>
 														<td style="width: 20%; text-align: center; vertical-align: middle"><strong> <span><%=userID%></span>
 														</strong></td>
-														<td style="width: 60%; align: center"><textarea class="form-control" id="boardQnA_ContentRe_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>" maxlength="2048"></textarea></td>
-														<td style="width: 20%; text-align: center; vertical-align: middle">
-															<a name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>" href="javascript:;" onclick="writeCommentReply(this)">등록</a>
-														</td>
+														<td style="width: 60%; align: center"><textarea class="form-control"
+																id="boardQnA_ContentRe_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>"
+																maxlength="2048"></textarea></td>
+														<td style="width: 20%; text-align: center; vertical-align: middle"><a class="btn btn-primary"
+															style="color: #fff; background-color: #212529; border-color: #212529"
+															name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>"
+															href="javascript:;" onclick="writeCommentReply(this)">등록</a></td>
 													</tr>
 												</table>
 											</form>
@@ -267,13 +312,22 @@
 									</div>
 								</li>
 								<li style="list-style: none; padding-left: 20px; background-color: #eeeeee">
-									<div>
-										<div id="comment_re">
+									<div
+										id="comment_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>">
+										<div>
 											<div id="idplace">
 												<strong> <span><%=commentList.get(i).getUserID()%></span>
 												</strong> <span><%=commentList.get(i).getBoardQnA_Reg_Date()%></span>
 												<%
-												if (userID.equals(commentList.get(i).getUserID()) || grade > 1) {
+												if (userID.equals(commentList.get(i).getUserID())) {
+												%>
+												<span style="float: right"><a href="javascript:;"
+													name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+													onclick="deleteComment(this)">[삭제]</a></span> <span style="float: right"><a
+													name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+													href="javascript:;" onclick="update(this)">[수정]</a></span>
+												<%
+												} else if (grade > 1) {
 												%>
 												<span style="float: right"><a href="javascript:;"
 													name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
@@ -288,19 +342,48 @@
 											<br>
 										</div>
 									</div>
+									<div
+										id="commentUpdate_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+										hidden>
+										<form>
+											<table class="table table-sm" style="border: 1px solid #dddddd">
+												<tr>
+													<td style="width: 20%; text-align: center; vertical-align: middle"><strong> <span><%=userID%></span></strong></td>
+													<td style="width: 60%; align: center"><textarea class="form-control"
+															id="boardQnA_Content_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+															maxlength="2048"><%=commentList.get(i).getBoardQnA_Content()%></textarea></td>
+													<td style="width: 20%; text-align: center; vertical-align: middle"><a
+														name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+														href="javascript:;" onclick="updateComment(this)" class="btn btn-primary"
+														style="color: #fff; background-color: #212529; border-color: #212529">수정</a> <a class="btn btn-primary"
+														name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+														href="javascript:;" onclick="update(this)">취소</a></td>
+												</tr>
+											</table>
+										</form>
+									</div>
 								</li>
 								<%
 								} else {
 								if (commentList.get(i - 1).getBoardQnA_CommentID() == commentList.get(i).getBoardQnA_CommentID()) { // 대댓글의 댓글이 삭제되지 않은 경우
 								%>
 								<li style="list-style: none; padding-left: 20px; background-color: #eeeeee">
-									<div>
-										<div id="comment_re">
+									<div
+										id="comment_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>">
+										<div>
 											<div id="idplace">
 												<strong> <span><%=commentList.get(i).getUserID()%></span>
 												</strong> <span><%=commentList.get(i).getBoardQnA_Reg_Date()%></span>
 												<%
-												if (userID.equals(commentList.get(i).getUserID()) || grade > 1) {
+												if (userID.equals(commentList.get(i).getUserID())) {
+												%>
+												<span style="float: right"><a href="javascript:;"
+													name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+													onclick="deleteComment(this)">[삭제]</a></span> <span style="float: right"><a
+													name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+													href="javascript:;" onclick="update(this)">[수정]</a></span>
+												<%
+												} else if (grade > 1) {
 												%>
 												<span style="float: right"><a href="javascript:;"
 													name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
@@ -314,6 +397,26 @@
 											</div>
 											<br>
 										</div>
+									</div>
+									<div
+										id="commentUpdate_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+										hidden>
+										<form>
+											<table class="table table-sm" style="border: 1px solid #dddddd">
+												<tr>
+													<td style="width: 20%; text-align: center; vertical-align: middle"><strong> <span><%=userID%></span></strong></td>
+													<td style="width: 60%; align: center"><textarea class="form-control"
+															id="boardQnA_Content_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+															maxlength="2048"><%=commentList.get(i).getBoardQnA_Content()%></textarea></td>
+													<td style="width: 20%; text-align: center; vertical-align: middle"><a
+														name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+														href="javascript:;" onclick="updateComment(this)" class="btn btn-primary"
+														style="color: #fff; background-color: #212529; border-color: #212529">수정</a> <a class="btn btn-primary"
+														name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+														href="javascript:;" onclick="update(this)">취소</a></td>
+												</tr>
+											</table>
+										</form>
 									</div>
 								</li>
 								<%
@@ -329,19 +432,25 @@
 												<span>삭제된 댓글입니다.</span>
 											</div>
 											<div id="buttonplace" style="text-align: right">
-												<a name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>" href="javascript:;" onclick="commentReply(this)">[답글]</a>
+												<a
+													name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>"
+													href="javascript:;" onclick="commentReply(this)">[답글]</a>
 											</div>
 										</div>
-										<div id="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>re" hidden>
+										<div
+											id="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>re"
+											hidden>
 											<form>
 												<table class="table table-sm" style="border: 1px solid #dddddd">
 													<tr>
 														<td style="width: 20%; text-align: center; vertical-align: middle"><strong> <span><%=userID%></span>
 														</strong></td>
-														<td style="width: 60%; align: center"><textarea class="form-control" id="boardQnA_ContentRe_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>" maxlength="2048"></textarea></td>
-														<td style="width: 20%; text-align: center; vertical-align: middle">
-															<a name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>" href="javascript:;" onclick="writeCommentReply(this)">등록</a>
-														</td>
+														<td style="width: 60%; align: center"><textarea class="form-control"
+																id="boardQnA_ContentRe_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>"
+																maxlength="2048"></textarea></td>
+														<td style="width: 20%; text-align: center; vertical-align: middle"><a
+															name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>"
+															href="javascript:;" onclick="writeCommentReply(this)">등록</a></td>
 													</tr>
 												</table>
 											</form>
@@ -349,13 +458,22 @@
 									</div>
 								</li>
 								<li style="list-style: none; padding-left: 20px; background-color: #eeeeee">
-									<div>
-										<div id="comment_re">
+									<div
+										id="comment_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>">
+										<div>
 											<div id="idplace">
 												<strong> <span><%=commentList.get(i).getUserID()%></span>
 												</strong> <span><%=commentList.get(i).getBoardQnA_Reg_Date()%></span>
 												<%
-												if (userID.equals(commentList.get(i).getUserID()) || grade > 1) {
+												if (userID.equals(commentList.get(i).getUserID())) {
+												%>
+												<span style="float: right"><a href="javascript:;"
+													name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+													onclick="deleteComment(this)">[삭제]</a></span> <span style="float: right"><a
+													name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+													href="javascript:;" onclick="update(this)">[수정]</a></span>
+												<%
+												} else if (grade > 1) {
 												%>
 												<span style="float: right"><a href="javascript:;"
 													name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
@@ -369,6 +487,26 @@
 											</div>
 											<br>
 										</div>
+									</div>
+									<div
+										id="commentUpdate_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+										hidden>
+										<form>
+											<table class="table table-sm" style="border: 1px solid #dddddd">
+												<tr>
+													<td style="width: 20%; text-align: center; vertical-align: middle"><strong> <span><%=userID%></span></strong></td>
+													<td style="width: 60%; align: center"><textarea class="form-control"
+															id="boardQnA_Content_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+															maxlength="2048"><%=commentList.get(i).getBoardQnA_Content()%></textarea></td>
+													<td style="width: 20%; text-align: center; vertical-align: middle"><a
+														name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+														href="javascript:;" onclick="updateComment(this)" class="btn btn-primary"
+														style="color: #fff; background-color: #212529; border-color: #212529">수정</a> <a class="btn btn-primary"
+														name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+														href="javascript:;" onclick="update(this)">취소</a></td>
+												</tr>
+											</table>
+										</form>
 									</div>
 								</li>
 								<%
@@ -377,13 +515,22 @@
 								} else { // 첫번째 코멘트가 아닌 경우
 								%>
 								<li style="list-style: none; padding-left: 20px; background-color: #eeeeee">
-									<div>
-										<div id="comment_re">
+									<div
+										id="comment_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>">
+										<div>
 											<div id="idplace">
 												<strong> <span><%=commentList.get(i).getUserID()%></span>
 												</strong> <span><%=commentList.get(i).getBoardQnA_Reg_Date()%></span>
 												<%
-												if (userID.equals(commentList.get(i).getUserID()) || grade > 1) {
+												if (userID.equals(commentList.get(i).getUserID())) {
+												%>
+												<span style="float: right"><a href="javascript:;"
+													name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+													onclick="deleteComment(this)">[삭제]</a></span> <span style="float: right"><a
+													name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+													href="javascript:;" onclick="update(this)">[수정]</a></span>
+												<%
+												} else if (grade > 1) {
 												%>
 												<span style="float: right"><a href="javascript:;"
 													name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
@@ -397,6 +544,26 @@
 											</div>
 											<br>
 										</div>
+									</div>
+									<div
+										id="commentUpdate_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+										hidden>
+										<form>
+											<table class="table table-sm" style="border: 1px solid #dddddd">
+												<tr>
+													<td style="width: 20%; text-align: center; vertical-align: middle"><strong> <span><%=userID%></span></strong></td>
+													<td style="width: 60%; align: center"><textarea class="form-control"
+															id="boardQnA_Content_<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+															maxlength="2048"><%=commentList.get(i).getBoardQnA_Content()%></textarea></td>
+													<td style="width: 20%; text-align: center; vertical-align: middle"><a
+														name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+														href="javascript:;" onclick="updateComment(this)" class="btn btn-primary"
+														style="color: #fff; background-color: #212529; border-color: #212529">수정</a> <a class="btn btn-primary"
+														name="<%=commentList.get(i).getBoardQnA_ID()%>,<%=commentList.get(i).getBoardQnA_ReplyID()%>,<%=commentList.get(i).getBoardQnA_CommentID()%>,<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
+														href="javascript:;" onclick="update(this)">취소</a></td>
+												</tr>
+											</table>
+										</form>
 									</div>
 								</li>
 								<%
