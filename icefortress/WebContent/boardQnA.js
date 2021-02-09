@@ -246,3 +246,46 @@ function writeCommentReply(commentReply){
 		});
 	}
 }
+
+// 댓글, 대댓글 수정버튼을 눌렀을 경우 + 취소버튼을 눌렀을 경우 수행
+function update(Comment) {
+	var hidden = update.name;
+	var query1 = "comment_"+hidden;
+	var query2 = "commentUpdate_"+hidden;
+	$("#"+query1).toggle();
+	$("#"+query2).toggle();
+}
+
+// 댓글, 대댓글을 수정할 경우 수행
+function updateComment(updateComment){
+	var tmp = updateComment.name;
+	var arr = tmp.split(",");
+	
+	if(!$("#boardQnA_Content_"+tmp).val()){ // 수정할 내용을 입력하지 않았을 경우
+		alert("수정할 내용을 입력하세요.");
+		("#boardQnA_Content_"+tmp).focus();
+		return false;
+	} else {
+		var query = {
+					boardQnA_ID:arr[0],
+					boardQnA_ReplyID:arr[1],
+					boardQnA_CommentID:arr[2],
+					boardQnA_CommentID_Re:arr[3],
+					boardQnA_Content:$("#boardQnA_Content_"+tmp).val()
+		};
+		$.ajax({
+			type:"post",
+			url:"boardQnA_updateCommentPro.jsp",
+			data:query,
+			success:function(data){
+				if (data == 1){
+					location.reload();
+				} else {
+					alert("수정에 실패했습니다.");
+					window.history.back();
+				}
+			}
+		});
+	}
+}
+	
