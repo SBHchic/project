@@ -85,7 +85,7 @@ public class BoardQnADBBean {
     		pstmt.setInt(1, boardQnA_ID);
     		rs = pstmt.executeQuery();
     		if (rs.next()) {
-    			return rs.getInt(2) + 1;
+    			return rs.getInt(1) + 1;
     		}
     		return 1; // 첫 번째 답글인 경우
     	} catch (Exception e) {
@@ -110,7 +110,7 @@ public class BoardQnADBBean {
     		pstmt.setInt(2, boardQnA_ReplyID);
     		rs = pstmt.executeQuery();
     		if (rs.next()) {
-    			return rs.getInt(3) + 1;
+    			return rs.getInt(1) + 1;
     		}
     		return 1; // 첫 번째 댓글인 경우
     	} catch (Exception e) {
@@ -136,7 +136,7 @@ public class BoardQnADBBean {
     		pstmt.setInt(3, boardQnA_CommentID);
     		rs = pstmt.executeQuery();
     		if (rs.next()) {
-    			return rs.getInt(4) + 1;
+    			return rs.getInt(1) + 1;
     		}
     		return 1; // 첫 번째 대댓글인 경우
     	} catch (Exception e) {
@@ -208,7 +208,7 @@ public class BoardQnADBBean {
         	pstmt.setInt(1, boardQnA_ID);
         	pstmt.setInt(2, boardQnA_ReplyID);
         	pstmt.setInt(3, getNextCommentWrite(boardQnA_ID, boardQnA_ReplyID));
-        	pstmt.setString(4, boardQnA_ID+","+boardQnA_ReplyID+"의 댓글");
+        	pstmt.setString(4, boardQnA_ID+","+boardQnA_ReplyID+"의 "+ getNextCommentWrite(boardQnA_ID, boardQnA_ReplyID) +"번째 댓글");
         	pstmt.setString(5, userID);
         	pstmt.setString(6, getDate());
         	pstmt.setString(7, boardQnA_Content);
@@ -235,7 +235,7 @@ public class BoardQnADBBean {
         	pstmt.setInt(2, boardQnA_ReplyID);
         	pstmt.setInt(3, boardQnA_CommentID);
         	pstmt.setInt(4, getNextCommentReplyWrite(boardQnA_ID, boardQnA_ReplyID, boardQnA_CommentID));
-        	pstmt.setString(5, boardQnA_ID+","+boardQnA_ReplyID+","+boardQnA_CommentID+"의 대댓글");
+        	pstmt.setString(5, boardQnA_ID+","+boardQnA_ReplyID+","+boardQnA_CommentID+"번째 댓글의 "+ getNextCommentReplyWrite(boardQnA_ID, boardQnA_ReplyID, boardQnA_CommentID) +"번째 대댓글");
         	pstmt.setString(6, userID);
         	pstmt.setString(7, getDate());
         	pstmt.setString(8, boardQnA_Content);
@@ -276,6 +276,31 @@ public class BoardQnADBBean {
         return -1; // 데이터베이스 오류
     }
     
+    // 댓글, 대댓글을 수정하는 메서드
+    public int updateComment(BoardQnADataBean comment, String boardQnA_Content) {
+    	Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+        	conn = getConnection();
+        	
+        	pstmt = conn.prepareStatement("update boardQnA set boardQnA_Content = ?, boardQnA_Reg_Date = ? where boardQnA_ID = ? and boardQnA_ReplyID = ? and boardQnA_CommentID = ? and boardQnA_CommentID_Re = ?");
+        	pstmt.setString(1, boardQnA_Content);
+        	pstmt.setString(2, getDate());
+        	pstmt.setInt(3, comment.getBoardQnA_ID());
+        	pstmt.setInt(4, comment.getBoardQnA_ReplyID());
+        	pstmt.setInt(5, comment.getBoardQnA_CommentID());
+        	pstmt.setInt(6, comment.getBoardQnA_CommentID_Re());
+        	pstmt.executeUpdate();
+        	return 1; // 수정 성공
+        } catch (Exception e) {
+        	e.printStackTrace();
+        } finally {
+    		if (pstmt != null) try { pstmt.close(); } catch(SQLException sqle) {}
+            if (conn != null) try { conn.close(); } catch(SQLException sqle) {}
+    	}
+        return -1; // 데이터베이스 오류
+    }
+    
     // 글, 답글을 삭제하는 메서드
     public int delete(int boardQnA_ID, int boardQnA_ReplyID) {
     	Connection conn = null;
@@ -297,7 +322,7 @@ public class BoardQnADBBean {
         		pstmt.setInt(5, rs.getInt("boardQnA_CommentID_Re")); // 그 글의 대댓글
         		pstmt.executeUpdate(); // 그 글의 댓글, 대댓글도 같이 삭제됨
         	}
-        	return 1; // 수정 성공
+        	return 1; // 삭제 성공
         } catch (Exception e) {
         	e.printStackTrace();
         } finally {
@@ -315,14 +340,14 @@ public class BoardQnADBBean {
         try {
         	conn = getConnection();
         	
-        	pstmt = conn.prepareStatement("update boardQnA set available = 0, boardQnA_DeleteReg_Date = ? where boardQnA_ID = ? and boardQnA_ReplyID = ? and boardQnA_CommentID = ? and boardQnA_CommentID_Re = ?"); // 그 글의 댓글도 같이 불러옴
+        	pstmt = conn.prepareStatement("update boardQnA set available = 0, boardQnA_DeleteReg_Date = ? where boardQnA_ID = ? and boardQnA_ReplyID = ? and boardQnA_CommentID = ? and boardQnA_CommentID_Re = ?"); 
         	pstmt.setString(1, getDate());
         	pstmt.setInt(2, comment.getBoardQnA_ID());
         	pstmt.setInt(3, comment.getBoardQnA_ReplyID());
         	pstmt.setInt(4, comment.getBoardQnA_CommentID());
         	pstmt.setInt(5, comment.getBoardQnA_CommentID_Re());
         	pstmt.executeUpdate();
-        	return 1; // 수정 성공
+        	return 1; // 삭제 성공
         } catch (Exception e) {
         	e.printStackTrace();
         } finally {
@@ -442,7 +467,7 @@ public class BoardQnADBBean {
         BoardQnADataBean written = null;
     	try {
     		conn = getConnection();
-    		String SQL = "select * from boardQnA where boardQnA_ID = ? and boardQnA_ReplyID = ? and boardQnA_CommentID = 0";
+    		String SQL = "select * from boardQnA where boardQnA_ID = ? and boardQnA_ReplyID = ? and boardQnA_CommentID = 0"; // available이 필요없는 이유 : 리스트를 뽑아낼 때 이미 걸러놓음 + 나중에 삭제 게시판 공용 사용을 위해
     		pstmt = conn.prepareStatement(SQL);
     		pstmt.setInt(1, boardQnA_ID);
     		pstmt.setInt(2, boardQnA_ReplyID);
@@ -516,9 +541,10 @@ public class BoardQnADBBean {
         ArrayList<BoardQnADataBean> list = new ArrayList<BoardQnADataBean>();
     	try {
     		conn = getConnection();
-    		String SQL = "select * from boardQnA where boardQnA_ID = ? and boardQnA_CommentID > 0 and boardQnA_CommentID_Re >= 0 and available = 1 order by boardQnA_CommentID asc, boardQnA_CommentID_Re asc";
+    		String SQL = "select * from boardQnA where boardQnA_ID = ? and boardQnA_ReplyID = ? and boardQnA_CommentID > 0 and boardQnA_CommentID_Re >= 0 and available = 1 order by boardQnA_CommentID asc, boardQnA_CommentID_Re asc";
     		pstmt = conn.prepareStatement(SQL);
     		pstmt.setInt(1, written.getBoardQnA_ID());
+    		pstmt.setInt(2, written.getBoardQnA_ReplyID());
     		rs = pstmt.executeQuery();
     		while (rs.next()) {
     			BoardQnADataBean tmp = new BoardQnADataBean();
