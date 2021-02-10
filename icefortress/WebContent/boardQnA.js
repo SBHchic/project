@@ -20,7 +20,6 @@ $(document).ready(function(){
 						location.href("boardQnA.jsp");
 					} else {
 						alert("작성에 실패했습니다.");
-						window.history.back();
 					}
 				}
 			});
