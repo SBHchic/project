@@ -155,7 +155,7 @@ public class BoardQnADBBean {
         try {
         	conn = getConnection();
         	
-        	pstmt = conn.prepareStatement("insert into boardQnA values (?, 0, 0, 0, ?, ?, ?, ?, 1, ?)");
+        	pstmt = conn.prepareStatement("insert into boardQnA values (?,0,0,0,?,?,?,?,1,?)");
         	pstmt.setInt(1, getNextWrittenID());
         	pstmt.setString(2, boardQnA_Title);
         	pstmt.setString(3, userID);
@@ -357,58 +357,35 @@ public class BoardQnADBBean {
         return -1; // 데이터베이스 오류
     }
     
-    // 일반 멤버인 경우 본인글과 답글을 리스트에 넣음 (보안을 위해)
-    public ArrayList<BoardQnADataBean> getList_Member(String userID) { 
-    	Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        ArrayList<BoardQnADataBean> list = new ArrayList<BoardQnADataBean>();
-    	try {
-    		conn = getConnection();
-    		String SQL = "select * from boardQnA where userID = ? and boardQnA_CommentID = 0 order by boardQnA_ID desc";
-    		pstmt = conn.prepareStatement(SQL);
-    		pstmt.setString(1, userID);
-    		rs = pstmt.executeQuery();
-    		while (rs.next()) {
-    			Connection conn2 = null;
-    	        PreparedStatement pstmt2 = null;
-    	        ResultSet rs2 = null;
-    	        try {
-    	        	conn2 = getConnection();
-    	        	String SQL2 = "select * from boardQnA where boardQnA_ID = ? and boardQnA_ReplyID >= 0 and boardQnA_CommentID = 0 and available = 1 order by boardQnA_ReplyID asc";
-    	        	pstmt2 = conn2.prepareStatement(SQL2);
-    	        	pstmt2.setInt(1, rs.getInt("boardQnA_ID"));
-    	        	rs2 = pstmt.executeQuery();
-    	        	while (rs2.next()) {
-    	        		BoardQnADataBean tmp = new BoardQnADataBean();
-    	        		tmp.setBoardQnA_ID(rs2.getInt(1));
-    	        		tmp.setBoardQnA_ReplyID(rs2.getInt(2));
-    	        		tmp.setBoardQnA_CommentID(rs2.getInt(3));
-    	        		tmp.setBoardQnA_CommentID_Re(rs.getInt(4));
-    	        		tmp.setBoardQnA_Title(rs2.getString(5));
-    	        		tmp.setUserID(rs2.getString(6));
-    	        		tmp.setBoardQnA_Reg_Date(rs2.getString(7));
-    	        		tmp.setBoardQnA_Content(rs2.getString(8));
-    	        		tmp.setAvailable(rs2.getByte(9));
-    	        		tmp.setBoardQnA_DeleteReg_Date(rs2.getString(10));
-    	        		list.add(tmp);
-    	        	}
-    	        	
-    	        } catch(Exception e) {
-    	        	e.printStackTrace();
-    	        } finally {
-    	    		if (rs2 != null) try { rs2.close(); } catch(SQLException sqle) {}
-    	    		if (pstmt2 != null) try { pstmt2.close(); } catch(SQLException sqle) {}
-    	            if (conn2 != null) try { conn2.close(); } catch(SQLException sqle) {}
-    	    	}
-    		}
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    	} finally {
-    		if (rs != null) try { rs.close(); } catch(SQLException sqle) {}
-    		if (pstmt != null) try { pstmt.close(); } catch(SQLException sqle) {}
-            if (conn != null) try { conn.close(); } catch(SQLException sqle) {}
-    	}
+    // 일반 멤버인 경우 본인글과 답글을 리스트에 넣음 (보안을 위해) - getList_Submaster() 와 연계
+    public ArrayList<BoardQnADataBean> getList_Member(String userID, ArrayList<BoardQnADataBean> list) { 
+        for (int i = list.size()-1; i >= 0; i--) {
+        	if (!list.get(i).getUserID().equals(userID)) { // userID와 리스트의 userID가 다른경우
+        		if (list.get(i).getBoardQnA_ReplyID() == 0) {
+        			list.remove(i);
+        		} else {
+        			Connection conn = null;
+        	        PreparedStatement pstmt = null;
+        	        ResultSet rs = null;
+        	    	try {
+        	    		conn = getConnection();
+        	    		String SQL = "select userID from boardQnA where boardQnA_ID = ? and boardQnA_ReplyID = 0 and boardQnA_CommentID = 0";
+        	    		pstmt = conn.prepareStatement(SQL);
+        	    		pstmt.setInt(1, list.get(i).getBoardQnA_ID());
+        	    		rs = pstmt.executeQuery();
+        	    		if (!rs.getString(1).equals(userID)) {
+        	    			list.remove(i);
+        	    		}
+        	    	} catch (Exception e) {
+        	    		e.printStackTrace();
+        	    	} finally {
+        	    		if (rs != null) try { rs.close(); } catch(SQLException sqle) {}
+        	    		if (pstmt != null) try { pstmt.close(); } catch(SQLException sqle) {}
+        	            if (conn != null) try { conn.close(); } catch(SQLException sqle) {}
+        	    	}
+        		}
+        	}
+        }
     	return list; 
     }
     
@@ -472,7 +449,7 @@ public class BoardQnADBBean {
     		pstmt.setInt(1, boardQnA_ID);
     		pstmt.setInt(2, boardQnA_ReplyID);
     		rs = pstmt.executeQuery();
-    		while (rs.next()) {
+    		if(rs.next()) {
     			written = new BoardQnADataBean();
         		written.setBoardQnA_ID(rs.getInt(1));
         		written.setBoardQnA_ReplyID(rs.getInt(2));
@@ -484,6 +461,7 @@ public class BoardQnADBBean {
         		written.setBoardQnA_Content(rs.getString(8));
         		written.setAvailable(rs.getByte(9));
         		written.setBoardQnA_DeleteReg_Date(rs.getString(10));
+        		return written;
     		}
     	} catch (Exception e) {
     		e.printStackTrace();
@@ -492,7 +470,7 @@ public class BoardQnADBBean {
     		if (pstmt != null) try { pstmt.close(); } catch(SQLException sqle) {}
             if (conn != null) try { conn.close(); } catch(SQLException sqle) {}
     	}
-    	return written; 
+    	return null; 
     }
     
     // 단일 코멘트를 가져오는 메서드
