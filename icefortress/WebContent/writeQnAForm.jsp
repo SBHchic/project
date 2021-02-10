@@ -91,7 +91,7 @@
 							<td><input type="text" class="form-control" placeholder="글 제목" id="boardQnA_Title" maxlength="50"></td>
 						</tr>
 						<tr>
-							<td><textarea class="form-control" placeholder="글 내용" id="boardQnA_Content" maxlength="2048"></textarea></td>
+							<td><textarea class="form-control" rows="20" placeholder="글 내용" id="boardQnA_Content" maxlength="2048"></textarea></td>
 						</tr>
 					</tbody>
 				</table>
