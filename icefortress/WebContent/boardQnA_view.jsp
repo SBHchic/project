@@ -41,7 +41,7 @@
 	}
 	int boardQnA_ReplyID = -1;
 	if (request.getParameter("boardQnA_ReplyID") != null) {
-	boardQnA_ID = Integer.parseInt(request.getParameter("boardQnA_ReplyID"));
+	boardQnA_ReplyID = Integer.parseInt(request.getParameter("boardQnA_ReplyID"));
 	}
 
 	if (boardQnA_ID == 0 || boardQnA_ReplyID == -1) {
@@ -53,9 +53,9 @@
 	<%
 	}
 	BoardQnADBBean manager2 = BoardQnADBBean.getInstance();
-	BoardQnADataBean boardQnADataBean = manager2.viewWritten(boardQnA_ID, boardQnA_ReplyID);
+	BoardQnADataBean written = manager2.viewWritten(boardQnA_ID, boardQnA_ReplyID);
 
-	ArrayList<BoardQnADataBean> commentList = manager2.getCommentList(boardQnADataBean);
+	ArrayList<BoardQnADataBean> commentList = manager2.getCommentList(written);
 
 	int check = manager2.checkAccessRights(userID, boardQnA_ID); // 접근 권한 확인
 	if (!(check == 1 || grade > 1)) {
@@ -131,39 +131,39 @@
 			<table class="table table-striped" style="text-align: center; border: 1px solid #dddddd">
 				<thead>
 					<tr>
-						<th colspan="6" style="background-color: #eeeeee; text-align: center"><%=boardQnADataBean.getBoardQnA_Title().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")%></th>
+						<th colspan="6" style="background-color: #eeeeee; text-align: center"><%=written.getBoardQnA_Title().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")%></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td>작성자</td>
-						<td colspan="2"><%=boardQnADataBean.getUserID()%></td>
+						<td colspan="2"><%=written.getUserID()%></td>
 						<td>작성일</td>
-						<td colspan="2"><%=boardQnADataBean.getBoardQnA_Reg_Date()%></td>
+						<td colspan="2"><%=written.getBoardQnA_Reg_Date()%></td>
 					</tr>
 					<tr>
-						<td colspan="6" style="min-height: 200px; text-align: left"><%=boardQnADataBean.getBoardQnA_Content().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")%></td>
+						<td colspan="6" style="min-height: 200px; text-align: left"><%=written.getBoardQnA_Content().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")%></td>
 					</tr>
 				</tbody>
 			</table>
 			<button id="previous" type="button" class="btn btn-primary">목록</button>
 			<%
-			if (userID != null && userID.equals(boardQnADataBean.getUserID())) {
+			if (userID != null && userID.equals(written.getUserID())) {
 			%>
 			<a
-				href="boardQnA_updateWrittenForm.jsp?boardQnA_ID=<%=boardQnADataBean.getBoardQnA_ID()%>&boardQnA_ReplyID=<%=boardQnADataBean.getBoardQnA_ReplyID()%>"
+				href="boardQnA_updateWrittenForm.jsp?boardQnA_ID=<%=written.getBoardQnA_ID()%>&boardQnA_ReplyID=<%=written.getBoardQnA_ReplyID()%>"
 				class="btn btn-primary">수정</a>
-			<button id="deleteWritten" name="<%=boardQnADataBean.getBoardQnA_ID()%>,<%=boardQnADataBean.getBoardQnA_ReplyID()%>" type="button"
+			<button id="deleteWritten" name="<%=written.getBoardQnA_ID()%>,<%=written.getBoardQnA_ReplyID()%>" type="button"
 				class="btn btn-primary">삭제</button>
 			<%
 			} else if (grade > 1) {
 			%>
-			<button id="deleteWritten" name="<%=boardQnADataBean.getBoardQnA_ID()%>,<%=boardQnADataBean.getBoardQnA_ReplyID()%>" type="button"
+			<button id="deleteWritten" name="<%=written.getBoardQnA_ID()%>,<%=written.getBoardQnA_ReplyID()%>" type="button"
 				class="btn btn-primary">삭제</button>
 			<%
 			}
 			%>
-			<a href="boardQnA_writeReplyForm.jsp?boardQnA_ID=<%=boardQnADataBean.getBoardQnA_ID()%>" class="btn btn-primary pull-right">답글쓰기</a>
+			<a href="boardQnA_writeReplyForm.jsp?boardQnA_ID=<%=written.getBoardQnA_ID()%>" class="btn btn-primary pull-right">답글쓰기</a>
 		</div>
 	</div>
 	<div class="container">
