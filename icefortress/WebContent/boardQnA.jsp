@@ -52,7 +52,8 @@ a, a:hover {
 	
 	int start = (pageNumber-1) * pageSize +1; // 현재 페이지에서 시작글 번호
 	if (grade < 2) {
-		listAll = manager2.getList_Member(userID);
+		ArrayList<BoardQnADataBean> list = manager2.getList_Submaster();
+		listAll = manager2.getList_Member(userID, list);
 	} else {
 		listAll = manager2.getList_Submaster();
 	}
