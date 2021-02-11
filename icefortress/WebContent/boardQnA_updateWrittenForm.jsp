@@ -41,7 +41,7 @@
 	}
 	int boardQnA_ReplyID = -1;
 	if (request.getParameter("boardQnA_ReplyID") != null){
-		boardQnA_ID = Integer.parseInt(request.getParameter("boardQnA_ReplyID"));
+		boardQnA_ReplyID = Integer.parseInt(request.getParameter("boardQnA_ReplyID"));
 	}
 	
 	if (boardQnA_ID == 0 || boardQnA_ReplyID == -1){
@@ -53,7 +53,7 @@
 <%
 	}
 	BoardQnADBBean manager2 = BoardQnADBBean.getInstance();
-	BoardQnADataBean boardQnADataBean = manager2.viewWritten(boardQnA_ID, boardQnA_ReplyID);
+	BoardQnADataBean written = manager2.viewWritten(boardQnA_ID, boardQnA_ReplyID);
 	
 	int check = manager2.checkAccessRights(userID, boardQnA_ID); // 접근 권한 확인
 	if (!(check == 1)) { 
@@ -136,15 +136,15 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td><input type="text" class="form-control" placeholder="글 제목" id="boardQnA_Title" maxlength="50" value="<%=boardQnADataBean.getBoardQnA_Title() %>"></td>
+							<td><input type="text" class="form-control" placeholder="글 제목" id="boardQnA_Title" maxlength="50" value="<%=written.getBoardQnA_Title() %>"></td>
 						</tr>
 						<tr>
-							<td><textarea class="form-control" placeholder="글 내용" id="boardQnA_Content" maxlength="2048"><%=boardQnADataBean.getBoardQnA_Content() %></textarea></td>
+							<td><textarea class="form-control" rows="20" placeholder="글 내용" id="boardQnA_Content" maxlength="2048"><%=written.getBoardQnA_Content() %></textarea></td>
 						</tr>
 					</tbody>
 				</table>
 				<button id="previous" type="button" class="btn btn-primary">이전</button>
-				<button id="submit_update" type="button" name="<%=boardQnADataBean.getBoardQnA_ID() %>,<%=boardQnADataBean.getBoardQnA_ReplyID() %>" class="btn btn-primary pull-right">수정</button>
+				<button id="submit_update" type="button" name="<%=written.getBoardQnA_ID() %>,<%=written.getBoardQnA_ReplyID() %>" class="btn btn-primary pull-right">수정</button>
 			</form>
 		</div>
 	</div>
