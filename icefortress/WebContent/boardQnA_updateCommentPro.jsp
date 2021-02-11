@@ -3,8 +3,6 @@
 <%@ page import = "board.BoardQnADBBean" %>
 <%@ page import = "board.BoardQnADataBean" %>
 
-<script src="../js/jquery-3.5.1.min.js"></script>
-
 <% request.setCharacterEncoding("UTF-8");%>
 
 <%

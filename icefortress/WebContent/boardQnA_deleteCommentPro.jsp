@@ -4,8 +4,6 @@
 <%@ page import = "board.BoardQnADataBean" %>
 <%@ page import = "user.UserDBBean" %>
 
-<script src="../js/jquery-3.5.1.min.js"></script>
-
 <% request.setCharacterEncoding("UTF-8");%>
 
 <%

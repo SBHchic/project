@@ -2,8 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ page import = "board.BoardQnADBBean" %>
 
-<script src="../js/jquery-3.5.1.min.js"></script>
-
 <% request.setCharacterEncoding("UTF-8");%>
 
 <%
