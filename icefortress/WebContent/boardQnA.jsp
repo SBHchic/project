@@ -133,10 +133,10 @@ a, a:hover {
 			<table class="table table-striped" style="text-align: center; border: 1px solid #dddddd">
 				<thead>
 					<tr>
-						<th style="background-color: #eeeeeee; text-align: center">번호</th>
-						<th style="background-color: #eeeeeee; text-align: center">제목</th>
-						<th style="background-color: #eeeeeee; text-align: center">작성자</th>
-						<th style="background-color: #eeeeeee; text-align: center">작성일</th>
+						<th style="width: 10%; background-color: #eeeeeee; text-align: center">번호</th>
+						<th style="width: 50%; background-color: #eeeeeee; text-align: center">제목</th>
+						<th style="width: 15%; background-color: #eeeeeee; text-align: center">작성자</th>
+						<th style="width: 25%; background-color: #eeeeeee; text-align: center">작성일</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -147,10 +147,10 @@ a, a:hover {
 						if (list.get(i).getBoardQnA_ReplyID() > 0) { // 답글인 경우
 							replyCount++;
 							if (i == 0){ // 첫번째 글이면서 글의 첫 답글인 경우
-								if (manager2.viewWritten(list.get(i).getBoardQnA_ID(), 0) != null){ // 글이 존재하는 경우
+								if (manager2.viewWritten(list.get(i).getBoardQnA_ID(), 0).getAvailable() == 1){ // 글이 존재하는 경우
 					%>
 					<tr>
-						<td><%=boardID %>-<%=list.get(i).getBoardQnA_ReplyID() %></td>
+						<td><%=boardID %>-<%=replyCount %></td>
 						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>"><%=list.get(i).getBoardQnA_Title() %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getBoardQnA_Reg_Date() %></td>
@@ -160,13 +160,15 @@ a, a:hover {
 					%>
 					<tr>
 						<td><%=start+i %></td>
-						<td colspan="3">삭제된 글입니다.</td>
+						<td>삭제된 글입니다.</td>
+						<td>****</td>
+						<td> </td>
 					</tr>
 					<%
 									boardID = start+i;
 					%>
 					<tr>
-						<td><%=boardID %>-<%=list.get(i).getBoardQnA_ReplyID() %></td>
+						<td><%=boardID %>-<%=replyCount %></td>
 						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>"><%=list.get(i).getBoardQnA_Title() %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getBoardQnA_Reg_Date() %></td>
@@ -174,10 +176,10 @@ a, a:hover {
 					<%
 								} 
 							} else if (replyCount == 1) { // 첫번째 글이 아니면서 첫 답글인 경우
-								if(!(list.get(i-1).getBoardQnA_ID() == list.get(i).getBoardQnA_ID())){ // 위의 글과 글 일련번호가 같을때
+								if(list.get(i-1).getBoardQnA_ID() == list.get(i).getBoardQnA_ID()){ // 위의 글과 글 일련번호가 같을때
 					%>
 					<tr>
-						<td><%=boardID %>-<%=list.get(i).getBoardQnA_ReplyID() %></td>
+						<td><%=boardID %>-<%=replyCount %></td>
 						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>"><%=list.get(i).getBoardQnA_Title() %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getBoardQnA_Reg_Date() %></td>
@@ -187,13 +189,15 @@ a, a:hover {
 					%>
 					<tr>
 						<td><%=start+i %></td>
-						<td colspan="3">삭제된 글입니다.</td>
+						<td>삭제된 글입니다.</td>
+						<td>****</td>
+						<td> </td>
 					</tr>
 					<%
 									boardID = start+i;
 					%>
 					<tr>
-						<td><%=boardID %>-<%=list.get(i).getBoardQnA_ReplyID() %></td>
+						<td><%=boardID %>-<%=replyCount %></td>
 						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>"><%=list.get(i).getBoardQnA_Title() %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getBoardQnA_Reg_Date() %></td>
@@ -203,7 +207,7 @@ a, a:hover {
 							} else { // 첫번째 글이 아니면서 첫 답글이 아닌 경우
 					%>
 					<tr>
-						<td><%=boardID %>-<%=list.get(i).getBoardQnA_ReplyID() %></td>
+						<td><%=boardID %>-<%=replyCount %></td>
 						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>"><%=list.get(i).getBoardQnA_Title() %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getBoardQnA_Reg_Date() %></td>
@@ -226,18 +230,20 @@ a, a:hover {
 					%>
 				</tbody>
 			</table>
+			<div class="btn-toolbar text-center" role="toolbar" aria-label="Toolbar with button groups">
 			<%
 				if (count > 0) {
-					int pageCount = count / pageSize + (count % pageSize == 0 ? 0 : 1);
-					int startPage = 1;
+					int pageCount = count / pageSize + (count % pageSize == 0 ? 0 : 1); // 총 페이지의 개수
+					int pageBlock = 10;
 					
-					if (pageNumber % pageSize != 0){
-						startPage = pageNumber / pageSize * pageSize + 1;
+					int startPage;
+					
+					if (pageNumber % pageBlock == 1){
+						startPage = pageNumber;
 					} else {
-						startPage = (pageNumber / pageSize - 1) * pageSize + 1;
+						startPage = ((pageNumber - 1) / pageBlock) * pageBlock + 1;
 					}
 					
-					int pageBlock = 10;
 					int endPage = startPage + pageBlock - 1;
 					
 					if (endPage > pageCount) {
@@ -245,8 +251,7 @@ a, a:hover {
 					}
 					if (startPage > pageBlock) {
 			%>
-			<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style="width: 500px; margin: auto;">
-				<div class="btn-group me-2" role="group" aria-label="First group">
+				<div class="btn-group me-2" role="group" aria-label="First group" style="float:none; margin:0 auto">
 					<button id="previousButton" name="<%=startPage-1 %>" onclick="p(this)" type="button" class="btn btn-primary"
 						style="color: #fff; background-color: #6c757d; border-color: #6c757d">&lt;&lt;</button>
 				</div>
@@ -254,26 +259,26 @@ a, a:hover {
 					}
 					for (int i = startPage; i <= endPage; i++){
 			%>
-				<div class="btn-group me-2" role="group" aria-label="Second group">
+				<div class="btn-group me-2" role="group" aria-label="Second group" style="float:none; margin:0 auto">
 					<%
 						if(pageNumber == i) {
 			%>
 					<button id="pageNumbers" name="<%=i %>" onclick="p(this)" type="button" class="btn btn-primary"
-						style="color: #fff; background-color: #343a40; border-color: #343a40"></button>
+						style="color: #fff; background-color: #343a40; border-color: #343a40"><%=i %></button>
 					<%
 						} else {
 			%>
 					<button id="pageNumbers" name="<%=i %>" onclick="p(this)" type="button" class="btn btn-primary"
-						style="color: #fff; background-color: #6c757d; border-color: #6c757d"></button>
+						style="color: #fff; background-color: #6c757d; border-color: #6c757d"><%=i %></button>
 					<%
 						}
 					}
 			%>
 				</div>
 				<%
-					if (endPage > pageCount) {
+					if (endPage < pageCount) {
 			%>
-				<div class="btn-group me-2" role="group" aria-label="Third group">
+				<div class="btn-group me-2" role="group" aria-label="Third group" style="float:none; margin:0 auto">
 					<button id="nextButton" name="<%=endPage + 1 %>" onclick="p(this)" type="button" class="btn btn-primary"
 						style="color: #fff; background-color: #6c757d; border-color: #6c757d">&gt;&gt;</button>
 				</div>
@@ -281,9 +286,11 @@ a, a:hover {
 					}
 				}
 			%>
-			</div>
-			<a href="writeQnAForm.jsp" class="btn btn-primary pull-right">글쓰기</a>
+			</div><br>
 		</div>
+		<div style="text-align: right">
+				<a href="writeQnAForm.jsp" class="btn btn-primary pull-right">글쓰기</a>
+			</div>
 	</div>
 	<%
 		}
