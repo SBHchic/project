@@ -309,7 +309,7 @@ public class BoardQnADBBean {
         try {
         	conn = getConnection();
         	
-        	pstmt = conn.prepareStatement("select from boardQnA where boardQnA_ID = ? and boardQnA_ReplyID = ?"); // 그 글의 댓글도 같이 불러옴
+        	pstmt = conn.prepareStatement("select * from boardQnA where boardQnA_ID = ? and boardQnA_ReplyID = ?"); // 그 글의 댓글도 같이 불러옴
         	pstmt.setInt(1, boardQnA_ID);
         	pstmt.setInt(2, boardQnA_ReplyID);
         	rs = pstmt.executeQuery();
@@ -373,8 +373,10 @@ public class BoardQnADBBean {
         	    		pstmt = conn.prepareStatement(SQL);
         	    		pstmt.setInt(1, list.get(i).getBoardQnA_ID());
         	    		rs = pstmt.executeQuery();
-        	    		if (!rs.getString(1).equals(userID)) {
-        	    			list.remove(i);
+        	    		if (rs.next()) {
+        	    			if(!rs.getString(1).equals(userID)) {
+        	    				list.remove(i);
+        	    			}
         	    		}
         	    	} catch (Exception e) {
         	    		e.printStackTrace();
