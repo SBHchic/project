@@ -45,10 +45,10 @@ $(document).ready(function(){
 				data:query,
 				success:function(data){
 					if (data == 1){
-						location.href("boardQnA_view.jsp?boardQnA_ID="+boardQnA_ID+"&boardQnA_ReplyID="+boardQnA_ReplyID);
+						
+						location.href("boardQnA_view.jsp?boardQnA_ID="+arr[0]+"&boardQnA_ReplyID="+arr[1]);
 					} else {
 						alert("수정에 실패했습니다.");
-						window.history.back();
 					}
 				}
 			});
@@ -73,10 +73,8 @@ $(document).ready(function(){
 						location.href("boardQnA.jsp");
 					} else if (data == 0){
 						alert("접근 권한이 없습니다.");
-						window.history.back();
 					} else {
 						alert("삭제에 실패했습니다.");
-						window.history.back();
 					}
 				}
 			});
@@ -88,11 +86,12 @@ $(document).ready(function(){
 	//boardQnA_view.jsp에서 등록버튼을 눌렀을 때 (댓글)
 	$("#writeComment").click(function(){
 		checkCommentWrite();
-		
+		var tmp = $("#writeComment").attr("name");
+		var arr = tmp.split(",");
 		if (status) {
 			var query = {
-					boardQnA_ID:boardQnA_ID,
-					boardQnA_ReplyID:boardQnA_ReplyID,
+					boardQnA_ID:arr[0],
+					boardQnA_ReplyID:arr[1],
 					boardQnA_Content:$("#boardQnA_Content").val()
 			};
 			$.ajax({
@@ -104,7 +103,6 @@ $(document).ready(function(){
 						location.reload();
 					} else {
 						alert("작성에 실패했습니다.");
-						window.history.back();
 					}
 				}
 			});
@@ -130,7 +128,6 @@ $(document).ready(function(){
 						location.href("boardQnA.jsp");
 					} else {
 						alert("작성에 실패했습니다.");
-						window.history.back();
 					}
 				}
 			});
@@ -175,7 +172,7 @@ function checkCommentWrite(){
 }
 
 // 답글버튼을 눌렀을 때 수행
-function commentReply(commentID) {
+function commentReplyForm(commentID) {
 	var hidden = commentID.name;
 	var query = hidden+"re";
 	$("#"+query).toggle();
@@ -185,7 +182,7 @@ function commentReply(commentID) {
 function deleteComment(deleteObject){
 	if(confirm("정말로 삭제하시겠습니까?") == true){
 		var tmp = deleteObject.name;
-		var arr = tmp.split(",");
+		var arr = tmp.split("_");
 		var query = {
 					boardQnA_ID:arr[0],
 					boardQnA_ReplyID:arr[1],
@@ -202,10 +199,8 @@ function deleteComment(deleteObject){
 					location.reload();
 				} else if (data == 0){
 					alert("접근 권한이 없습니다.");
-					window.history.back();
 				} else {
 					alert("삭제에 실패했습니다.");
-					window.history.back();
 				}
 			}
 		});
@@ -217,7 +212,7 @@ function deleteComment(deleteObject){
 // 대댓글을 등록할 경우 수행
 function writeCommentReply(commentReply){
 	var tmp = commentReply.name;
-	var arr = tmp.split(",");
+	var arr = tmp.split("_");
 	
 	if(!$("#boardQnA_ContentRe_"+tmp).val()){ // 댓글 내용을 입력하지 않았을 경우
 		alert("댓글 내용을 입력하세요.");
@@ -239,7 +234,6 @@ function writeCommentReply(commentReply){
 					location.reload();
 				} else {
 					alert("작성에 실패했습니다.");
-					window.history.back();
 				}
 			}
 		});
@@ -248,7 +242,7 @@ function writeCommentReply(commentReply){
 
 // 댓글, 대댓글 수정버튼을 눌렀을 경우 + 취소버튼을 눌렀을 경우 수행
 function update(Comment) {
-	var hidden = update.name;
+	var hidden = Comment.name;
 	var query1 = "comment_"+hidden;
 	var query2 = "commentUpdate_"+hidden;
 	$("#"+query1).toggle();
@@ -258,7 +252,7 @@ function update(Comment) {
 // 댓글, 대댓글을 수정할 경우 수행
 function updateComment(updateComment){
 	var tmp = updateComment.name;
-	var arr = tmp.split(",");
+	var arr = tmp.split("_");
 	
 	if(!$("#boardQnA_Content_"+tmp).val()){ // 수정할 내용을 입력하지 않았을 경우
 		alert("수정할 내용을 입력하세요.");
@@ -281,10 +275,14 @@ function updateComment(updateComment){
 					location.reload();
 				} else {
 					alert("수정에 실패했습니다.");
-					window.history.back();
 				}
 			}
 		});
 	}
+}
+
+function p(pageBtn){
+	var pageNum = pageBtn.name;
+	location.href("boardQnA.jsp?pageNumber="+pageNum);
 }
 	
