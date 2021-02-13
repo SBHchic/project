@@ -263,8 +263,6 @@ public class UserDBBean {
             
 			if(rs.next()){
 				return rs.getInt("grade"); // 세션에 있는 아이디의 등급을 가져옴
-			} else {
-				return -1; // 비로그인 상태(세션이 없는 상태)인 경우
 			}
 			
         } catch(Exception e) {
@@ -274,6 +272,6 @@ public class UserDBBean {
             if (pstmt != null) try { pstmt.close(); } catch(SQLException sqle) {}
             if (conn != null) try { conn.close(); } catch(SQLException sqle) {}
         }
-		return -2; // 데이터베이스 오류
+		return -1; // 비로그인 상태(세션이 없는 상태)인 경우
     }
 }
