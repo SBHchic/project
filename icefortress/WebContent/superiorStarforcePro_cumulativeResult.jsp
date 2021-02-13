@@ -3,7 +3,6 @@
 <%@ page import="starforce.SuperiorStarforce"%>
 <%@ page import="starforce.SuperiorStarforceDBBean"%>
 <%@ page import="starforce.SuperiorStarforceDataBean"%>
-<script src="js/jquery-3.5.1.min.js"></script>
 
 <% request.setCharacterEncoding("UTF-8"); %>
 <!-- 사용자가 입력한 정보들 --> 

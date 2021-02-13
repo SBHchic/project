@@ -3,8 +3,6 @@
 <%@ page import = "user.UserDBBean" %>
 <%@ page import = "java.sql.Timestamp" %>
 
-<script src="../js/jquery-3.5.1.min.js"></script>
-
 <% request.setCharacterEncoding("UTF-8");%>
 <jsp:useBean id="member" class="user.UserDataBean">
     <jsp:setProperty name="member" property="*" />
