@@ -32,17 +32,6 @@ $(document).ready(function(){
 		}
 	});
 	
-	// [로그아웃]버튼을 클릭하면 자동실행
-	// logout.jsp페이지를 생행
-	$("#logout").click(function(){ // [로그아웃]버튼 클릭
-		$.ajax({
-		   type: "POST",
-		   url: "logout.jsp",
-		   success: function(data){
-		   		window.location.href("main.jsp");
-		   }
-		});
-	});
 });
 
 // 인증되지 않은 사용자 영역에서 사용하는 입력 폼의 입력값 유무 확인
