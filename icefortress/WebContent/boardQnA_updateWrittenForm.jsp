@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="board.BoardQnADataBean" %>
 <%@ page import="board.BoardQnADBBean" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="user.UserDBBean" %>
 <!DOCTYPE html>
 <html>
@@ -68,25 +67,6 @@
 			</button>
 			<a class="navbar-brand" href="main.jsp">[리부트]얼음요새</a>
 		</div>
-		<%
-			if (userID.equals("") || userID == null) {
-		%>
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav">
-				<li><a href="main.jsp">메인</a></li>
-			</ul>
-			<ul class="nav navbar-nav navbar-right">
-				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">접속하기<span
-						class="caret"></span></a>
-					<ul class="dropdown-menu">
-						<li><a href="loginForm.jsp">로그인</a></li>
-						<li><a href="registerForm.jsp">회원가입</a></li>
-					</ul></li>
-			</ul>
-		</div>
-		<%
-			} else {
-		%>
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
 				<li><a href="main.jsp">메인</a></li>
@@ -153,9 +133,6 @@
 				</li>
 			</ul>
 		</div>
-		<%
-			}
-		%>
 	</nav>
 	<div class="container">
 		<div class="row">
@@ -173,6 +150,20 @@
 						<tr>
 							<td><textarea class="form-control" rows="20" placeholder="글 내용" id="boardQnA_Content" maxlength="2048"><%=written.getBoardQnA_Content() %></textarea></td>
 						</tr>
+						<%
+							if (grade > 1){
+						%>
+						<tr>
+							<td>
+								<div class="form-check">
+									<input type="checkbox" class="form-check-input" id="notice" value="1">
+									<label class="form-check-label" for="notice">공지사항으로 작성</label>
+								</div>
+							</td>
+						</tr>
+						<%
+							}
+						%>
 					</tbody>
 				</table>
 				<button id="previous" type="button" class="btn btn-primary">이전</button>
