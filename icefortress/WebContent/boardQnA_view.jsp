@@ -40,7 +40,10 @@
 	boardQnA_ReplyID = Integer.parseInt(request.getParameter("boardQnA_ReplyID"));
 	}
 
-	if (boardQnA_ID == 0 || boardQnA_ReplyID == -1) {
+	BoardQnADBBean manager2 = BoardQnADBBean.getInstance();
+	BoardQnADataBean written = manager2.viewWritten(boardQnA_ID, boardQnA_ReplyID);
+	
+	if (boardQnA_ID == 0 || boardQnA_ReplyID == -1 || written.getAvailable() == 0) {
 	%>
 	<script>
 		alert("유효하지 않은 글입니다.");
@@ -48,13 +51,11 @@
 	</script>
 	<%
 	}
-	BoardQnADBBean manager2 = BoardQnADBBean.getInstance();
-	BoardQnADataBean written = manager2.viewWritten(boardQnA_ID, boardQnA_ReplyID);
 
 	ArrayList<BoardQnADataBean> commentList = manager2.getCommentList(written);
 
 	int check = manager2.checkAccessRights(userID, boardQnA_ID); // 접근 권한 확인
-	if (!(check == 1 || grade > 1)) {
+	if (!(check == 1 || grade > 1 || written.getNotice() == 1)) {
 	%>
 	<script>
 		alert("접근권한이 없습니다.");
@@ -176,8 +177,13 @@
 				class="btn btn-primary">삭제</button>
 			<%
 			}
+			
+			if (!(written.getNotice() == 1)){
 			%>
 			<a href="boardQnA_writeReplyForm.jsp?boardQnA_ID=<%=written.getBoardQnA_ID()%>" class="btn btn-primary pull-right">답글쓰기</a>
+			<%
+			}
+			%>
 		</div>
 	</div>
 	<div class="container">
@@ -251,7 +257,7 @@
 																maxlength="2048"><%=commentList.get(i).getBoardQnA_Content()%></textarea></td>
 														<td style="width: 20%; text-align: center; vertical-align: middle"><a
 															name="<%=commentList.get(i).getBoardQnA_ID()%>_<%=commentList.get(i).getBoardQnA_ReplyID()%>_<%=commentList.get(i).getBoardQnA_CommentID()%>_<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
-															href="javascript:;" onclick="updateComment(this)" class="btn btn-primary"
+															href="javascript:;" onclick="updateComment(this)" class="btn btn-secondary"
 															style="color: #fff; background-color: #212529; border-color: #212529">수정</a> <a class="btn btn-primary"
 															name="<%=commentList.get(i).getBoardQnA_ID()%>_<%=commentList.get(i).getBoardQnA_ReplyID()%>_<%=commentList.get(i).getBoardQnA_CommentID()%>_<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
 															href="javascript:;" onclick="update(this)">취소</a></td>
@@ -272,7 +278,7 @@
 														<td style="width: 60%; align: center"><textarea class="form-control"
 																id="boardQnA_ContentRe_<%=commentList.get(i).getBoardQnA_ID()%>_<%=commentList.get(i).getBoardQnA_ReplyID()%>_<%=commentList.get(i).getBoardQnA_CommentID()%>"
 																maxlength="2048"></textarea></td>
-														<td style="width: 20%; text-align: center; vertical-align: middle"><a class="btn btn-primary"
+														<td style="width: 20%; text-align: center; vertical-align: middle"><a class="btn btn-secondary"
 															style="color: #fff; background-color: #212529; border-color: #212529"
 															name="<%=commentList.get(i).getBoardQnA_ID()%>_<%=commentList.get(i).getBoardQnA_ReplyID()%>_<%=commentList.get(i).getBoardQnA_CommentID()%>"
 															href="javascript:;" onclick="writeCommentReply(this)">등록</a></td>
@@ -315,7 +321,7 @@
 														<td style="width: 60%; align: center"><textarea class="form-control"
 																id="boardQnA_ContentRe_<%=commentList.get(i).getBoardQnA_ID()%>_<%=commentList.get(i).getBoardQnA_ReplyID()%>_<%=commentList.get(i).getBoardQnA_CommentID()%>"
 																maxlength="2048"></textarea></td>
-														<td style="width: 20%; text-align: center; vertical-align: middle"><a class="btn btn-primary"
+														<td style="width: 20%; text-align: center; vertical-align: middle"><a class="btn btn-secondary"
 															style="color: #fff; background-color: #212529; border-color: #212529"
 															name="<%=commentList.get(i).getBoardQnA_ID()%>_<%=commentList.get(i).getBoardQnA_ReplyID()%>_<%=commentList.get(i).getBoardQnA_CommentID()%>"
 															href="javascript:;" onclick="writeCommentReply(this)">등록</a></td>
@@ -368,7 +374,7 @@
 															maxlength="2048"><%=commentList.get(i).getBoardQnA_Content()%></textarea></td>
 													<td style="width: 20%; text-align: center; vertical-align: middle"><a
 														name="<%=commentList.get(i).getBoardQnA_ID()%>_<%=commentList.get(i).getBoardQnA_ReplyID()%>_<%=commentList.get(i).getBoardQnA_CommentID()%>_<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
-														href="javascript:;" onclick="updateComment(this)" class="btn btn-primary"
+														href="javascript:;" onclick="updateComment(this)" class="btn btn-secondary"
 														style="color: #fff; background-color: #212529; border-color: #212529">수정</a> <a class="btn btn-primary"
 														name="<%=commentList.get(i).getBoardQnA_ID()%>_<%=commentList.get(i).getBoardQnA_ReplyID()%>_<%=commentList.get(i).getBoardQnA_CommentID()%>_<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
 														href="javascript:;" onclick="update(this)">취소</a></td>
@@ -424,7 +430,7 @@
 															maxlength="2048"><%=commentList.get(i).getBoardQnA_Content()%></textarea></td>
 													<td style="width: 20%; text-align: center; vertical-align: middle"><a
 														name="<%=commentList.get(i).getBoardQnA_ID()%>_<%=commentList.get(i).getBoardQnA_ReplyID()%>_<%=commentList.get(i).getBoardQnA_CommentID()%>_<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
-														href="javascript:;" onclick="updateComment(this)" class="btn btn-primary"
+														href="javascript:;" onclick="updateComment(this)" class="btn btn-secondary"
 														style="color: #fff; background-color: #212529; border-color: #212529">수정</a> <a class="btn btn-primary"
 														name="<%=commentList.get(i).getBoardQnA_ID()%>_<%=commentList.get(i).getBoardQnA_ReplyID()%>_<%=commentList.get(i).getBoardQnA_CommentID()%>_<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
 														href="javascript:;" onclick="update(this)">취소</a></td>
@@ -462,7 +468,7 @@
 														<td style="width: 60%; align: center"><textarea class="form-control"
 																id="boardQnA_ContentRe_<%=commentList.get(i).getBoardQnA_ID()%>_<%=commentList.get(i).getBoardQnA_ReplyID()%>_<%=commentList.get(i).getBoardQnA_CommentID()%>"
 																maxlength="2048"></textarea></td>
-														<td style="width: 20%; text-align: center; vertical-align: middle"><a class="btn btn-primary"
+														<td style="width: 20%; text-align: center; vertical-align: middle"><a class="btn btn-secondary"
 															style="color: #fff; background-color: #212529; border-color: #212529"
 															name="<%=commentList.get(i).getBoardQnA_ID()%>_<%=commentList.get(i).getBoardQnA_ReplyID()%>_<%=commentList.get(i).getBoardQnA_CommentID()%>"
 															href="javascript:;" onclick="writeCommentReply(this)">등록</a></td>
@@ -515,7 +521,7 @@
 															maxlength="2048"><%=commentList.get(i).getBoardQnA_Content()%></textarea></td>
 													<td style="width: 20%; text-align: center; vertical-align: middle"><a
 														name="<%=commentList.get(i).getBoardQnA_ID()%>_<%=commentList.get(i).getBoardQnA_ReplyID()%>_<%=commentList.get(i).getBoardQnA_CommentID()%>_<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
-														href="javascript:;" onclick="updateComment(this)" class="btn btn-primary"
+														href="javascript:;" onclick="updateComment(this)" class="btn btn-secondary"
 														style="color: #fff; background-color: #212529; border-color: #212529">수정</a> <a class="btn btn-primary"
 														name="<%=commentList.get(i).getBoardQnA_ID()%>_<%=commentList.get(i).getBoardQnA_ReplyID()%>_<%=commentList.get(i).getBoardQnA_CommentID()%>_<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
 														href="javascript:;" onclick="update(this)">취소</a></td>
@@ -572,7 +578,7 @@
 															maxlength="2048"><%=commentList.get(i).getBoardQnA_Content()%></textarea></td>
 													<td style="width: 20%; text-align: center; vertical-align: middle"><a
 														name="<%=commentList.get(i).getBoardQnA_ID()%>_<%=commentList.get(i).getBoardQnA_ReplyID()%>_<%=commentList.get(i).getBoardQnA_CommentID()%>_<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
-														href="javascript:;" onclick="updateComment(this)" class="btn btn-primary"
+														href="javascript:;" onclick="updateComment(this)" class="btn btn-secondary"
 														style="color: #fff; background-color: #212529; border-color: #212529">수정</a> <a class="btn btn-primary"
 														name="<%=commentList.get(i).getBoardQnA_ID()%>_<%=commentList.get(i).getBoardQnA_ReplyID()%>_<%=commentList.get(i).getBoardQnA_CommentID()%>_<%=commentList.get(i).getBoardQnA_CommentID_Re()%>"
 														href="javascript:;" onclick="update(this)">취소</a></td>
@@ -598,7 +604,7 @@
 											<td style="width: 60%; text-align: center; vertical-align: middle"><textarea class="form-control" id="boardQnA_Content"
 													maxlength="2048"></textarea></td>
 											<td style="width: 20%; text-align: center; vertical-align: middle">
-												<button id="writeComment" type="button" class="btn" name="<%=boardQnA_ID %>,<%=boardQnA_ReplyID %>" style="color: #fff; background-color: #212529; border-color: #212529">등록</button>
+												<button id="writeComment" type="button" class="btn btn-secondary" name="<%=boardQnA_ID %>,<%=boardQnA_ReplyID %>" style="color: #fff; background-color: #212529; border-color: #212529">등록</button>
 											</td>
 										</tr>
 									</table>
