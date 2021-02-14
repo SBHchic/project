@@ -120,6 +120,20 @@
 						<tr>
 							<td><textarea class="form-control" rows="20" placeholder="글 내용" id="boardQnA_Content" maxlength="2048"></textarea></td>
 						</tr>
+						<%
+							if (grade > 1){
+						%>
+						<tr>
+							<td>
+								<div class="form-check">
+									<input type="checkbox" class="form-check-input" id="notice" value="1">
+									<label class="form-check-label" for="notice">공지사항으로 작성</label>
+								</div>
+							</td>
+						</tr>
+						<%
+							}
+						%>
 					</tbody>
 				</table>
 				<button id="previous" type="button" class="btn btn-primary">이전</button>

@@ -11,11 +11,15 @@
 	String boardQnA_Title = request.getParameter("boardQnA_Title");
 	String boardQnA_Content = request.getParameter("boardQnA_Content");
 	String userID = (String)session.getAttribute("userID");
+	byte notice = 0;
+	if (request.getParameter("notice") != null){
+		notice = 1;
+	}
 	
 	BoardQnADBBean manager = BoardQnADBBean.getInstance();
 	BoardQnADataBean update = manager.viewWritten(boardQnA_ID, boardQnA_ReplyID);
 	
-	int result = manager.update(update, boardQnA_Title, boardQnA_Content);
+	int result = manager.update(update, boardQnA_Title, boardQnA_Content, notice);
 	
 	out.println(result);
 %>

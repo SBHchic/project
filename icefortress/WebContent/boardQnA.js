@@ -5,11 +5,11 @@ $(document).ready(function(){
 	// writeQnAForm.jsp 에서 글쓰기 버튼을 눌렀을 때
 	$("#submit_write").click(function(){
 		checkWrite();
-		
 		if (status) {
 			var query = {
 					boardQnA_Title:$("#boardQnA_Title").val(),
-					boardQnA_Content:$("#boardQnA_Content").val()
+					boardQnA_Content:$("#boardQnA_Content").val(),
+					notice:$("input[id='notice']:checked").val()
 			};
 			$.ajax({
 				type:"post",
@@ -37,7 +37,8 @@ $(document).ready(function(){
 					boardQnA_ID:arr[0],
 					boardQnA_ReplyID:arr[1],
 					boardQnA_Title:$("#boardQnA_Title").val(),
-					boardQnA_Content:$("#boardQnA_Content").val()
+					boardQnA_Content:$("#boardQnA_Content").val(),
+					notice:$("input[id='notice']:checked").val()
 			};
 			$.ajax({
 				type:"post",

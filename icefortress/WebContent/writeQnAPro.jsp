@@ -8,9 +8,13 @@
 	String boardQnA_Title = request.getParameter("boardQnA_Title");
 	String boardQnA_Content = request.getParameter("boardQnA_Content");
 	String userID = (String)session.getAttribute("userID");
+	byte notice = 0;
+	if (request.getParameter("notice") != null){
+		notice = 1;
+	}
 	
 	BoardQnADBBean manager = BoardQnADBBean.getInstance();
-	int result = manager.write(boardQnA_Title, userID, boardQnA_Content);
+	int result = manager.write(boardQnA_Title, userID, boardQnA_Content, notice);
 	
 	out.println(result);
 %>

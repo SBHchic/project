@@ -60,6 +60,7 @@ a, a:hover {
 	}
 	
 	ArrayList<BoardQnADataBean> list = manager2.getListView(listAll, start, pageSize);
+	ArrayList<BoardQnADataBean> noticeList = manager2.getNoticeList();
 	
 %>
 	<nav class="navbar navbar-default">
@@ -138,9 +139,6 @@ a, a:hover {
 			</ul>
 		</div>
 	</nav>
-	<%
-		if (!(userID.equals("") || userID == null)) {
-	%>
 	<div class="container">
 		<div class="row">
 			<table class="table table-striped" style="text-align: center; border: 1px solid #dddddd">
@@ -154,6 +152,17 @@ a, a:hover {
 				</thead>
 				<tbody>
 					<%
+					for (int i = 0; i < noticeList.size(); i++){
+					%>
+					<tr>
+						<td><b>공지</b></td>
+						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=noticeList.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=noticeList.get(i).getBoardQnA_ReplyID()%>"><%=noticeList.get(i).getBoardQnA_Title() %></a></td>
+						<td><%=noticeList.get(i).getUserID() %></td>
+						<td><%=noticeList.get(i).getBoardQnA_Reg_Date() %></td>
+					</tr>
+					<%
+					}
+					
 					int boardID = start;
 					int replyCount = 0;
 					for (int i = 0; i < list.size(); i++){
@@ -265,8 +274,7 @@ a, a:hover {
 					if (startPage > pageBlock) {
 			%>
 				<div class="btn-group me-2" role="group" aria-label="First group" style="float:none; margin:0 auto">
-					<button id="previousButton" name="<%=startPage-1 %>" onclick="p(this)" type="button" class="btn btn-primary"
-						style="color: #fff; background-color: #6c757d; border-color: #6c757d">&lt;&lt;</button>
+					<button id="previousButton" name="<%=startPage-1 %>" onclick="p(this)" type="button" class="btn btn-secondary">&lt;&lt;</button>
 				</div>
 				<%
 					}
@@ -276,13 +284,12 @@ a, a:hover {
 					<%
 						if(pageNumber == i) {
 			%>
-					<button id="pageNumbers" name="<%=i %>" onclick="p(this)" type="button" class="btn btn-primary"
+					<button id="pageNumbers" name="<%=i %>" onclick="p(this)" type="button" class="btn btn-secondary"
 						style="color: #fff; background-color: #343a40; border-color: #343a40"><%=i %></button>
 					<%
 						} else {
 			%>
-					<button id="pageNumbers" name="<%=i %>" onclick="p(this)" type="button" class="btn btn-primary"
-						style="color: #fff; background-color: #6c757d; border-color: #6c757d"><%=i %></button>
+					<button id="pageNumbers" name="<%=i %>" onclick="p(this)" type="button" class="btn btn-secondary"><%=i %></button>
 					<%
 						}
 					}
@@ -292,8 +299,7 @@ a, a:hover {
 					if (endPage < pageCount) {
 			%>
 				<div class="btn-group me-2" role="group" aria-label="Third group" style="float:none; margin:0 auto">
-					<button id="nextButton" name="<%=endPage + 1 %>" onclick="p(this)" type="button" class="btn btn-primary"
-						style="color: #fff; background-color: #6c757d; border-color: #6c757d">&gt;&gt;</button>
+					<button id="nextButton" name="<%=endPage + 1 %>" onclick="p(this)" type="button" class="btn btn-secondary">&gt;&gt;</button>
 				</div>
 				<%
 					}
@@ -305,9 +311,6 @@ a, a:hover {
 				<a href="writeQnAForm.jsp" class="btn btn-primary pull-right">글쓰기</a>
 			</div>
 	</div>
-	<%
-		}
-	%>
 <script src="js/jquery-3.5.1.min.js"></script>
 <script src="js/bootstrap.js"></script>
 <script src="boardQnA.js"></script>
