@@ -12,6 +12,7 @@ public class BoardQnADataBean {
 	private String boardQnA_Content;
 	private byte available; // 1- 존재, 0- 삭제
 	private String boardQnA_DeleteReg_Date; // 삭제 시간
+	private byte notice; // 공지사항
 	
 	public int getBoardQnA_ID() {
 		return boardQnA_ID;
@@ -72,6 +73,12 @@ public class BoardQnADataBean {
 	}
 	public void setBoardQnA_DeleteReg_Date(String boardQnA_DeleteReg_Date) {
 		this.boardQnA_DeleteReg_Date = boardQnA_DeleteReg_Date;
+	}
+	public byte getNotice() {
+		return notice;
+	}
+	public void setNotice(byte notice) {
+		this.notice = notice;
 	}
 	
 }
