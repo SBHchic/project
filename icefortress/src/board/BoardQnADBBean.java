@@ -149,19 +149,20 @@ public class BoardQnADBBean {
     	return -1; // 데이터베이스 오류
     }
     
-    public int write(String boardQnA_Title, String userID, String boardQnA_Content) { // 글 작성 메서드
+    public int write(String boardQnA_Title, String userID, String boardQnA_Content, byte notice) { // 글 작성 메서드
     	Connection conn = null;
         PreparedStatement pstmt = null;
         try {
         	conn = getConnection();
         	
-        	pstmt = conn.prepareStatement("insert into boardQnA values (?,0,0,0,?,?,?,?,1,?)");
+        	pstmt = conn.prepareStatement("insert into boardQnA values (?,0,0,0,?,?,?,?,1,?,?)");
         	pstmt.setInt(1, getNextWrittenID());
         	pstmt.setString(2, boardQnA_Title);
         	pstmt.setString(3, userID);
         	pstmt.setString(4, getDate());
         	pstmt.setString(5, boardQnA_Content);
         	pstmt.setString(6, "2000-01-01 00:00:00"); // 기본값 지정
+        	pstmt.setByte(7, notice);
         	pstmt.executeUpdate();
         	return 1; // 작성 성공
         } catch (Exception e) {
@@ -179,7 +180,7 @@ public class BoardQnADBBean {
         try {
         	conn = getConnection();
         	
-        	pstmt = conn.prepareStatement("insert into boardQnA values (?, ?, 0, 0, ?, ?, ?, ?, 1, ?)");
+        	pstmt = conn.prepareStatement("insert into boardQnA values (?, ?, 0, 0, ?, ?, ?, ?, 1, ?, 0)");
         	pstmt.setInt(1, boardQnA_ID);
         	pstmt.setInt(2, getNextReplyWrittenID(boardQnA_ID));
         	pstmt.setString(3, boardQnA_Title);
@@ -204,7 +205,7 @@ public class BoardQnADBBean {
         try {
         	conn = getConnection();
         	
-        	pstmt = conn.prepareStatement("insert into boardQnA values (?, ?, ?, 0, ?, ?, ?, ?, 1, ?)");
+        	pstmt = conn.prepareStatement("insert into boardQnA values (?, ?, ?, 0, ?, ?, ?, ?, 1, ?, 0)");
         	pstmt.setInt(1, boardQnA_ID);
         	pstmt.setInt(2, boardQnA_ReplyID);
         	pstmt.setInt(3, getNextCommentWrite(boardQnA_ID, boardQnA_ReplyID));
@@ -230,7 +231,7 @@ public class BoardQnADBBean {
         try {
         	conn = getConnection();
         	
-        	pstmt = conn.prepareStatement("insert into boardQnA values (?, ?, ?, ?, ?, ?, ?, ?, 1, ?)");
+        	pstmt = conn.prepareStatement("insert into boardQnA values (?, ?, ?, ?, ?, ?, ?, ?, 1, ?, 0)");
         	pstmt.setInt(1, boardQnA_ID);
         	pstmt.setInt(2, boardQnA_ReplyID);
         	pstmt.setInt(3, boardQnA_CommentID);
@@ -253,18 +254,19 @@ public class BoardQnADBBean {
     
     
     // 글, 답글을 수정하는 메서드
-    public int update(BoardQnADataBean update, String boardQnA_Title, String boardQnA_Content) {
+    public int update(BoardQnADataBean update, String boardQnA_Title, String boardQnA_Content, byte notice) {
     	Connection conn = null;
         PreparedStatement pstmt = null;
         try {
         	conn = getConnection();
         	
-        	pstmt = conn.prepareStatement("update boardQnA set boardQnA_Title = ?, boardQnA_Content = ?, boardQnA_Reg_Date = ? where boardQnA_ID = ? and boardQnA_ReplyID = ? and boardQnA_CommentID = 0");
+        	pstmt = conn.prepareStatement("update boardQnA set boardQnA_Title = ?, boardQnA_Content = ?, boardQnA_Reg_Date = ?, notice = ? where boardQnA_ID = ? and boardQnA_ReplyID = ? and boardQnA_CommentID = 0");
         	pstmt.setString(1, boardQnA_Title);
         	pstmt.setString(2, boardQnA_Content);
         	pstmt.setString(3, getDate());
-        	pstmt.setInt(4, update.getBoardQnA_ID());
-        	pstmt.setInt(5, update.getBoardQnA_ReplyID());
+        	pstmt.setByte(4, notice);
+        	pstmt.setInt(5, update.getBoardQnA_ID());
+        	pstmt.setInt(6, update.getBoardQnA_ReplyID());
         	pstmt.executeUpdate();
         	return 1; // 수정 성공
         } catch (Exception e) {
@@ -391,7 +393,7 @@ public class BoardQnADBBean {
     	return list; 
     }
     
-    // 운영진인 경우 모든 글을 리스트에 넣음
+    // 운영진인 경우 모든 글을 리스트에 넣음 (공지 제외)
     public ArrayList<BoardQnADataBean> getList_Submaster() { 
     	Connection conn = null;
         PreparedStatement pstmt = null;
@@ -399,7 +401,7 @@ public class BoardQnADBBean {
         ArrayList<BoardQnADataBean> list = new ArrayList<BoardQnADataBean>();
     	try {
     		conn = getConnection();
-    		String SQL = "select * from boardQnA where boardQnA_CommentID = 0 and available = 1 order by boardQnA_ID desc, boardQnA_ReplyID asc";
+    		String SQL = "select * from boardQnA where boardQnA_CommentID = 0 and available = 1 and notice = 0 order by boardQnA_ID desc, boardQnA_ReplyID asc";
     		pstmt = conn.prepareStatement(SQL);
     		rs = pstmt.executeQuery();
     		while (rs.next()) {
@@ -414,6 +416,43 @@ public class BoardQnADBBean {
         		tmp.setBoardQnA_Content(rs.getString(8));
         		tmp.setAvailable(rs.getByte(9));
         		tmp.setBoardQnA_DeleteReg_Date(rs.getString(10));
+        		tmp.setNotice(rs.getByte(11));
+        		list.add(tmp);
+    		}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	} finally {
+    		if (rs != null) try { rs.close(); } catch(SQLException sqle) {}
+    		if (pstmt != null) try { pstmt.close(); } catch(SQLException sqle) {}
+            if (conn != null) try { conn.close(); } catch(SQLException sqle) {}
+    	}
+    	return list; 
+    }
+    
+    // 공지사항 리스트 
+    public ArrayList<BoardQnADataBean> getNoticeList() { 
+    	Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        ArrayList<BoardQnADataBean> list = new ArrayList<BoardQnADataBean>();
+    	try {
+    		conn = getConnection();
+    		String SQL = "select * from boardQnA where boardQnA_CommentID = 0 and available = 1 and notice = 1 order by boardQnA_ID desc, boardQnA_ReplyID asc";
+    		pstmt = conn.prepareStatement(SQL);
+    		rs = pstmt.executeQuery();
+    		while (rs.next()) {
+    			BoardQnADataBean tmp = new BoardQnADataBean();
+        		tmp.setBoardQnA_ID(rs.getInt(1));
+        		tmp.setBoardQnA_ReplyID(rs.getInt(2));
+        		tmp.setBoardQnA_CommentID(rs.getInt(3));
+        		tmp.setBoardQnA_CommentID_Re(rs.getInt(4));
+        		tmp.setBoardQnA_Title(rs.getString(5));
+        		tmp.setUserID(rs.getString(6));
+        		tmp.setBoardQnA_Reg_Date(rs.getString(7));
+        		tmp.setBoardQnA_Content(rs.getString(8));
+        		tmp.setAvailable(rs.getByte(9));
+        		tmp.setBoardQnA_DeleteReg_Date(rs.getString(10));
+        		tmp.setNotice(rs.getByte(11));
         		list.add(tmp);
     		}
     	} catch (Exception e) {
@@ -463,6 +502,7 @@ public class BoardQnADBBean {
         		written.setBoardQnA_Content(rs.getString(8));
         		written.setAvailable(rs.getByte(9));
         		written.setBoardQnA_DeleteReg_Date(rs.getString(10));
+        		written.setNotice(rs.getByte(11));
         		return written;
     		}
     	} catch (Exception e) {
@@ -502,6 +542,7 @@ public class BoardQnADBBean {
         		comment.setBoardQnA_Content(rs.getString(8));
         		comment.setAvailable(rs.getByte(9));
         		comment.setBoardQnA_DeleteReg_Date(rs.getString(10));
+        		comment.setNotice(rs.getByte(11));
     		}
     	} catch (Exception e) {
     		e.printStackTrace();
@@ -538,6 +579,7 @@ public class BoardQnADBBean {
         		tmp.setBoardQnA_Content(rs.getString(8));
         		tmp.setAvailable(rs.getByte(9));
         		tmp.setBoardQnA_DeleteReg_Date(rs.getString(10));
+        		tmp.setNotice(rs.getByte(11));
         		list.add(tmp);
     		}
     	} catch (Exception e) {
