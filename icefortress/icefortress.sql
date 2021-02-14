@@ -82,10 +82,46 @@ create table boardQnA(
 	boardQnA_Reg_Date datetime,
 	boardQnA_Content varchar(2048) not null,
 	available tinyint default 1,
-	boardQnA_DeleteReg_Date datetime
+	boardQnA_DeleteReg_Date datetime,
+	notice tinyint default 0
 );
 
 desc boardQnA;
 
 select * from boardQnA;
 
+create table guildBoard(
+	writtenID int,
+	replyID int,
+	commentID int,
+	commentID_Re int,
+	title varchar(50),
+	userID varchar(20) not null,
+	reg_Date datetime,
+	content varchar(2048) not null,
+	available tinyint default 1,
+	deleteReg_Date datetime,
+	notice tinyint default 0
+);
+
+desc guildBoard;
+
+select * from guildBoard;
+
+create table freeBoard(
+	writtenID int,
+	replyID int,
+	commentID int,
+	commentID_Re int,
+	title varchar(50),
+	userID varchar(20) not null,
+	reg_Date datetime,
+	content varchar(2048) not null,
+	available tinyint default 1,
+	deleteReg_Date datetime,
+	notice tinyint default 0
+);
+
+desc freeBoard;
+
+select * from freeBoard;
