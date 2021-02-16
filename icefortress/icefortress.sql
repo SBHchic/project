@@ -125,3 +125,17 @@ create table freeBoard(
 desc freeBoard;
 
 select * from freeBoard;
+
+create table guildBoard_noticeAndMeetingLog(
+	writtenID int,
+	title varchar(50),
+	userID varchar(20) not null,
+	reg_Date datetime,
+	content varchar(2048) not null,
+	available tinyint default 1,
+	location tinyint 
+);
+
+desc guildBoard_noticeAndMeetingLog;
+
+select * from guildBoard_noticeAndMeetingLog;
