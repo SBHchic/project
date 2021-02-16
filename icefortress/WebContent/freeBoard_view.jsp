@@ -84,7 +84,7 @@
 						aria-expanded="false">게시판<span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li class="active"><a href="freeBoard.jsp">자유 게시판</a></li>
-						<li><a href="freeBoard.jsp">QnA</a></li>
+						<li><a href="boardQnA.jsp">QnA</a></li>
 						<%
 							if (grade >= 1){
 						%>
