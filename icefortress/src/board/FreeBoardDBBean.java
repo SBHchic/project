@@ -169,6 +169,7 @@ public class FreeBoardDBBean {
         		tmp.setContent(rs.getString(8));
         		tmp.setAvailable(rs.getByte(9));
         		tmp.setDeleteReg_Date(rs.getString(10));
+        		tmp.setNotice(rs.getByte(11));
         		list.add(tmp);
     		}
     	} catch (Exception e) {
@@ -218,6 +219,7 @@ public class FreeBoardDBBean {
         		written.setContent(rs.getString(8));
         		written.setAvailable(rs.getByte(9));
         		written.setDeleteReg_Date(rs.getString(10));
+        		written.setNotice(rs.getByte(11));
         		return written;
     		}
     	} catch (Exception e) {
