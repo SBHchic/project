@@ -45,7 +45,7 @@
 			<div class="jumbotron" style="padding-top: 20px;">
 				<h3 style="text-align: center;">회원가입</h3>
 				<div class="form-group">
-					<input id="userID" name="userID" type="text" class="form-control" placeholder="본캐 닉네임" maxlength="20" autofocus>
+					<input id="userID" name="userID" type="text" class="form-control" placeholder="본캐 닉네임" maxlength="20">
 					<input id="checkID" type="button" class="btn btn-primary pull-right" value="중복확인">
 				</div>
 				<div class="form-group">
@@ -54,8 +54,11 @@
 				<div class="form-group">
 					<input id="repass" name="repass" type="password" class="form-control" placeholder="비밀번호 재입력" maxlength="20">
 				</div>
-				<input id="register" type="submit" class="btn btn-primary" value="회원가입">
+				<div class="form-group">
+					<input id="server" name="server" type="text" class="form-control" placeholder="서버" maxlength="20">
+				</div>
 				<input id="cancel" type="button" class="btn btn-primary" value="취소">
+				<input id="register" type="submit" class="btn btn-primary pull-right" value="회원가입">
 			</div>
 		</div>
 		<div class="col-lg-4"></div>
