@@ -139,12 +139,16 @@
 				%>
 				<p>로그인을 하시면 더 많은 기능을 사용할 수 있습니다.</p>
 				<%
+					} else {
+				%>
+				<p><%=userID %>님 환영합니다!</p>
+				<%
 					}
 				%>
 			</div>
 	</div>
-	<div class="container">
-		<div id="guildImages" class="carousel" data-ride="carousel">
+	<div class="container" style="padding-bottom: 20px">
+		<div id="guildImages" class="carousel slide" data-ride="carousel">
 			<ol class="carousel-indicators">
 				<li data-target="#guildImages" data-slide-to="0" class="active">
 				<li data-target="#guildImages" data-slide-to="1">
