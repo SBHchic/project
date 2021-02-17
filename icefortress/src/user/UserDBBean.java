@@ -12,7 +12,6 @@ import javax.sql.DataSource;
 
 import java.util.Base64;
 import java.util.Base64.Encoder;
-import user.BCrypt;
 
 public class UserDBBean {
 	
@@ -73,7 +72,7 @@ public class UserDBBean {
 	}
     
     // 회원 가입 처리(registerPro.jsp)에서 사용하는 새 레코드 추가 메서드
-    public void insertMember(UserDataBean member){
+    public int insertMember(UserDataBean member){
     	Connection conn = null;
         PreparedStatement pstmt = null;
         Encoder sha = Base64.getEncoder();
@@ -84,18 +83,21 @@ public class UserDBBean {
             String shaPass = sha.encodeToString(orgPass.getBytes());
         	String bcPass = BCrypt.hashpw(shaPass, BCrypt.gensalt());
         	
-            pstmt = conn.prepareStatement("insert into member values (?,?,?,?)");
+            pstmt = conn.prepareStatement("insert into member values (?,?,?,?,?)");
             pstmt.setString(1, member.getUserID());
             pstmt.setString(2, bcPass);
             pstmt.setInt(3, 0);
-            pstmt.setTimestamp(4, member.getReg_date());		
+            pstmt.setTimestamp(4, member.getReg_date());
+            pstmt.setString(5, member.getServer());
             pstmt.executeUpdate();
+            return 1; // 회원가입 성공
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
             if (pstmt != null) try { pstmt.close(); } catch(SQLException sqle) {}
             if (conn != null) try { conn.close(); } catch(SQLException sqle) {}
         }
+        return -1;
     }
 	
     // 아이디 중복 확인 (confirmId.jsp)에서 아이디의 중복 여부를 확인하는 메서드
@@ -106,15 +108,15 @@ public class UserDBBean {
    		try {
    			conn = getConnection();   
    			
-               pstmt = conn.prepareStatement(
-               	"select userID from member where userID = ?");
-               pstmt.setString(1, userID);
-               rs= pstmt.executeQuery();
+            pstmt = conn.prepareStatement("select userID from member where userID = ?");
+            pstmt.setString(1, userID);
+            rs= pstmt.executeQuery();
 
-   			if(rs.next()) // 아이디 존재
+   			if(rs.next()) {// 아이디 존재
    				return 1; // 중복되는 아이디 있음
-   			else
-   				return -1; // 중복되는 아이디 없음
+   			}
+   			
+   			return -1; // 중복되는 아이디 없음
            } catch(Exception e) {
                e.printStackTrace();
            } finally {
@@ -137,7 +139,7 @@ public class UserDBBean {
             String shaPass = sha.encodeToString(orgPass.getBytes());
             String bcPass = BCrypt.hashpw(shaPass, BCrypt.gensalt());
         	
-            pstmt = conn.prepareStatement("update member set userPassword = ?" + "where userID = ?");
+            pstmt = conn.prepareStatement("update member set userPassword = ? where userID = ?");
             pstmt.setString(1, bcPass);
             pstmt.setString(2, userID);
             pstmt.executeUpdate();
@@ -156,32 +158,16 @@ public class UserDBBean {
    	public int updateID(String userID, String newUserID) {
    		Connection conn = null;
    		PreparedStatement pstmt = null;
-   		ResultSet rs = null;
    		try {
    			conn = getConnection();
-   			pstmt = conn.prepareStatement("select * from member where userID = ?");
-   			pstmt.setString(1, userID);
-   			rs = pstmt.executeQuery();
-   			String userPassword = "";
-   			int grade = 0;
-   			Timestamp reg_date = null;
-   			if (rs.next()) {
-   				userPassword = rs.getString("userPassword");
-   	   			grade = rs.getInt("grade");
-   	   			reg_date = rs.getTimestamp("reg_date");
-   			}
-   			
-   			pstmt = conn.prepareStatement("insert into member values (?,?,?,?)");
-            pstmt.setString(1, newUserID);
-            pstmt.setString(2, userPassword);
-            pstmt.setInt(3, grade);
-            pstmt.setTimestamp(4, reg_date);		
+   			pstmt = conn.prepareStatement("update member set userID = ? where userID = ?");
+			pstmt.setString(1, newUserID);
+			pstmt.setString(2, userID);	
             pstmt.executeUpdate();
             return 1; // 아이디 변경 성공
    		} catch (Exception e) {
    			e.printStackTrace();
    		} finally {
-			if (rs != null) try { rs.close(); } catch(SQLException sqle) {}
             if (pstmt != null) try { pstmt.close(); } catch(SQLException sqle) {}
             if (conn != null) try { conn.close(); } catch(SQLException sqle) {}
         }
@@ -228,10 +214,8 @@ public class UserDBBean {
             rs = pstmt.executeQuery();
             
 			if(rs.next()){
-				String dbpasswd= rs.getString("userPassword"); 
-				if(BCrypt.checkpw(shaPass,dbpasswd)){
-					pstmt = conn.prepareStatement(
-            	      "delete from member where userID = ?");
+				if(BCrypt.checkpw(shaPass,rs.getString("userPassword"))){
+					pstmt = conn.prepareStatement("delete from member where userID = ?");
                     pstmt.setString(1, userID);
                     pstmt.executeUpdate();
 					return 1; // 회원 탈퇴처리 성공
@@ -256,8 +240,7 @@ public class UserDBBean {
         try {
 			conn = getConnection();
 
-            pstmt = conn.prepareStatement(
-            	"select grade from member where userID = ?");
+            pstmt = conn.prepareStatement("select grade from member where userID = ?");
             pstmt.setString(1, userID);
             rs = pstmt.executeQuery();
             
