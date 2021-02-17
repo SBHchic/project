@@ -16,7 +16,7 @@ $(document).ready(function(){
 		     data: query,
 		     success: function(data){
 		    	 if(data == 1){ // 로그인 성공
-		    		 window.location.href("main.jsp"); // 나중에 원래 있던 페이지로 갈수있도록 고려
+		    		 location.href="main.jsp";
 		         }else if(data == 0){ // 비밀번호 틀림
 		    	  	 alert("비밀번호가 틀립니다.");
 		    	  	 $("#userPassword").val("");
