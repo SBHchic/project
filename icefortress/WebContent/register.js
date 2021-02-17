@@ -18,10 +18,11 @@ $(document).ready(function(){
 	    		if(data == 1){ // 사용할 수 없는 아이디
 	    			alert("사용할 수 없는 아이디입니다.");
 	    	    	$("#userID").val("");
-	    	     }else if(data == -1) // 사용할 수 있는 아이디
+	    	    } else if(data == -1) { // 사용할 수 있는 아이디
 	    	  	    alert("사용할 수 있는 아이디입니다.");
 	    	  	    checkIDBoolean = true;
 	    	  	    checkedID = $("#userID").val();
+	    	  	}
 	 	    }
 	    });
 	  } else { // 아이디를 입력하지 않고 [중복확인]버튼을 클릭한 경우
@@ -37,14 +38,20 @@ $(document).ready(function(){
 	   
 	   if(status){
 		  var query = {userID:$("#userID").val(), 
-				  userPassword:$("#userPassword").val()};
+				  userPassword:$("#userPassword").val(),
+				  server:$("#server").val()};
 		  
 		  $.ajax({
 		      type:"post",
 		      url:"registerPro.jsp",
 		      data:query,
 		      success:function(data){
-		    	  window.location.href("main.jsp");
+		      	  if (data == 1){
+		      	  	 alert("회원가입에 성공하셨습니다.");
+		    	  	 location.href="main.jsp";
+		    	  } else {
+		    	  	 alert("알수 없는 오류가 발생했습니다.");
+		    	  }
 		 	  }
 		  });
 	   }
@@ -52,7 +59,7 @@ $(document).ready(function(){
 	
 	// [취소]버튼을 클릭하면 자동실행
 	$("#cancel").click(function(){
-		location.href("main.jsp");
+		location.href="main.jsp";
 	});
 
  });
@@ -82,9 +89,15 @@ function checkIt() {
         return false;
     }
     // 아이디 중복체크를 하지 않은 경우 + 중복체크 후 아이디 수정을 했을 경우
-    if(checkIDBoolean == false || $("#userID").val()!=checkedID){
+    if(checkIDBoolean == false || $("#userID").val() != checkedID){
     	alert("아이디 중복확인을 해주세요");
     	$("#checkID").focus();
+    	status = false;
+	}
+	
+    if(!$("#server").val()){ // 서버를 입력하지 않으면 수행
+    	alert("서버를 입력하세요");
+    	$("#server").focus();
     	status = false;
 	}
 }
