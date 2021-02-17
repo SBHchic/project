@@ -50,7 +50,10 @@
 				<div class="form-group">
 					<input id="userPassword" name="userPassword" type="password" class="form-control" placeholder="비밀번호" maxlength="20">
 				</div>
-				<input id="login" type="submit" class="btn btn-primary form-control" value="로그인">
+				<div style="padding-bottom: 10px">
+					<button id="login" type="button" class="btn btn-primary form-control">로그인</button>
+				</div>
+				<a href="registerForm.jsp" class="btn btn-primary form-control">회원가입</a>
 			</div>
 		</div>
 		<div class="col-lg-4"></div>
