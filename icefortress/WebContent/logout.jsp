@@ -4,5 +4,5 @@
   session.invalidate(); // 세션 무효화
 %>
 <script>
-	location.href("main.jsp");
+	location.href="main.jsp";
 </script>
