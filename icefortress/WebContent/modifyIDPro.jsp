@@ -13,10 +13,8 @@
   int check = manager.updateID(userID,newUserID);// 아이디 변경 메서드
   
   if (check == 1){
-	  int check2 = manager.deleteMember(userID);
-	  if (check2 == 1){
-		  session.invalidate();
-	  }
+	  session.invalidate();
   }
+  
   out.println(check); // 처리결과를 반환
 %>
