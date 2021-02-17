@@ -8,6 +8,7 @@ public class UserDataBean {
 	private String userPassword;
 	private int grade; // 길드원x, 길드원, 운영진, 관리자
 	private Timestamp reg_date; // 가입 날짜
+	private String server; // 서버
 	
 	public String getUserID() {
 		return userID;
@@ -32,6 +33,12 @@ public class UserDataBean {
 	}
 	public void setReg_date(Timestamp reg_date) {
 		this.reg_date = reg_date;
+	}
+	public String getServer() {
+		return server;
+	}
+	public void setServer(String server) {
+		this.server = server;
 	}
 	
 }
