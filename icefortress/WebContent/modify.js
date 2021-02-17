@@ -13,13 +13,15 @@ $(document).ready(function(){
 			url: "memberCheck.jsp",
 			data: query,
 			success: function(data){
-				if(data == 1) // 비밀번호 일치
-		    		 window.location.href("modifyIDForm.jsp");
-		    	 else { //비밀번호 틀림
+				if(data == 1) { // 비밀번호 일치
+		    		 location.href="modifyIDForm.jsp";
+		    	} else if (data == 0) { //비밀번호 틀림
 		    	  	 alert("비밀번호가 틀립니다.");
 		    	  	 $("#userPassword").val("");
 		    	  	 $("#userPassword").focus();
-		    	 }   
+		    	} else {
+		    		 alert("알수 없는 오류가 발생했습니다.");
+		    	}
 		   }
 		});
 	});
@@ -34,13 +36,15 @@ $(document).ready(function(){
 			url: "memberCheck.jsp",
 			data: query,
 			success: function(data){
-				if(data == 1) // 비밀번호 일치
-		    		 window.location.href("modifyPasswordForm.jsp");
-		    	 else { //비밀번호 틀림
+				if(data == 1) { // 비밀번호 일치
+		    		 location.href="modifyPasswordForm.jsp";
+		    	} else if (data == 0) { //비밀번호 틀림
 		    	  	 alert("비밀번호가 틀립니다.");
 		    	  	 $("#userPassword").val("");
 		    	  	 $("#userPassword").focus();
-		    	 }   
+		    	} else {
+		    		 alert("알수 없는 오류가 발생했습니다.");
+		    	}
 		   }
 		});
 	});
@@ -58,7 +62,9 @@ $(document).ready(function(){
 				success: function(data){
 					if(data == 1) { // 비밀번호 변경 성공
 						alert("비밀번호가 변경되었습니다.");
-						window.location.href("main.jsp");
+						location.href="main.jsp";
+					} else {
+						alert("알수 없는 오류가 발생했습니다.");
 					}
 				}
 			});
@@ -80,19 +86,20 @@ $(document).ready(function(){
 	    		if(data == 1){ // 사용할 수 없는 아이디
 	    			alert("사용할 수 없는 아이디입니다.");
 	    	    	$("#newUserID").val("");
-	    	     }else if(data == -1) // 사용할 수 있는 아이디
+	    	    } else if(data == -1) { // 사용할 수 있는 아이디
 	    	  	    alert("사용할 수 있는 아이디입니다.");
 	    	  	    checkIDBoolean = true;
 	    	  	    checkedID = $("#newUserID").val();
+	    	  	}
 	 	    }
 	    });
 	  } else { // 아이디를 입력하지 않고 [중복확인]버튼을 클릭한 경우
 		  alert("사용할 아이디를 입력하세요");
-		  $("#userID").focus();
+		  $("#newUserID").focus();
 	  }
 	});
 	
-	// modifyIDForm.jsp페이지의 [비밀번호 변경] 버튼 클릭시 자동실행
+	// modifyIDForm.jsp페이지의 [아이디 변경] 버튼 클릭시 자동실행
 	//수정폼에 입력한 값을 갖고 modifyIDPro.jsp 실행
 	$("#modifyingID").click(function(){
 		checkID(); // 입력폼에 입력한 아이디 + 아이디 중복확인 체크
@@ -105,7 +112,9 @@ $(document).ready(function(){
 				success: function(data){
 					if(data == 1) { // 아이디 변경 성공
 						alert("아이디가 변경되었습니다. 다시 로그인 해주세요.");
-						window.location.href("main.jsp");
+						location.href="loginForm.jsp";
+					} else {
+						alert("알수 없는 오류가 발생했습니다.");
 					}
 				}
 			});
@@ -114,7 +123,7 @@ $(document).ready(function(){
 	
 	// [취소]버튼 클릭시 자동실행
 	$("#cancel").click(function(){
-		window.location.href("main.jsp");
+		location.href="main.jsp";
 	});
 	
 	// modify.jsp페이지의 [탈퇴]버튼을 클릭하면 자동실행
@@ -137,16 +146,18 @@ $(document).ready(function(){
 							   data: query,
 							   success: function(data){
 								   if(data == 1){ // 탈퇴 성공
-									  alert("회원 탈퇴가 되었습니다. 지금까지 이용해주셔서 감사합니다.");
-									  window.location.href("main.jsp");
-							       }   
+									  alert("탈퇴 되었습니다. 지금까지 이용해주셔서 감사합니다.");
+									  location.href="main.jsp";
+							       } else {
+							       	  alert("알수 없는 오류가 발생했습니다.");
+							       }
 							   }
 							});
-					}else {//비밀번호 틀림
+					} else { //비밀번호 틀림
 			    	  	 alert("비밀번호가 맞지 않습니다.");
 			    	  	 $("#userPassword").val("");
 			    	  	 $("#userPassword").focus();
-			    	 }   
+			    	}   
 				}
 			});
 		} else { // 취소
@@ -181,7 +192,7 @@ function checkID() {
     }
     
     // 아이디 중복체크를 하지 않은 경우 + 중복체크 후 아이디 수정을 했을 경우
-    if(checkIDBoolean == false || $("#newUserID").val()!=checkedID){
+    if(checkIDBoolean == false || $("#newUserID").val() != checkedID){
     	alert("아이디 중복확인을 해주세요");
     	$("#checkID").focus();
     	status = false;
