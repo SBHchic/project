@@ -14,5 +14,9 @@
 
   UserDBBean manager = UserDBBean.getInstance();
   // 사용자가 입력한 데이터저장빈 객체를 가지고 회원가입 처리 메서드호출
-  manager.insertMember(member);
+  int check = manager.insertMember(member);
+  if (check == 1){
+	  session.setAttribute("userID", member.getUserID());
+  }
+  out.println(check);
 %>
