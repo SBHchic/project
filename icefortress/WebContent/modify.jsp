@@ -24,7 +24,7 @@
 	%>
 	<script>
 		alert("로그인 이후 사용이 가능합니다.");
-		window.history.back();
+		location.href="loginForm.jsp";
 	</script>
 	<%
 	}
@@ -121,10 +121,20 @@
 				<div class="form-group">
 					<input id="userPassword" name="userPassword" type="password" class="form-control" placeholder="비밀번호 확인" maxlength="20">
 				</div>
-				<input id="checkBeforeModifyingID" type="submit" class="btn btn-primary" value="아이디 변경">
-				<input id="checkBeforeModifyingPassword" type="submit" class="btn btn-primary" value="비밀번호 변경">
-				<input id="delete" type="submit" class="btn btn-primary" value="탈퇴">
-				<input id="cancel" type="button" class="btn btn-primary" value="취소">
+				<div class="row">
+					<div class="col-xs-6" style="padding-bottom: 5px">
+						<input id="checkBeforeModifyingID" type="submit" class="btn btn-primary pull-right" value="아이디 변경">
+					</div>
+					<div class="col-xs-6" style="padding-bottom: 5px">
+						<input id="checkBeforeModifyingPassword" type="submit" class="btn btn-primary pull-right" value="비밀번호 변경">
+					</div>
+					<div class="col-xs-6">
+						<input id="cancel" type="button" class="btn btn-primary" value="취소">
+					</div>
+					<div class="col-xs-6">
+						<input id="delete" type="submit" class="btn btn-primary pull-right" value="탈퇴">
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="col-lg-4"></div>

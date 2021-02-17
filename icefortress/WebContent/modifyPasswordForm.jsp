@@ -25,7 +25,7 @@
 	%>
 	<script>
 		alert("로그인 이후 사용이 가능합니다.");
-		window.history.back();
+		location.href="loginForm.jsp";
 	</script>
 	<%
 	}
@@ -125,8 +125,8 @@
 				<div class="form-group">
 					<input id="repass" name="repass" type="password" class="form-control" placeholder="비밀번호 확인" maxlength="20">
 				</div>
-				<input id="modifyingPassword" type="submit" class="btn btn-primary" value="비밀번호 변경">
 				<input id="cancel" type="button" class="btn btn-primary" value="취소">
+				<input id="modifyingPassword" type="submit" class="btn btn-primary pull-right" value="비밀번호 변경">
 			</div>
 		</div>
 		<div class="col-lg-4"></div>
