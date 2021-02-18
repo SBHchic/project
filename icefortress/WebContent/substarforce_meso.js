@@ -6,9 +6,9 @@ $(document).ready(function(){
 	// meso.jsp 에서 확인 버튼을 눌렀을 때
 	$("#firstSubmit").click(function(){
 		if($("input:radio[id=normalItem]").is(":checked")){
-			location.href("meso_normal.jsp");
+			location.href="meso_normal.jsp";
 		} else if($("input:radio[id=superiorItem]").is(":checked")){
-			location.href("meso_superior.jsp");
+			location.href="meso_superior.jsp";
 		}
 	});
 	
@@ -18,6 +18,9 @@ $(document).ready(function(){
 		if($("input[id=toad]:checked").val()=="true"){ // 토드O 인 경우
 			if($("#level").val()>160){ // 토드가 안되는 레벨에서 체크한 경우
 				alert("토드는 160제 이하에서 가능합니다");
+				$("#level").focus();
+			} else if ($("#level").val()<20) { // 아이템 레벨의 입력이 안되어 있거나 비정상적인 입력을 했을 경우
+				alert("아이템 레벨부터 입력해주시기 바랍니다.");
 				$("#level").focus();
 			} else {
 				$("#selectToadProperty").show();
@@ -88,7 +91,7 @@ $(document).ready(function(){
 	// normal, superior 둘다 작동
 	// 이전버튼을 눌렀을 때
 	$("#previous").click(function(){
-		location.href("meso.jsp");
+		location.href="meso.jsp";
 	});
 });
 
@@ -145,14 +148,8 @@ function checkNormalItem() {
 			mesoOnHand:$("#mesoOnHand").val(),
 			fromStarforce:$("#fromStarforce").val(),
 			starforce:$("#starforce").val(),
-			ignoreDestroy:$("#ignoreDestroy").val(),
-			discountPCRoom:$("#discountPCRoom").val(),
-			succededCatch:$("input[id=succededCatch]:checked").val(),
-			mapleEvent:$("input[id=mapleEvent]:checked").val(),
-			discountMVPGrade:$("input[id=discountMVPGrade]:checked").val(),
 			toad:$("input[id=toad]:checked").val(),
-			toadToStarforce:$("#toadToStarforce").val(),
-			toadIgnoreDestroy:$("#toadIgnoreDestroy").val()
+			toadToStarforce:$("#toadToStarforce").val()
 	};
 	$.ajax({
 		type:"post",
@@ -211,8 +208,7 @@ function checkSuperiorItem() {
 			level:$("#level").val(),
 			mesoOnHand:$("#mesoOnHand").val(),
 			fromStarforce:$("#fromStarforce").val(),
-			starforce:$("#starforce").val(),
-			succededCatch:$("input[id=succededCatch]:checked").val()
+			starforce:$("#starforce").val()
 	};
 	$.ajax({
 		type:"post",
