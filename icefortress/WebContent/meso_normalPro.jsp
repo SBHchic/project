@@ -24,7 +24,7 @@
   double subresult = 0;
   String result ="";
   
-  if (toad == false) {
+  if (!toad) {
 	  Meso_Normal[] normalArr = new Meso_Normal[numberOfItems];
 	  for (int i = 0; i < normalArr.length; i++){
 	     	normalArr[i] = new Meso_Normal(level, fromStarforce, succededCatch, mapleEvent, discountPCRoom, discountMVPGrade, ignoreDestroy);
@@ -34,8 +34,7 @@
 	  result = Meso_Normal.result(normalArr, fromStarforce, starforce);
 	  result += "제한 - 보유메소 : " + tmpstr + "메소 <br>" + "<br>";
 	  result += "성공 확률 : " + subresult + "%";
-	  out.println(result);
-  } else if (toad == true){
+  } else {
 	  toadToStarforce = Integer.parseInt(request.getParameter("toadToStarforce"));
 	  toadIgnoreDestroy = Boolean.parseBoolean(request.getParameter("toadIgnoreDestroy"));
 	  
@@ -48,6 +47,7 @@
 	  result = Meso_Normal.result(normalArr, fromStarforce, starforce);
 	  result += "제한 - 보유메소 : " + tmpstr + "메소 <br>" + "<br>";
 	  result += "성공 확률 : " + subresult + "%";
-	  out.println(result);
   }
+  
+  out.println(result);
 %>

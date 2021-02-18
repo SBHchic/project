@@ -22,7 +22,7 @@
   double subresult = 0;
   String result ="";
   
-  if (toad == false) {
+  if (!toad) {
 	  NumberOfItems_Normal[] normalArr = new NumberOfItems_Normal[numberOfItems];
 	  for (int i = 0; i < normalArr.length; i++){
 	     	normalArr[i] = new NumberOfItems_Normal(level, fromStarforce, succededCatch, mapleEvent, ignoreDestroy);
@@ -32,8 +32,7 @@
 	  result = NumberOfItems_Normal.result(normalArr, fromStarforce, starforce);
 	  result += "제한 - 본템 개수 : " + numberOfRealItems + "개 <br>" + "<br>";
 	  result += "성공 확률 : " + subresult + "%";
-	  out.println(result);
-  } else if (toad == true){
+  } else {
 	  numberOfToadItems = Integer.parseInt(request.getParameter("numberOfToadItems"));
 	  toadToStarforce = Integer.parseInt(request.getParameter("toadToStarforce"));
 	  toadIgnoreDestroy = Boolean.parseBoolean(request.getParameter("toadIgnoreDestroy"));
@@ -47,6 +46,7 @@
 	  result = NumberOfItems_Normal.result(normalArr, fromStarforce, starforce);
 	  result += "제한 - 본템 개수 : " + numberOfRealItems + "개, 토드템 개수 : " + numberOfToadItems + "개 <br>" + "<br>";
 	  result += "성공 확률 : " + subresult + "%";
-	  out.println(result);
   }
+  
+  out.println(result);
 %>

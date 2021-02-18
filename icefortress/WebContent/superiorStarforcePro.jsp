@@ -11,20 +11,6 @@
 </jsp:useBean>
 <%
 
-// 메서드로 인해 출력될 결과값들
-long minSumUpgradePrice;
-long maxSumUpgradePrice;
-long averageSumUpgradePrice;
-int minUpgradeCount;
-int maxUpgradeCount;
-long averageUpgradeCount;
-int minDestroyCount;
-int maxDestroyCount;
-long averageDestroyCount;
-int minChanceTimeCount;
-int maxChanceTimeCount;
-long averageChanceTimeCount;
-
 String result = "";
 
 SuperiorStarforce[] superiorArr = new SuperiorStarforce[(int)superiorStarforce.getNumberOfItems()];
@@ -32,46 +18,23 @@ for (int i = 0; i < superiorArr.length; i++) {
 	superiorArr[i] = new SuperiorStarforce(superiorStarforce.getLevel(), superiorStarforce.getFromStarforce(), superiorStarforce.getSuccededCatch());
 	superiorArr[i].goTo(superiorStarforce.getStarforce());
 }
-minSumUpgradePrice = SuperiorStarforce.sumUpgradePriceMin(superiorArr);
-maxSumUpgradePrice = SuperiorStarforce.sumUpgradePriceMax(superiorArr);
-averageSumUpgradePrice = SuperiorStarforce.sumUpgradePriceAverage(superiorArr);
-minUpgradeCount = SuperiorStarforce.upgradeCountMin(superiorArr);
-maxUpgradeCount = SuperiorStarforce.upgradeCountMax(superiorArr);
-averageUpgradeCount = SuperiorStarforce.upgradeCountAverage(superiorArr);
-minDestroyCount = SuperiorStarforce.destroyCountMin(superiorArr);
-maxDestroyCount = SuperiorStarforce.destroyCountMax(superiorArr);
-averageDestroyCount = SuperiorStarforce.destroyCountAverage(superiorArr);
-minChanceTimeCount = SuperiorStarforce.chanceTimeMin(superiorArr);
-maxChanceTimeCount = SuperiorStarforce.chanceTimeMax(superiorArr);
-averageChanceTimeCount = SuperiorStarforce.chanceTimeAverage(superiorArr);
 
-result = SuperiorStarforce.result(superiorArr, superiorStarforce.getFromStarforce(), superiorStarforce.getStarforce());
-result += superiorArr.length + "개의 아이템 중 스타포스 강화 최소비용은 " + minSumUpgradePrice + "00메소 입니다. <br>";
-result += superiorArr.length + "개의 아이템 중 스타포스 강화 최대비용은 " + maxSumUpgradePrice + "00메소 입니다. <br>";
-result += superiorArr.length + "개의 아이템의 평균적인 스타포스 강화 비용은 " + averageSumUpgradePrice + "00메소 입니다. <br>";
-result += superiorArr.length + "개의 아이템 중 가장 적은 강화 횟수는 " + minUpgradeCount + "번 입니다. <br>";
-result += superiorArr.length + "개의 아이템 중 가장 많은 강화 횟수는 " + maxUpgradeCount + "번 입니다. <br>";
-result += superiorArr.length + "개의 아이템의 평균적인 강화 횟수는 " + averageUpgradeCount + "번 입니다. <br>";
-result += superiorArr.length + "개의 아이템 중 가장 적은 파괴 횟수는 " + minDestroyCount + "번 입니다. <br>";
-result += superiorArr.length + "개의 아이템 중 가장 많은 파괴 횟수는 " + maxDestroyCount + "번 입니다. <br>";
-result += superiorArr.length + "개의 아이템의 평균적인 파괴 횟수는 " + averageDestroyCount + "번 입니다. <br>";
-result += superiorArr.length + "개의 아이템 중 가장 적은 찬스타임 횟수는 " + minChanceTimeCount + "번 입니다. <br>";
-result += superiorArr.length + "개의 아이템 중 가장 많은 찬스타임 횟수는 " + maxChanceTimeCount + "번 입니다. <br>";
-result += superiorArr.length + "개의 아이템의 평균적인 찬스타임 횟수는 " + averageChanceTimeCount + "번 입니다.";
+superiorStarforce.setMinSumUpgradePrice(SuperiorStarforce.sumUpgradePriceMin(superiorArr));
+superiorStarforce.setMaxSumUpgradePrice(SuperiorStarforce.sumUpgradePriceMax(superiorArr));
+superiorStarforce.setAverageSumUpgradePrice(SuperiorStarforce.sumUpgradePriceAverage(superiorArr));
+superiorStarforce.setMinUpgradeCount(SuperiorStarforce.upgradeCountMin(superiorArr));
+superiorStarforce.setMaxUpgradeCount(SuperiorStarforce.upgradeCountMax(superiorArr));
+superiorStarforce.setAverageUpgradeCount(SuperiorStarforce.upgradeCountAverage(superiorArr));
+superiorStarforce.setMinDestroyCount(SuperiorStarforce.destroyCountMin(superiorArr));
+superiorStarforce.setMaxDestroyCount(SuperiorStarforce.destroyCountMax(superiorArr));
+superiorStarforce.setAverageDestroyCount(SuperiorStarforce.destroyCountAverage(superiorArr));
+superiorStarforce.setMinChanceTimeCount(SuperiorStarforce.chanceTimeMin(superiorArr));
+superiorStarforce.setMaxChanceTimeCount(SuperiorStarforce.chanceTimeMax(superiorArr));
+superiorStarforce.setAverageChanceTimeCount(SuperiorStarforce.chanceTimeAverage(superiorArr));
 
-superiorStarforce.setMinSumUpgradePrice(minSumUpgradePrice);
-superiorStarforce.setMaxSumUpgradePrice(maxSumUpgradePrice);
-superiorStarforce.setAverageSumUpgradePrice(averageSumUpgradePrice);
-superiorStarforce.setMinUpgradeCount(minUpgradeCount);
-superiorStarforce.setMaxUpgradeCount(maxUpgradeCount);
-superiorStarforce.setAverageUpgradeCount(averageUpgradeCount);
-superiorStarforce.setMinDestroyCount(minDestroyCount);
-superiorStarforce.setMaxDestroyCount(maxDestroyCount);
-superiorStarforce.setAverageDestroyCount(averageDestroyCount);
-superiorStarforce.setMinChanceTimeCount(minChanceTimeCount);
-superiorStarforce.setMaxChanceTimeCount(maxChanceTimeCount);
-superiorStarforce.setAverageChanceTimeCount(averageChanceTimeCount);
-	
+result = SuperiorStarforceDBBean.condition(superiorStarforce);
+result += SuperiorStarforceDBBean.result(superiorStarforce);
+
 SuperiorStarforceDBBean manager = SuperiorStarforceDBBean.getInstance();
 if (superiorStarforce.getNumberOfItems() >= 10000){
 	int check1 = manager.check(superiorStarforce);
