@@ -24,7 +24,7 @@
 	%>
 	<script>
 		alert("로그인 이후 사용이 가능합니다.");
-		window.history.back();
+		location.href="loginForm.jsp";
 	</script>
 	<%
 	}
@@ -115,43 +115,43 @@
 			<div class="jumbotron" style="padding-top: 20px;">
 				<h3 style="text-align: center;">슈페리얼아이템 개수 기준 강화 성공 확률</h3>
 				<h4 style="text-align: center;">세부사항을 작성해주세요.</h4>
-				<form class="row g-3">
-					<div class="col-md-4">
+				<form class="row">
+					<div class="col-sm-4 pb-custom-3">
 						<label for="numberOfItems" class="form-label">표본 개수</label> <input
-							type="number" class="form-control" id="numberOfItems" autofocus
+							type="number" class="form-control" placeholder="10000" id="numberOfItems"
 							required>
 					</div>
-					<div class="col-md-4">
+					<div class="col-sm-4 pb-custom-3">
 						<label for="level" class="form-label">아이템 레벨</label> <input
-							type="number" class="form-control" id="level" required>
+							type="number" class="form-control" placeholder="150" id="level" required>
 					</div>
-					<div class="col-md-4">
+					<div class="col-sm-4 pb-custom-3">
 						<label for="numberOfRealItems" class="form-label">본템 개수 제한</label>
-						<input type="number" class="form-control" id="numberOfRealItems"
+						<input type="number" class="form-control" placeholder="5" id="numberOfRealItems"
 							required>
 					</div>
-					<div class="col-md-6">
+					<div class="col-sm-6 pb-custom-3">
 						<label for="fromStarforce" class="form-label">시작 스타포스</label> <input
-							type="number" class="form-control" id="fromStarforce" required>
+							type="number" class="form-control" placeholder="0" id="fromStarforce" required>
 					</div>
-					<div class="col-md-6">
+					<div class="col-sm-6 pb-custom-3">
 						<label for="starforce" class="form-label">목표 스타포스</label> <input
-							type="number" class="form-control" id="starforce" required>
+							type="number" class="form-control" placeholder="12" id="starforce" required>
 					</div>
-					<div class="col-md-12">
+					<div class="col-md-12 pb-custom-3">
 						<label for="succededCatch" class="form-label">스타캐치 여부</label>
 						<div class="form-check">
 							<input type="radio" name="succededCatch" class="form-check-input"
 								id="succededCatch" value="0" checked> <label
 								class="form-check-label" for="succededCatch">스타캐치 X</label>
 						</div>
-						<div class="mb-12 form-check">
+						<div class="form-check">
 							<input type="radio" name="succededCatch" class="form-check-input"
 								id="succededCatch" value="1"> <label
 								class="form-check-label" for="succededCatch">합연산 (4.5%p
 								증가)</label>
 						</div>
-						<div class="mb-12 form-check">
+						<div class="form-check">
 							<input type="radio" name="succededCatch" class="form-check-input"
 								id="succededCatch" value="2"> <label
 								class="form-check-label" for="succededCatch">곱연산 (1.045
@@ -160,7 +160,7 @@
 					</div>
 					<div class="col-12">
 						<button id="previous" class="btn btn-primary">이전</button>
-						<button id="reset" class="btn btn-primary" onclick="location.reload()">리셋</button>
+						<button id="reset" class="btn btn-danger" onclick="location.reload()">리셋</button>
 						<button id="finalSubmit_superior" type="button" class="btn btn-primary pull-right">시행</button>
 					</div>
 				</form>

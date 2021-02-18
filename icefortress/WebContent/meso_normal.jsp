@@ -24,7 +24,7 @@
 	%>
 	<script>
 		alert("로그인 이후 사용이 가능합니다.");
-		window.history.back();
+		location.href="loginForm.jsp";
 	</script>
 	<%
 	}
@@ -119,130 +119,130 @@
 			<div class="jumbotron" style="padding-top: 20px;">
 				<h3 style="text-align: center;">노말아이템 보유메소 기준 강화 성공 확률</h3>
 				<h4 style="text-align: center;">세부사항을 작성해주세요.</h4>
-				<form class="row g-3">
-					<div class="col-md-4">
+				<form class="row">
+					<div class="col-sm-4 pb-custom-3">
 						<label for="numberOfItems" class="form-label">표본 개수</label> <input
-							type="number" class="form-control" id="numberOfItems" autofocus
+							type="number" class="form-control" placeholder="10000" id="numberOfItems"
 							required>
 					</div>
-					<div class="col-md-4">
+					<div class="col-sm-4 pb-custom-3">
 						<label for="level" class="form-label">아이템 레벨</label> <input
-							type="number" class="form-control" id="level" required>
+							type="number" class="form-control" placeholder="160" id="level" required>
 					</div>
-					<div class="col-md-4">
+					<div class="col-sm-4 pb-custom-3">
 						<label for="mesoOnHand" class="form-label">보유메소(100이상 900경이하)</label>
-						<input type="number" class="form-control" id="mesoOnHand"
+						<input type="number" class="form-control" placeholder="10000000000" id="mesoOnHand"
 							required>
 					</div>
-					<div class="col-md-6">
+					<div class="col-sm-6 pb-custom-3">
 						<label for="fromStarforce" class="form-label">시작 스타포스</label> <input
-							type="number" class="form-control" id="fromStarforce" required>
+							type="number" class="form-control" placeholder="0" id="fromStarforce" required>
 					</div>
-					<div class="col-md-6">
+					<div class="col-sm-6 pb-custom-3">
 						<label for="starforce" class="form-label">목표 스타포스</label> <input
-							type="number" class="form-control" id="starforce" required>
+							type="number" class="form-control" placeholder="22" id="starforce" required>
 					</div>
-					<div class="col-md-6">
+					<div class="col-sm-6 pb-custom-3">
 						<label for="ignoreDestroy" class="form-label">파괴방지</label> <select
 							class="form-select form-control" id="ignoreDestroy" required>
 							<option value="false">파괴방지 X</option>
 							<option value="true">파괴방지 O</option>
 						</select>
 					</div>
-					<div class="col-md-6">
+					<div class="col-sm-6 pb-custom-3">
 						<label for="discountPCRoom" class="form-label">PC방 할인</label> <select
 							class="form-select form-control" id="discountPCRoom" required>
 							<option value="false">PC방 할인 X</option>
 							<option value="true">PC방 할인 O(5%)</option>
 						</select>
 					</div>
-					<div class="col-md-12">
+					<div class="col-md-12 pb-custom-3">
 						<label for="succededCatch" class="form-label">스타캐치 여부</label>
 						<div class="form-check">
 							<input type="radio" name="succededCatch" class="form-check-input"
 								id="succededCatch" value="0" checked> <label
 								class="form-check-label" for="succededCatch">스타캐치 X</label>
 						</div>
-						<div class="mb-12 form-check">
+						<div class="form-check">
 							<input type="radio" name="succededCatch" class="form-check-input"
 								id="succededCatch" value="1"> <label
 								class="form-check-label" for="succededCatch">합연산 (4.5%p
 								증가)</label>
 						</div>
-						<div class="mb-12 form-check">
+						<div class="form-check">
 							<input type="radio" name="succededCatch" class="form-check-input"
 								id="succededCatch" value="2"> <label
 								class="form-check-label" for="succededCatch">곱연산 (1.045
 								배)</label>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-sm-6 pb-custom-3">
 						<label for="mapleEvent" class="form-label">이벤트 여부</label>
 						<div class="form-check">
 							<input type="radio" name="mapleEvent" class="form-check-input"
 								id="mapleEvent" value="0" checked> <label
 								class="form-check-label" for="mapleEvent">이벤트 X</label>
 						</div>
-						<div class="mb-6 form-check">
+						<div class="form-check">
 							<input type="radio" name="mapleEvent" class="form-check-input"
 								id="mapleEvent" value="1"> <label
 								class="form-check-label" for="mapleEvent">30 퍼센트 할인 (곱연산)</label>
 						</div>
-						<div class="mb-6 form-check">
+						<div class="form-check">
 							<input type="radio" name="mapleEvent" class="form-check-input"
 								id="mapleEvent" value="2"> <label
 								class="form-check-label" for="mapleEvent">10성 이하 1+1성</label>
 						</div>
-						<div class="mb-6 form-check">
+						<div class="form-check">
 							<input type="radio" name="mapleEvent" class="form-check-input"
 								id="mapleEvent" value="3"> <label
 								class="form-check-label" for="mapleEvent">5,10,15성에서
 								강화확률 100%</label>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-sm-6 pb-custom-3">
 						<label for="discountMVPGrade" class="form-label">MVP 등급별 할인</label>
 						<div class="form-check">
 							<input type="radio" name="discountMVPGrade" class="form-check-input"
 								id="discountMVPGrade" value="0" checked> <label
 								class="form-check-label" for="discountMVPGrade">브론즈 (X)</label>
 						</div>
-						<div class="mb-6 form-check">
+						<div class="form-check">
 							<input type="radio" name="discountMVPGrade" class="form-check-input"
 								id="discountMVPGrade" value="1"> <label
 								class="form-check-label" for="discountMVPGrade">실버 (3%)</label>
 						</div>
-						<div class="mb-6 form-check">
+						<div class="form-check">
 							<input type="radio" name="discountMVPGrade" class="form-check-input"
 								id="discountMVPGrade" value="2"> <label
 								class="form-check-label" for="discountMVPGrade">골드 (5%)</label>
 						</div>
-						<div class="mb-6 form-check">
+						<div class="form-check">
 							<input type="radio" name="discountMVPGrade" class="form-check-input"
 								id="discountMVPGrade" value="3"> <label
 								class="form-check-label" for="discountMVPGrade">다이아, 레드 (10%)</label>
 						</div>
 					</div>
-					<div class="col-md-12">
+					<div class="col-md-12 pb-custom-3">
 						<label for="toad" class="form-label">토드 여부</label>
-						<div class="mb-12 form-check">
+						<div class="form-check">
 							<input type="radio" name="toad" class="form-check-input"
 								id="toad" value="false" checked> <label
 								class="form-check-label" for="toad">토드 X</label>
 						</div>
-						<div class="mb-12 form-check">
+						<div class="form-check">
 							<input type="radio" name="toad" class="form-check-input"
 								id="toad" value="true"> <label class="form-check-label"
 								for="toad">토드 O</label>
 						</div>
 					</div>
 					<div id="selectToadProperty" hidden>
-						<div class="col-md-6">
+						<div class="col-md-6 pb-custom-3">
 							<label for="toadToStarforce" class="form-label">토드템 목표
-								스타포스</label> <input type="number" class="form-control"
+								스타포스</label> <input type="number" class="form-control" placeholder="16"
 								id="toadToStarforce" required>
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-6 pb-custom-3">
 							<label for="toadIgnoreDestroy" class="form-label">토드템
 								파괴방지</label> <select class="form-select form-control"
 								id="toadIgnoreDestroy" required>
@@ -253,7 +253,7 @@
 					</div>
 					<div class="col-12">
 						<button id="previous" class="btn btn-primary">이전</button>
-						<button id="reset" class="btn btn-primary" onclick="location.reload()">리셋</button>
+						<button id="reset" class="btn btn-danger" onclick="location.reload()">리셋</button>
 						<button id="finalSubmit_normal" type="button" class="btn btn-primary pull-right">시행</button>
 					</div>
 				</form>
