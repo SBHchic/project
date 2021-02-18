@@ -49,6 +49,47 @@ abstract class Item {
 			return "곱연산(1.045배)";
         }
     }
+
+    public static String booleanToString(boolean booleanSelect){ // boolean형태 출력 편의성
+		if (booleanSelect == true){
+			return "O";
+		}
+		return "X";
+	}
+
+	public static String mapleEventToString(byte mapleEvent){ // 이벤트 출력 편의성
+		if (mapleEvent == 0){
+			return "X";
+		} else if (mapleEvent == 1) {
+			return "강화비용 30% 할인 이벤트";
+		} else if (mapleEvent == 2){
+			return "스타포스 1+1 이벤트 (10성까지)";
+		} else {
+			return "5의 배수의 스타포스 100퍼센트 성공 (15성까지)";
+		}
+    }
+
+	public static String MVPGradeToString(byte discountMVPGrade){ // MVP등급 출력 편의성
+		if (discountMVPGrade == 0){
+			return "X";
+		} else if (discountMVPGrade == 1){
+			return "실버 (3%)";
+		} else if (discountMVPGrade == 2){
+			return "골드 (5%)";
+		} else {
+			return "다이아 or 레드 (10%)";
+		}
+	}
+    
+    public static int toadItemLevel(int level) { // 토드템 허용 여부 확인 메서드
+    	int toadItemLevel = 0;
+    	if (level <= 110) {
+    		toadItemLevel = level-20;
+        } else {
+        	toadItemLevel = level-10;
+        }
+    	return toadItemLevel;
+    }
     
     public static long sumUpgradePriceMin(Item[] itemArr) { // 최소 강화 비용을 구하는 메서드
     	long min = itemArr[0].sumUpgradePrice;
@@ -222,16 +263,9 @@ public class NumberOfItems_Normal extends Item {
 		}
     }
 
-    static String booleanToString(boolean booleanSelect){ // boolean형태 출력 편의성
-		if (booleanSelect == true){
-			return "O";
-		}
-		return "X";
-	}
-
-	static String mapleEventToString(byte mapleEvent){ // 이벤트 출력 편의성
+	public static String mapleEventToString(byte mapleEvent){ // 이벤트 출력 편의성
 		if (mapleEvent == 0){
-			return "x";
+			return "X";
 		} else if (mapleEvent == 1) {
 			return "스타포스 1+1 이벤트 (10성까지)";
 		} else {
@@ -256,23 +290,13 @@ public class NumberOfItems_Normal extends Item {
     public static String result(NumberOfItems_Normal[] niArr, int fromStarforce, int toStarforce) { // 결과값 출력 메서드
     	String result = "";
     	result += "==== " + niArr[0].level + "제 노말아이템의 " + niArr.length + "개 " + fromStarforce + "성 -> " + toStarforce + "성까지의 강화 ==== <br>";
-    	result += "추가 설명 - 스타캐치 " + Item.starCatchToString(niArr[0].succededCatch) + ", 파괴방지 : " + NumberOfItems_Normal.booleanToString(niArr[0].ignoreDestroy) + "<br>";
+    	result += "추가 설명 - 스타캐치 " + NumberOfItems_Normal.starCatchToString(niArr[0].succededCatch) + ", 파괴방지 : " + NumberOfItems_Normal.booleanToString(niArr[0].ignoreDestroy) + "<br>";
     	result += "토드여부 : " + NumberOfItems_Normal.booleanToString(niArr[0].toadHammer) + "<br>";
     	if (niArr[0].toadHammer) {
     		result += " 토드템 0성 -> " + niArr[0].toadToStarforce + "성, 토드템 파괴방지 : " + NumberOfItems_Normal.booleanToString(niArr[0].toadIgnoreDestroy) + "<br>";
     	}
     	result += "메이플 이벤트 적용 : " + NumberOfItems_Normal.mapleEventToString(niArr[0].mapleEvent) + "<br>";
     	return result;
-    }
-    
-    public static int toadItemLevel(int level) { // 토드템 허용 여부 확인 메서드
-    	int toadItemLevel = 0;
-    	if (level <= 110) {
-    		toadItemLevel = level-20;
-        } else {
-        	toadItemLevel = level-10;
-        }
-    	return toadItemLevel;
     }
     
     public static NumberOfItems_Normal goTo(NumberOfItems_Normal ni, int toStarforce, boolean toadIgnoreDestroy, int numberOfRealItems, int numberOfToadItems) { // 스타포스 시행 메서드

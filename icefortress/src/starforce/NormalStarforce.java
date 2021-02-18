@@ -73,37 +73,6 @@ public class NormalStarforce extends Item {
 			return 25;
 		}
     }
-    
-    public static String booleanToString(boolean booleanSelect){ // boolean형태 출력 편의성
-		if (booleanSelect == true){
-			return "O";
-		}
-		return "X";
-	}
-
-    public static String MVPGradeToString(byte discountMVPGrade){ // MVP등급 출력 편의성
-		if (discountMVPGrade == 0){
-			return "X";
-		} else if (discountMVPGrade == 1){
-			return "실버 (3%)";
-		} else if (discountMVPGrade == 2){
-			return "골드 (5%)";
-		} else {
-			return "다이아 or 레드 (10%)";
-		}
-	}
-
-	public static String mapleEventToString(byte mapleEvent){ // 이벤트 출력 편의성
-		if (mapleEvent == 0){
-			return "X";
-		} else if (mapleEvent == 1) {
-			return "스타포스 1+1 이벤트 (10성까지)";
-		} else if (mapleEvent == 2){
-			return "스타포스 1+1 이벤트 (10성까지)";
-		} else {
-			return "5의 배수의 스타포스 100퍼센트 성공 (15성까지)";
-		}
-    }
 	
 	void fromToadStarforceToNormalStarforce(ToadStarforce ti){
         this.starforce = --ti.starforce;

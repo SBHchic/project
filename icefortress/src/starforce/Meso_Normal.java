@@ -74,37 +74,6 @@ public class Meso_Normal extends Item {
 		}
     }
 
-    static String booleanToString(boolean booleanSelect){ // boolean형태 출력 편의성
-		if (booleanSelect == true){
-			return "O";
-		}
-		return "X";
-	}
-
-	static String MVPGradeToString(byte discountMVPGrade){ // MVP등급 출력 편의성
-		if (discountMVPGrade == 0){
-			return "X";
-		} else if (discountMVPGrade == 1){
-			return "실버 (3%)";
-		} else if (discountMVPGrade == 2){
-			return "골드 (5%)";
-		} else {
-			return "다이아 or 레드 (10%)";
-		}
-	}
-
-	static String mapleEventToString(byte mapleEvent){ // 이벤트 출력 편의성
-		if (mapleEvent == 0){
-			return "X";
-		} else if (mapleEvent == 1) {
-			return "스타포스 1+1 이벤트 (10성까지)";
-		} else if (mapleEvent == 2){
-			return "스타포스 1+1 이벤트 (10성까지)";
-		} else {
-			return "5의 배수의 스타포스 100퍼센트 성공 (15성까지)";
-		}
-    }
-
     void fromMeso_ToadItemToMeso_Normal(Meso_ToadItem ti){ // 토드템에서 본템으로 토드할때 옮겨오는 값들
 		this.starforce = --ti.starforce;
 		this.sumUpgradePrice += ti.sumUpgradePrice;
@@ -123,7 +92,7 @@ public class Meso_Normal extends Item {
     public static String result(Meso_Normal[] niArr, int fromStarforce, int toStarforce) { // 결과값 출력 메서드
     	String result = "";
     	result += "==== " + niArr[0].level + "제 노말아이템의 " + niArr.length + "개 " + fromStarforce + "성 -> " + toStarforce + "성까지의 강화 ==== <br>";
-		result += "추가 설명 - 스타캐치 " + Item.starCatchToString(niArr[0].succededCatch) + ", 파괴방지 : " + Meso_Normal.booleanToString(niArr[0].ignoreDestroy) + "<br>";
+		result += "추가 설명 - 스타캐치 " + Meso_Normal.starCatchToString(niArr[0].succededCatch) + ", 파괴방지 : " + Meso_Normal.booleanToString(niArr[0].ignoreDestroy) + "<br>";
 		result += ", PC방 할인 : " + Meso_Normal.booleanToString(niArr[0].roomOfPC) + ", MVP 등급 : " + Meso_Normal.MVPGradeToString(niArr[0].gradeOfMVP) + "<br>";
     	result += "토드여부 : " + Meso_Normal.booleanToString(niArr[0].toadHammer) + "<br>";
     	if (niArr[0].toadHammer) {
@@ -131,16 +100,6 @@ public class Meso_Normal extends Item {
     	}
     	result += "메이플 이벤트 적용 : " + Meso_Normal.mapleEventToString(niArr[0].mapleEvent) + "<br>";
     	return result;
-    }
-    
-    public static int toadItemLevel(int level) { // 토드템 허용 여부 확인 메서드
-    	int toadItemLevel = 0;
-    	if (level <= 110) {
-    		toadItemLevel = level-20;
-        } else {
-        	toadItemLevel = level-10;
-        }
-    	return toadItemLevel;
     }
     
     public static Meso_Normal goTo(Meso_Normal ni, int toStarforce, boolean toadIgnoreDestroy, long mesoOnHand) { // 스타포스 시행 메서드

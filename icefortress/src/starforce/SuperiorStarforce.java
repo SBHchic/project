@@ -50,13 +50,6 @@ public class SuperiorStarforce extends Item {
         }
     }
 	
-	public static String result(SuperiorStarforce[] siArr, int fromStarforce, int toStarforce) { // 결과값 출력 메서드
-    	String result = "";
-    	result += "==== " + siArr[0].level + "제 슈페리얼 아이템의 " + siArr.length + "개 " + fromStarforce + "성 -> " + toStarforce + "성까지의 강화 ==== <br>";
-    	result += "추가 설명 - 스타캐치 " + Item.starCatchToString(siArr[0].succededCatch) +"<br>";
-    	return result;
-    }
-	
 	public void goTo(int toStarforce) {
 		do {
 			// 강화 시작
