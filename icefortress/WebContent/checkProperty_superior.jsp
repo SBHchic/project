@@ -10,10 +10,9 @@
   int level  = Integer.parseInt(request.getParameter("level"));
   int fromStarforce = Integer.parseInt(request.getParameter("fromStarforce"));
   int starforce = Integer.parseInt(request.getParameter("starforce"));
-  byte succededCatch = Byte.parseByte(request.getParameter("succededCatch"));
   
   boolean result = true;
-  if (numberOfItems <= 0 || level <= 0 || starforce <= 0 || fromStarforce < 0){
+  if (numberOfItems <= 0 || numberOfItems >= 100000000 || level <= 0 || starforce <= 0 || fromStarforce < 0){
 	  result = false;
   } else if (fromStarforce >= starforce || SuperiorStarforce.maxItemStarforce(level) < starforce) {
 	  result = false;

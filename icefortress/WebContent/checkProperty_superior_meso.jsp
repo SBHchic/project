@@ -8,14 +8,12 @@
   // 사용자가 입력한 정보들
   int numberOfItems = Integer.parseInt(request.getParameter("numberOfItems"));
   int level  = Integer.parseInt(request.getParameter("level"));
-  String tmpstr = request.getParameter("mesoOnHand");
-  long mesoOnHand = Long.parseLong(tmpstr.substring(0,tmpstr.length()-2));
+  long mesoOnHand = Long.parseLong(request.getParameter("mesoOnHand"));
   int fromStarforce = Integer.parseInt(request.getParameter("fromStarforce"));
   int starforce = Integer.parseInt(request.getParameter("starforce"));
-  byte succededCatch = Byte.parseByte(request.getParameter("succededCatch"));
   
   boolean result = true;
-  if (numberOfItems <= 0 || level <= 0 || mesoOnHand < 100 || starforce <= 0 || fromStarforce < 0){
+  if (numberOfItems <= 0 || numberOfItems >= 100000000 || level <= 0 || mesoOnHand < 100 || starforce <= 0 || fromStarforce < 0){
 	  result = false;
   } else if (fromStarforce >= starforce || Meso_Superior.maxItemStarforce(level) < starforce){
 	  result = false;

@@ -11,13 +11,13 @@
   int numberOfRealItems = Integer.parseInt(request.getParameter("numberOfRealItems"));
   int fromStarforce = Integer.parseInt(request.getParameter("fromStarforce"));
   int starforce = Integer.parseInt(request.getParameter("starforce"));
-  byte succededCatch = Byte.parseByte(request.getParameter("succededCatch"));
   
   boolean result = true;
-  if (numberOfItems <= 0 || level <= 0 || numberOfRealItems <= 0 || starforce <= 0 || fromStarforce < 0){
+  if (numberOfItems <= 0 || numberOfItems >= 100000000 || level <= 0 || numberOfRealItems <= 0 || starforce <= 0 || fromStarforce < 0){
 	  result = false;
   } else if (fromStarforce >= starforce || NumberOfItems_Superior.maxItemStarforce(level) < starforce){
 	  result = false;
   }
+  
   out.println(result); // 처리결과를 반환
 %>
