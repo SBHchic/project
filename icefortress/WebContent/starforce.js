@@ -35,6 +35,7 @@ $(document).ready(function(){
 	
 	// normalStarforceForm_cumulativeResult.jsp 에서 시행버튼을 눌렀을 때
 	$("#search_normal").click(function(){
+		// 데이터베이스에 이미 저장된 데이터를 불러오는 것이기 때문에 굳이 체크 안해도 됨
 		
 		var query = {
 				numberOfItems:$("#numberOfItems").val(),
@@ -67,6 +68,9 @@ $(document).ready(function(){
 		if($("input[id=toad]:checked").val()=="true"){ // 토드O 인 경우
 			if($("#level").val()>160){ // 토드가 안되는 레벨에서 체크한 경우
 				alert("토드는 160제 이하에서 가능합니다");
+				$("#level").focus();
+			} else if ($("#level").val()<20) { // 아이템 레벨의 입력이 안되어 있거나 비정상적인 입력을 했을 경우
+				alert("아이템 레벨부터 입력해주시기 바랍니다.");
 				$("#level").focus();
 			} else {
 				$("#selectToadProperty").show();
@@ -167,14 +171,8 @@ function checkNormalItem() {
 			level:$("#level").val(),
 			fromStarforce:$("#fromStarforce").val(),
 			starforce:$("#starforce").val(),
-			ignoreDestroy:$("#ignoreDestroy").val(),
-			discountPCRoom:$("#discountPCRoom").val(),
-			succededCatch:$("input[id=succededCatch]:checked").val(),
-			mapleEvent:$("input[id=mapleEvent]:checked").val(),
-			discountMVPGrade:$("input[id=discountMVPGrade]:checked").val(),
 			toad:$("input[id=toad]:checked").val(),
-			toadToStarforce:$("#toadToStarforce").val(),
-			toadIgnoreDestroy:$("#toadIgnoreDestroy").val()
+			toadToStarforce:$("#toadToStarforce").val()
 	};
 	$.ajax({
 		type:"post",
@@ -225,8 +223,7 @@ function checkSuperiorItem() {
     		numberOfItems:$("#numberOfItems").val(),
 			level:$("#level").val(),
 			fromStarforce:$("#fromStarforce").val(),
-			starforce:$("#starforce").val(),
-			succededCatch:$("input[id=succededCatch]:checked").val()
+			starforce:$("#starforce").val()
 	};
 	$.ajax({
 		type:"post",
