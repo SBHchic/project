@@ -9,6 +9,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import java.lang.Math;
+
 public class NormalStarforceDBBean {
 
 	// NormalStarforceDBBean 전역 객체 생성 <- 한개의 객제만 생성해서 공유
@@ -134,27 +136,25 @@ public class NormalStarforceDBBean {
    			
             if (rs.next()) {
             	pstmt = conn.prepareStatement(
-           	        "update normalStarforce set numberOfItems = ?,minSumUpgradePrice = ?,maxSumUpgradePrice = ?,averageSumUpgradePrice = ?,"
-           	        + "minUpgradeCount = ?,maxUpgradeCount = ?,averageUpgradeCount = ?,"
-           	        + "minDestroyCount = ?,maxDestroyCount = ?,averageDestroyCount = ?,"
-           	        + "minChanceTimeCount = ?,maxChanceTimeCount = ?,averageChanceTimeCount = ? "
+           	        "update normalStarforce set numberOfItems = ?,minSumUpgradePrice = ?,maxSumUpgradePrice = ?,averageSumUpgradePrice = ?,minUpgradeCount = ?,maxUpgradeCount = ?,averageUpgradeCount = ?,"
+           	        + "minDestroyCount = ?,maxDestroyCount = ?,averageDestroyCount = ?,minChanceTimeCount = ?,maxChanceTimeCount = ?,averageChanceTimeCount = ? "
            	        + "where level = ? and fromStarforce = ? and starforce = ? and ignoreDestroy = ? and discountPCRoom = ? and succededCatch = ? and mapleEvent = ? and discountMVPGrade = ? and toad = ? and toadToStarforce = ? and toadIgnoreDestroy = ?");
             	pstmt.setLong(1, normalStarforce.getNumberOfItems()+rs.getLong("numberOfItems"));
             	double subTop1 = normalStarforce.getNumberOfItems();
             	double subTop2 = rs.getLong("numberOfItems");
-            	double subUnder = (normalStarforce.getNumberOfItems()+rs.getLong("numberOfItems"));
-            	pstmt.setLong(2, (long)(normalStarforce.getMinSumUpgradePrice()*(subTop1/subUnder)+rs.getLong("minSumUpgradePrice")*(subTop2/subUnder)));
-                pstmt.setLong(3, (long)(normalStarforce.getMaxSumUpgradePrice()*(subTop1/subUnder)+rs.getLong("maxSumUpgradePrice")*(subTop2/subUnder)));
-                pstmt.setLong(4, (long)(normalStarforce.getAverageSumUpgradePrice()*(subTop1/subUnder)+rs.getLong("averageSumUpgradePrice")*(subTop2/subUnder)));
-                pstmt.setInt(5, (int)(normalStarforce.getMinUpgradeCount()*(subTop1/subUnder)+rs.getInt("minUpgradeCount")*(subTop2/subUnder)));
-                pstmt.setInt(6, (int)(normalStarforce.getMaxUpgradeCount()*(subTop1/subUnder)+rs.getInt("maxUpgradeCount")*(subTop2/subUnder)));
-                pstmt.setLong(7, (long)(normalStarforce.getAverageUpgradeCount()*(subTop1/subUnder)+rs.getLong("averageUpgradeCount")*(subTop2/subUnder)));
-                pstmt.setInt(8, (int)(normalStarforce.getMinDestroyCount()*(subTop1/subUnder)+rs.getInt("minDestroyCount")*(subTop2/subUnder)));
-                pstmt.setInt(9, (int)(normalStarforce.getMaxDestroyCount()*(subTop1/subUnder)+rs.getInt("maxDestroyCount")*(subTop2/subUnder)));
-                pstmt.setLong(10, (long)(normalStarforce.getAverageDestroyCount()*(subTop1/subUnder)+rs.getLong("averageDestroyCount")*(subTop2/subUnder)));
-                pstmt.setInt(11, (int)(normalStarforce.getMinChanceTimeCount()*(subTop1/subUnder)+rs.getInt("minChanceTimeCount")*(subTop2/subUnder)));
-                pstmt.setInt(12, (int)(normalStarforce.getMaxChanceTimeCount()*(subTop1/subUnder)+rs.getInt("maxChanceTimeCount")*(subTop2/subUnder)));
-                pstmt.setLong(13, (long)(normalStarforce.getAverageChanceTimeCount()*(subTop1/subUnder)+rs.getLong("averageChanceTimeCount")*(subTop2/subUnder)));
+            	double subUnder = normalStarforce.getNumberOfItems()+rs.getLong("numberOfItems");
+            	pstmt.setLong(2, Math.round(normalStarforce.getMinSumUpgradePrice()*(subTop1/subUnder)+rs.getLong("minSumUpgradePrice")*(subTop2/subUnder)));
+                pstmt.setLong(3, Math.round(normalStarforce.getMaxSumUpgradePrice()*(subTop1/subUnder)+rs.getLong("maxSumUpgradePrice")*(subTop2/subUnder)));
+                pstmt.setLong(4, Math.round(normalStarforce.getAverageSumUpgradePrice()*(subTop1/subUnder)+rs.getLong("averageSumUpgradePrice")*(subTop2/subUnder)));
+                pstmt.setInt(5, (int) Math.round(normalStarforce.getMinUpgradeCount()*(subTop1/subUnder)+rs.getInt("minUpgradeCount")*(subTop2/subUnder)));
+                pstmt.setInt(6, (int) Math.round(normalStarforce.getMaxUpgradeCount()*(subTop1/subUnder)+rs.getInt("maxUpgradeCount")*(subTop2/subUnder)));
+                pstmt.setLong(7, Math.round(normalStarforce.getAverageUpgradeCount()*(subTop1/subUnder)+rs.getLong("averageUpgradeCount")*(subTop2/subUnder)));
+                pstmt.setInt(8, (int) Math.round(normalStarforce.getMinDestroyCount()*(subTop1/subUnder)+rs.getInt("minDestroyCount")*(subTop2/subUnder)));
+                pstmt.setInt(9, (int) Math.round(normalStarforce.getMaxDestroyCount()*(subTop1/subUnder)+rs.getInt("maxDestroyCount")*(subTop2/subUnder)));
+                pstmt.setLong(10, Math.round(normalStarforce.getAverageDestroyCount()*(subTop1/subUnder)+rs.getLong("averageDestroyCount")*(subTop2/subUnder)));
+                pstmt.setInt(11, (int) Math.round(normalStarforce.getMinChanceTimeCount()*(subTop1/subUnder)+rs.getInt("minChanceTimeCount")*(subTop2/subUnder)));
+                pstmt.setInt(12, (int) Math.round(normalStarforce.getMaxChanceTimeCount()*(subTop1/subUnder)+rs.getInt("maxChanceTimeCount")*(subTop2/subUnder)));
+                pstmt.setLong(13, Math.round(normalStarforce.getAverageChanceTimeCount()*(subTop1/subUnder)+rs.getLong("averageChanceTimeCount")*(subTop2/subUnder)));
                 pstmt.setInt(14, normalStarforce.getLevel());
                 pstmt.setInt(15, normalStarforce.getFromStarforce());
                 pstmt.setInt(16, normalStarforce.getStarforce());
@@ -227,5 +227,34 @@ public class NormalStarforceDBBean {
             if (conn != null) try { conn.close(); } catch(SQLException sqle) {}
         }
 		return existingResult; // 기존 데이터 가져옴
+   	}
+   	
+   	public static String condition (NormalStarforceDataBean normalStarforce) {
+   		String condition = "";
+   		condition += "==== " + normalStarforce.getLevel() + "제 노말아이템의 " + normalStarforce.getNumberOfItems() + "개 " + normalStarforce.getFromStarforce() + "성 -> " + normalStarforce.getStarforce() + "성까지의 강화 ==== <br>";
+    	condition += "추가 설명 - 스타캐치 " + Item.starCatchToString(normalStarforce.getSuccededCatch()) + ", 파괴방지 : " + Item.booleanToString(normalStarforce.isIgnoreDestroy()) + "<br>";
+    	condition += "토드여부 : " + Item.booleanToString(normalStarforce.isToad()) + "<br>";
+    	if (normalStarforce.isToad()) {
+    		condition += " 토드템 0성 -> " + normalStarforce.getToadToStarforce() + "성, 토드템 파괴방지 : " + Item.booleanToString(normalStarforce.isToadIgnoreDestroy()) + "<br>";
+    	}
+    	condition += "메이플 이벤트 적용 : " + Item.mapleEventToString(normalStarforce.getMapleEvent()) + "<br><br>";
+    	return condition;
+   	}
+   	
+   	public static String result(NormalStarforceDataBean normalStarforce) {
+   		String result = "";
+   		result += normalStarforce.getNumberOfItems() + "개의 아이템 중 스타포스 강화 최소비용은 " + normalStarforce.getMinSumUpgradePrice() + "00메소 입니다. <br>";
+   		result += normalStarforce.getNumberOfItems() + "개의 아이템 중 스타포스 강화 최대비용은 " + normalStarforce.getMaxSumUpgradePrice() + "00메소 입니다. <br>";
+   		result += normalStarforce.getNumberOfItems() + "개의 아이템의 평균적인 스타포스 강화 비용은 " + normalStarforce.getAverageSumUpgradePrice() + "00메소 입니다. <br>";
+   		result += normalStarforce.getNumberOfItems() + "개의 아이템 중 가장 적은 강화 횟수는 " + normalStarforce.getMinUpgradeCount() + "번 입니다. <br>";
+   		result += normalStarforce.getNumberOfItems() + "개의 아이템 중 가장 많은 강화 횟수는 " + normalStarforce.getMaxUpgradeCount() + "번 입니다. <br>";
+   		result += normalStarforce.getNumberOfItems() + "개의 아이템의 평균적인 강화 횟수는 " + normalStarforce.getAverageUpgradeCount() + "번 입니다. <br>";
+   		result += normalStarforce.getNumberOfItems() + "개의 아이템 중 가장 적은 파괴 횟수는 " + normalStarforce.getMinDestroyCount() + "번 입니다. <br>";
+   		result += normalStarforce.getNumberOfItems() + "개의 아이템 중 가장 많은 파괴 횟수는 " + normalStarforce.getMaxDestroyCount() + "번 입니다. <br>";
+   		result += normalStarforce.getNumberOfItems() + "개의 아이템의 평균적인 파괴 횟수는 " + normalStarforce.getAverageDestroyCount() + "번 입니다. <br>";
+   		result += normalStarforce.getNumberOfItems() + "개의 아이템 중 가장 적은 찬스타임 횟수는 " + normalStarforce.getMinChanceTimeCount() + "번 입니다. <br>";
+   		result += normalStarforce.getNumberOfItems() + "개의 아이템 중 가장 많은 찬스타임 횟수는 " + normalStarforce.getMaxChanceTimeCount() + "번 입니다. <br>";
+   		result += normalStarforce.getNumberOfItems() + "개의 아이템의 평균적인 찬스타임 횟수는 " + normalStarforce.getAverageChanceTimeCount() + "번 입니다.";
+   		return result;
    	}
 }
