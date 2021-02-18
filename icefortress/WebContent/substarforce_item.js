@@ -6,45 +6,48 @@ $(document).ready(function(){
 	// numberOfItems.jsp 에서 확인 버튼을 눌렀을 때
 	$("#firstSubmit").click(function(){
 		if($("input:radio[id=normalItem]").is(":checked")){
-			location.href("numberOfItems_normal.jsp");
+			location.href="numberOfItems_normal.jsp";
 		} else if($("input:radio[id=superiorItem]").is(":checked")){
-			location.href("numberOfItems_superior.jsp");
+			location.href="numberOfItems_superior.jsp";
 		}
 	});
 	
 	// numberOfItems_normal.jsp 에서의 작동
-	// nuberOfItems_normal.jsp 에서 토드 여부를 확인하고 토드에 관한 사항들을 보여줌
-	$("input[id=toad_normalItem]").click(function(){
-		if($("input[id=toad_normalItem]:checked").val()=="true"){ // 토드O 인 경우
-			if($("#level_normalItem").val()>160){ // 토드가 안되는 레벨에서 체크한 경우
+	// numberOfItems_normal.jsp 에서 토드 여부를 확인하고 토드에 관한 사항들을 보여줌
+	$("input[id=toad]").click(function(){
+		if($("input[id=toad]:checked").val()=="true"){ // 토드O 인 경우
+			if($("#level").val()>160){ // 토드가 안되는 레벨에서 체크한 경우
 				alert("토드는 160제 이하에서 가능합니다");
-				$("#level_normalItem").focus();
+				$("#level").focus();
+			} else if ($("#level").val()<20) { // 아이템 레벨의 입력이 안되어 있거나 비정상적인 입력을 했을 경우
+				alert("아이템 레벨부터 입력해주시기 바랍니다.");
+				$("#level").focus();
 			} else {
-				$("#selectToadProperty_normalItem").show();
+				$("#selectToadProperty").show();
 			}
-		} else if($("input[id=toad_normalItem]:checked").val()=="false"){ // 토드X 인 경우
-			$("#selectToadProperty_normalItem").hide();
+		} else if($("input[id=toad]:checked").val()=="false"){ // 토드X 인 경우
+			$("#selectToadProperty").hide();
 		}
 	});
 	
-	// nuberOfItems_normal.jsp 에서 시행버튼을 눌렀을 때
+	// numberOfItems_normal.jsp 에서 시행버튼을 눌렀을 때
 	$("#finalSubmit_normal").click(function(){
 		checkNormalItem();
 		
 		if (status) {
 			var query = {
-					numberOfItems:$("#numberOfItems_normalItem").val(),
-					level:$("#level_normalItem").val(),
-					numberOfRealItems:$("#numberOfRealItems_normalItem").val(),
-					fromStarforce:$("#fromStarforce_normalItem").val(),
-					starforce:$("#starforce_normalItem").val(),
-					ignoreDestroy:$("#ignoreDestroy_normalItem").val(),
-					succededCatch:$("input[id=succededCatch_normalItem]:checked").val(),
-					mapleEvent:$("input[id=mapleEvent_normalItem]:checked").val(),
-					toad:$("input[id=toad_normalItem]:checked").val(),
-					numberOfToadItems:$("#numberOfToadItems_normalItem").val(),
-					toadToStarforce:$("#toadToStarforce_normalItem").val(),
-					toadIgnoreDestroy:$("#toadIgnoreDestroy_normalItem").val()
+					numberOfItems:$("#numberOfItems").val(),
+					level:$("#level").val(),
+					numberOfRealItems:$("#numberOfRealItems").val(),
+					fromStarforce:$("#fromStarforce").val(),
+					starforce:$("#starforce").val(),
+					ignoreDestroy:$("#ignoreDestroy").val(),
+					succededCatch:$("input[id=succededCatch]:checked").val(),
+					mapleEvent:$("input[id=mapleEvent]:checked").val(),
+					toad:$("input[id=toad]:checked").val(),
+					numberOfToadItems:$("#numberOfToadItems").val(),
+					toadToStarforce:$("#toadToStarforce").val(),
+					toadIgnoreDestroy:$("#toadIgnoreDestroy").val()
 			};
 			$.ajax({
 				type:"post",
@@ -59,7 +62,7 @@ $(document).ready(function(){
 	});
 	
 	// numberOfItems_superior.jsp 에서의 작동
-	// nuberOfItems_superior.jsp 에서 시행버튼을 눌렀을 때
+	// numberOfItems_superior.jsp 에서 시행버튼을 눌렀을 때
 	$("#finalSubmit_superior").click(function(){
 		checkSuperiorItem();
 		
@@ -85,79 +88,75 @@ $(document).ready(function(){
 	});
 	
 	// normal, superior 둘다 작동
-	// nuberOfItems_normal.jsp 에서 이전버튼을 눌렀을 때
+	// numberOfItems_normal.jsp 에서 이전버튼을 눌렀을 때
 	$("#previous").click(function(){
-		location.href("numberOfItems.jsp");
+		location.href="numberOfItems.jsp";
 	});
 });
 
 function checkNormalItem() {
 	status = true;
 	
-	if(!$("#numberOfItems_normalItem").val()) {// 표본 개수를 입력하지 않으면 수행
+	if(!$("#numberOfItems").val()) {// 표본 개수를 입력하지 않으면 수행
         alert("표본 개수를 입력하세요");
-        $("#numberOfItems_normalItem").focus();
+        $("#numberOfItems").focus();
         status = false;
         return false; // 사용자가 서비스를 요청한 시점으로 돌아감
     }
     
-    if(!$("#level_normalItem").val()) {// 레벨을 입력하지 않으면 수행
+    if(!$("#level").val()) {// 레벨을 입력하지 않으면 수행
         alert("아이템 레벨을 입력하세요");
-        $("#level_normalItem").focus();
+        $("#level").focus();
         status = false;
         return false; // 사용자가 서비스를 요청한 시점으로 돌아감
     }
     
-    if(!$("#numberOfRealItems_normalItem").val()) {// 본템 개수 제한을 입력하지 않으면 수행
+    if(!$("#numberOfRealItems").val()) {// 본템 개수 제한을 입력하지 않으면 수행
         alert("본템 개수 제한을 입력하세요");
-        $("#numberOfRealItems_normalItem").focus();
+        $("#numberOfRealItems").focus();
         status = false;
         return false; // 사용자가 서비스를 요청한 시점으로 돌아감
     }
     
-    if(!$("#fromStarforce_normalItem").val()) {// 시작 스타포스를 입력하지 않으면 수행
+    if(!$("#fromStarforce").val()) {// 시작 스타포스를 입력하지 않으면 수행
         alert("시작 스타포스를 입력하세요");
-        $("#fromStarforce_normalItem").focus();
+        $("#fromStarforce").focus();
         status = false;
         return false; // 사용자가 서비스를 요청한 시점으로 돌아감
     }
     
-    if(!$("#starforce_normalItem").val()) {// 목표 스타포스를 입력하지 않으면 수행
+    if(!$("#starforce").val()) {// 목표 스타포스를 입력하지 않으면 수행
         alert("목표 스타포스를 입력하세요");
-        $("#starforce_normalItem").focus();
+        $("#starforce").focus();
         status = false;
         return false; // 사용자가 서비스를 요청한 시점으로 돌아감
     }
     
-    if($("input[id=toad_normalItem]:checked").val()=="true"){
-    	if(!$("#numberOfToadItems_normalItem").val()) {// 토드템 개수 제한을 입력하지 않으면 수행
+    if($("input[id=toad]:checked").val()=="true"){
+    	if(!$("#numberOfToadItems").val()) {// 토드템 개수 제한을 입력하지 않으면 수행
  	       alert("토드템 개수 제한을 입력하세요");
-    	    $("#numberOfToadItems_normalItem").focus();
+    	    $("#numberOfToadItems").focus();
         	status = false;
       	  	return false; // 사용자가 서비스를 요청한 시점으로 돌아감
   	 	}
     
-	    if(!$("#toadToStarforce_normalItem").val()) {// 토드템 목표 스타포스를 입력하지 않으면 수행
+	    if(!$("#toadToStarforce").val()) {// 토드템 목표 스타포스를 입력하지 않으면 수행
    	    	alert("토드템 목표 스타포스를 입력하세요");
-        	$("#toadToStarforce_normalItem").focus();
+        	$("#toadToStarforce").focus();
         	status = false;
         	return false; // 사용자가 서비스를 요청한 시점으로 돌아감
     	}
     }
     
     var query = {
-    		numberOfItems:$("#numberOfItems_normalItem").val(),
-			level:$("#level_normalItem").val(),
-			numberOfRealItems:$("#numberOfRealItems_normalItem").val(),
-			fromStarforce:$("#fromStarforce_normalItem").val(),
-			starforce:$("#starforce_normalItem").val(),
-			ignoreDestroy:$("#ignoreDestroy_normalItem").val(),
-			succededCatch:$("input[id=succededCatch_normalItem]:checked").val(),
-			mapleEvent:$("input[id=mapleEvent_normalItem]:checked").val(),
-			toad:$("input[id=toad_normalItem]:checked").val(),
-			numberOfToadItems:$("#numberOfToadItems_normalItem").val(),
-			toadToStarforce:$("#toadToStarforce_normalItem").val(),
-			toadIgnoreDestroy:$("#toadIgnoreDestroy_normalItem").val()
+    		numberOfItems:$("#numberOfItems").val(),
+			level:$("#level").val(),
+			numberOfRealItems:$("#numberOfRealItems").val(),
+			fromStarforce:$("#fromStarforce").val(),
+			starforce:$("#starforce").val(),
+			toad:$("input[id=toad]:checked").val(),
+			numberOfToadItems:$("#numberOfToadItems").val(),
+			toadToStarforce:$("#toadToStarforce").val()
 	};
 	$.ajax({
 		type:"post",
@@ -216,8 +215,7 @@ function checkSuperiorItem() {
 			level:$("#level").val(),
 			numberOfRealItems:$("#numberOfRealItems").val(),
 			fromStarforce:$("#fromStarforce").val(),
-			starforce:$("#starforce").val(),
-			succededCatch:$("input[id=succededCatch]:checked").val()
+			starforce:$("#starforce").val()
 	};
 	$.ajax({
 		type:"post",
