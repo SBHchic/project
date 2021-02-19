@@ -363,9 +363,9 @@ public class BoardQnADBBean {
     public ArrayList<BoardQnADataBean> getList_Member(String userID, ArrayList<BoardQnADataBean> list) { 
         for (int i = list.size()-1; i >= 0; i--) {
         	if (!list.get(i).getUserID().equals(userID)) { // userID와 리스트의 userID가 다른경우
-        		if (list.get(i).getBoardQnA_ReplyID() == 0) {
+        		if (list.get(i).getBoardQnA_ReplyID() == 0) { // 답글이 아닌 경우
         			list.remove(i);
-        		} else {
+        		} else { // 답글인 경우
         			Connection conn = null;
         	        PreparedStatement pstmt = null;
         	        ResultSet rs = null;
@@ -415,8 +415,6 @@ public class BoardQnADBBean {
         		tmp.setBoardQnA_Reg_Date(rs.getString(7));
         		tmp.setBoardQnA_Content(rs.getString(8));
         		tmp.setAvailable(rs.getByte(9));
-        		tmp.setBoardQnA_DeleteReg_Date(rs.getString(10));
-        		tmp.setNotice(rs.getByte(11));
         		list.add(tmp);
     		}
     	} catch (Exception e) {
@@ -451,8 +449,6 @@ public class BoardQnADBBean {
         		tmp.setBoardQnA_Reg_Date(rs.getString(7));
         		tmp.setBoardQnA_Content(rs.getString(8));
         		tmp.setAvailable(rs.getByte(9));
-        		tmp.setBoardQnA_DeleteReg_Date(rs.getString(10));
-        		tmp.setNotice(rs.getByte(11));
         		list.add(tmp);
     		}
     	} catch (Exception e) {
@@ -577,9 +573,6 @@ public class BoardQnADBBean {
         		tmp.setUserID(rs.getString(6));
         		tmp.setBoardQnA_Reg_Date(rs.getString(7));
         		tmp.setBoardQnA_Content(rs.getString(8));
-        		tmp.setAvailable(rs.getByte(9));
-        		tmp.setBoardQnA_DeleteReg_Date(rs.getString(10));
-        		tmp.setNotice(rs.getByte(11));
         		list.add(tmp);
     		}
     	} catch (Exception e) {
@@ -599,12 +592,12 @@ public class BoardQnADBBean {
         ResultSet rs = null;
     	try {
     		conn = getConnection();
-    		String SQL = "select * from boardQnA where boardQnA_ID = ? and boardQnA_ReplyID = 0 and boardQnA_CommentID = 0";
+    		String SQL = "select userID from boardQnA where boardQnA_ID = ? and boardQnA_ReplyID = 0 and boardQnA_CommentID = 0";
     		pstmt = conn.prepareStatement(SQL);
     		pstmt.setInt(1, boardQnA_ID);
     		rs = pstmt.executeQuery();
-    		while (rs.next()) {
-    			if (userID.equals(rs.getString("userID"))) {
+    		if (rs.next()) {
+    			if (userID.equals(rs.getString(1))) {
     				return 1;
     			}
     		}
