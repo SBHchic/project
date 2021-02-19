@@ -26,7 +26,7 @@
 	%>
 	<script>
 		alert("로그인 이후 사용이 가능합니다.");
-		window.history.back();
+		location.href="loginForm.jsp";
 	</script>
 	<%
 	}
@@ -120,7 +120,17 @@
 		<div class="col-lg-8">
 			<div class="jumbotron" style="padding-top: 20px;">
 				<nav class="navbar navbar-default">
-					<div class="collapse navbar-collapse">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed"
+							data-toggle="collapse" data-target="#bs-example-navbar-collapse-2"
+							aria-expanded="false">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="javascript:;">길드원</a>
+					</div>
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
 						<ul class="nav navbar-nav">
 							<li class="active"><a href="guildMembers.jsp">길드 구성원</a></li>
 							<%

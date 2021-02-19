@@ -24,10 +24,10 @@
 	%>
 	<script>
 		alert("로그인 이후 사용이 가능합니다.");
-		window.history.back();
+		location.href="loginForm.jsp";
 	</script>
 	<%
-	} else if (grade == 0){
+	} else if (grade < 1){
 		%>
 		<script>
 			alert("길드원만 사용 가능합니다.");
@@ -75,13 +75,7 @@
 					<ul class="dropdown-menu">
 						<li><a href="freeBoard.jsp">자유 게시판</a></li>
 						<li><a href="boardQnA.jsp">QnA</a></li>
-						<%
-							if (grade >= 1){
-						%>
 						<li><a href="guildBoard.jsp">길드원 게시판</a></li>
-						<%
-							}
-						%>
 					</ul>
 				</li>
 				<li class="dropdown">
@@ -90,13 +84,7 @@
 						aria-expanded="false">길드원<span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="guildMembers.jsp">길드 구성원</a></li>
-						<%
-							if (grade >= 1){
-						%>
 						<li class="active"><a href="nobelesseTable.jsp">길드원 노블표</a></li>
-						<%
-							}
-						%>
 					</ul>
 				</li>
 			</ul>
@@ -124,16 +112,20 @@
 		<div class="col-lg-12">
 			<div class="jumbotron" style="padding-top: 20px;">
 				<nav class="navbar navbar-default">
-					<div class="collapse navbar-collapse">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed"
+							data-toggle="collapse" data-target="#bs-example-navbar-collapse-2"
+							aria-expanded="false">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="javascript:;">길드원</a>
+					</div>
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
 						<ul class="nav navbar-nav">
 							<li><a href="guildMembers.jsp">길드 구성원</a></li>
-							<%
-								if (grade >= 1){
-							%>
 							<li class="active"><a href="nobelesseTable.jsp">길드원 노블표</a></li>
-							<%
-								}
-							%>
 						</ul>
 					</div>
 				</nav>

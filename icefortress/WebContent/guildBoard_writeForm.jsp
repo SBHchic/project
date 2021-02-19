@@ -23,7 +23,7 @@
 	%>
 	<script>
 		alert("로그인 이후 사용이 가능합니다.");
-		window.history.back();
+		location.href="loginForm.jsp";
 	</script>
 	<%
 	} else if (grade < 1) {
@@ -66,13 +66,7 @@
 					<ul class="dropdown-menu">
 						<li><a href="freeBoard.jsp">자유 게시판</a></li>
 						<li><a href="boardQnA.jsp">QnA</a></li>
-						<%
-							if (grade >= 1){
-						%>
 						<li class="active"><a href="guildBoard.jsp">길드원 게시판</a></li>
-						<%
-							}
-						%>
 					</ul>
 				</li>
 				<li class="dropdown">
@@ -81,13 +75,7 @@
 						aria-expanded="false">길드원<span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="guildMembers.jsp">길드 구성원</a></li>
-						<%
-							if (grade >= 1){
-						%>
 						<li><a href="nobelesseTable.jsp">길드원 노블표</a></li>
-						<%
-							}
-						%>
 					</ul>
 				</li>
 			</ul>
@@ -117,7 +105,7 @@
 				<table class="table table-striped" style="text-align: center; border: 1px solid #dddddd">
 					<thead>
 						<tr>
-							<th colspan="2" style="background-color: #eeeeeee; text-align: center">길드원 게시판 글쓰기</th>
+							<th style="background-color: #eeeeeee; text-align: center">길드원 게시판 글쓰기</th>
 						</tr>
 					</thead>
 					<tbody>

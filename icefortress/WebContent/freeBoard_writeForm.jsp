@@ -23,7 +23,7 @@
 	%>
 	<script>
 		alert("로그인 이후 사용이 가능합니다.");
-		window.history.back();
+		location.href="loginForm.jsp";
 	</script>
 	<%
 	}
@@ -110,7 +110,7 @@
 				<table class="table table-striped" style="text-align: center; border: 1px solid #dddddd">
 					<thead>
 						<tr>
-							<th colspan="2" style="background-color: #eeeeeee; text-align: center">자유 게시판 글쓰기</th>
+							<th style="background-color: #eeeeeee; text-align: center">자유 게시판 글쓰기</th>
 						</tr>
 					</thead>
 					<tbody>
