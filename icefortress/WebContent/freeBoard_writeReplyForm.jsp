@@ -23,7 +23,7 @@
 	%>
 	<script>
 		alert("로그인 이후 사용이 가능합니다.");
-		window.history.back();
+		location.href="loginForm.jsp";
 	</script>
 	<%
 	}
@@ -31,6 +31,10 @@
 	int writtenID = 0;
 	if (request.getParameter("writtenID") != null){
 		writtenID = Integer.parseInt(request.getParameter("writtenID"));
+	}
+	int pageNumber = 1;
+	if (request.getParameter("pageNumber") != null) {
+		pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
 	}
 	%>
 	<nav class="navbar navbar-default">
@@ -115,7 +119,7 @@
 				<table class="table table-striped" style="text-align: center; border: 1px solid #dddddd">
 					<thead>
 						<tr>
-							<th colspan="2" style="background-color: #eeeeeee; text-align: center">답글쓰기</th>
+							<th style="background-color: #eeeeeee; text-align: center">답글쓰기</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -128,7 +132,7 @@
 					</tbody>
 				</table>
 				<button id="previous" type="button" class="btn btn-primary">이전</button>
-				<button id="submit_writeReply" name="<%=writtenID %>" type="button" class="btn btn-primary pull-right">답글쓰기</button>
+				<button id="submit_writeReply" name="<%=writtenID %>,<%=pageNumber %>" type="button" class="btn btn-primary pull-right">답글쓰기</button>
 			</form>
 		</div>
 	</div>

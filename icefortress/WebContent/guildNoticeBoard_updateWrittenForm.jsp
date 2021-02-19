@@ -25,7 +25,7 @@
 %>
 <script>
 	alert("로그인 이후 사용이 가능합니다.");
-	window.history.back();
+	location.href="loginForm.jsp";
 </script>
 <%
 	} else if (grade < 2) {
@@ -41,13 +41,18 @@
 	if (request.getParameter("writtenID") != null){
 		writtenID = Integer.parseInt(request.getParameter("writtenID"));
 	}
+	int pageNumber = 1;
+	if (request.getParameter("pageNumber") != null){
+		pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
+	}
+	
 	GuildBoard_NoticeAndMeetingLogDBBean manager2 = GuildBoard_NoticeAndMeetingLogDBBean.getInstance();
 	GuildBoard_NoticeAndMeetingLogDataBean written = manager2.viewWritten(writtenID);
 	
 	if (writtenID == 0 || written.getLocation() != 1){
 %>
 <script>
-	alert("유효하지 않은 글입니다.");
+	alert("존재하지 않는 글입니다.");
 	window.history.back();
 </script>
 <%
@@ -93,13 +98,7 @@
 					<ul class="dropdown-menu">
 						<li><a href="freeBoard.jsp">자유 게시판</a></li>
 						<li><a href="boardQnA.jsp">QnA</a></li>
-						<%
-							if (grade >= 1){
-						%>
 						<li class="active"><a href="guildBoard.jsp">길드원 게시판</a></li>
-						<%
-							}
-						%>
 					</ul>
 				</li>
 				<li class="dropdown">
@@ -108,13 +107,7 @@
 						aria-expanded="false">길드원<span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="guildMembers.jsp">길드 구성원</a></li>
-						<%
-							if (grade >= 1){
-						%>
 						<li><a href="nobelesseTable.jsp">길드원 노블표</a></li>
-						<%
-							}
-						%>
 					</ul>
 				</li>
 			</ul>
@@ -122,13 +115,7 @@
 				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">회원정보<span
 						class="caret"></span></a>
 					<ul class="dropdown-menu">
-					<%
-						if(grade >= 2){
-					%>
 						<li><a href="manager.jsp">관리</a></li>
-					<%
-						}
-					%>
 						<li><a href="modify.jsp">회원정보 수정</a></li>
 						<li><a href="logout.jsp">로그아웃</a></li>
 					</ul>
@@ -142,7 +129,7 @@
 				<table class="table table-striped" style="text-align: center; border: 1px solid #dddddd">
 					<thead>
 						<tr>
-							<th colspan="2" style="background-color: #eeeeeee; text-align: center">공지사항 수정</th>
+							<th style="background-color: #eeeeeee; text-align: center">공지사항 수정</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -155,7 +142,7 @@
 					</tbody>
 				</table>
 				<button id="previous" type="button" class="btn btn-primary">이전</button>
-				<button id="submit_update" type="button" name="<%=written.getWrittenID() %>_<%=written.getLocation() %>" class="btn btn-primary pull-right">수정</button>
+				<button id="submit_update" type="button" name="<%=written.getWrittenID() %>_<%=written.getLocation() %>_<%=pageNumber %>" class="btn btn-primary pull-right">수정</button>
 			</form>
 		</div>
 	</div>
