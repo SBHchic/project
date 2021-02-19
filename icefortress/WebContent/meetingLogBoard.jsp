@@ -32,7 +32,7 @@ a, a:hover {
 %>
 	<script>
 		alert("로그인 이후 사용이 가능합니다.");
-		window.history.back();
+		location.href="loginForm.jsp";
 	</script>
 	<%
 	} else if (grade < 2) {
@@ -96,13 +96,7 @@ a, a:hover {
 					<ul class="dropdown-menu">
 						<li><a href="freeBoard.jsp">자유 게시판</a></li>
 						<li><a href="boardQnA.jsp">QnA</a></li>
-						<%
-							if (grade >= 1){
-						%>
 						<li class="active"><a href="guildBoard.jsp">길드원 게시판</a></li>
-						<%
-							}
-						%>
 					</ul>
 				</li>
 				<li class="dropdown">
@@ -111,13 +105,7 @@ a, a:hover {
 						aria-expanded="false">길드원<span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="guildMembers.jsp">길드 구성원</a></li>
-						<%
-							if (grade >= 1){
-						%>
 						<li><a href="nobelesseTable.jsp">길드원 노블표</a></li>
-						<%
-							}
-						%>
 					</ul>
 				</li>
 			</ul>
@@ -127,13 +115,7 @@ a, a:hover {
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false">회원정보<span class="caret"></span></a>
 					<ul class="dropdown-menu">
-					<%
-						if(grade >= 2){
-					%>
 						<li><a href="manager.jsp">관리</a></li>
-					<%
-						}
-					%>
 						<li><a href="modify.jsp">회원정보 수정</a></li>
 						<li><a href="logout.jsp">로그아웃</a></li>
 					</ul>
@@ -144,17 +126,21 @@ a, a:hover {
 	<div class="container">
 		<div class="jumbotron" style="padding-top: 20px;">
 			<nav class="navbar navbar-default">
-				<div class="collapse navbar-collapse">
-					<ul class="nav navbar-nav">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed"
+							data-toggle="collapse" data-target="#bs-example-navbar-collapse-2"
+							aria-expanded="false">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="javascript:;">길드 게시판</a>
+					</div>
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+						<ul class="nav navbar-nav">
 						<li><a href="guildBoard.jsp">길드원 게시판</a></li>
 						<li><a href="guildNoticeBoard.jsp">길드원 공지사항</a></li>
-						<%
-						if (grade > 1){
-						%>
 						<li class="active"><a href="meetingLogBoard.jsp">운영진 회의록</a></li>
-						<%
-						}
-						%>
 					</ul>
 				</div>
 			</nav>
@@ -175,7 +161,7 @@ a, a:hover {
 						%>
 					<tr>
 						<td><b><%=start+i %></b></td>
-						<td><a href="meetingLogBoard_view.jsp?writtenID=<%=list.get(i).getWrittenID() %>"><%=list.get(i).getTitle() %></a></td>
+						<td><a href="meetingLogBoard_view.jsp?writtenID=<%=list.get(i).getWrittenID() %>&pageNumber=<%=pageNumber%>"><%=list.get(i).getTitle().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getReg_Date() %></td>
 					</tr>
@@ -239,15 +225,9 @@ a, a:hover {
 			%>
 			</div><br>
 		</div>
-		<%
-		if (grade > 1){
-		%>
 		<div style="text-align: right">
 			<a href="meetingLogBoard_writeForm.jsp" class="btn btn-primary pull-right">회의록 작성</a>
 		</div>
-		<%
-		}
-		%>
 	</div>
 <script src="js/jquery-3.5.1.min.js"></script>
 <script src="js/bootstrap.js"></script>

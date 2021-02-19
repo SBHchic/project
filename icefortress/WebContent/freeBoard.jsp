@@ -32,7 +32,7 @@ a, a:hover {
 %>
 	<script>
 		alert("로그인 이후 사용이 가능합니다.");
-		window.history.back();
+		location.href="loginForm.jsp";
 	</script>
 	<%
 	}
@@ -150,7 +150,7 @@ a, a:hover {
 					%>
 					<tr>
 						<td><b>공지</b></td>
-						<td><a href="freeBoard_view.jsp?writtenID=<%=noticeList.get(i).getWrittenID() %>&replyID=<%=noticeList.get(i).getReplyID()%>"><%=noticeList.get(i).getTitle() %></a></td>
+						<td><a href="freeBoard_view.jsp?writtenID=<%=noticeList.get(i).getWrittenID() %>&replyID=<%=noticeList.get(i).getReplyID()%>&pageNumber=<%=pageNumber%>"><%=noticeList.get(i).getTitle().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></a></td>
 						<td><%=noticeList.get(i).getUserID() %></td>
 						<td><%=noticeList.get(i).getReg_Date() %></td>
 					</tr>
@@ -166,7 +166,7 @@ a, a:hover {
 					%>
 					<tr>
 						<td><%=boardID %>-<%=replyCount %></td>
-						<td><a href="freeBoard_view.jsp?writtenID=<%=list.get(i).getWrittenID() %>&replyID=<%=list.get(i).getReplyID()%>"><%=list.get(i).getTitle() %></a></td>
+						<td><a href="freeBoard_view.jsp?writtenID=<%=list.get(i).getWrittenID() %>&replyID=<%=list.get(i).getReplyID()%>&pageNumber=<%=pageNumber%>"><%=list.get(i).getTitle().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getReg_Date() %></td>
 					</tr>
@@ -184,7 +184,7 @@ a, a:hover {
 					%>
 					<tr>
 						<td><%=boardID %>-<%=replyCount %></td>
-						<td><a href="freeBoard_view.jsp?writtenID=<%=list.get(i).getWrittenID() %>&replyID=<%=list.get(i).getReplyID()%>"><%=list.get(i).getTitle() %></a></td>
+						<td><a href="freeBoard_view.jsp?writtenID=<%=list.get(i).getWrittenID() %>&replyID=<%=list.get(i).getReplyID()%>&pageNumber=<%=pageNumber%>"><%=list.get(i).getTitle().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getReg_Date() %></td>
 					</tr>
@@ -195,7 +195,7 @@ a, a:hover {
 					%>
 					<tr>
 						<td><%=boardID %>-<%=replyCount %></td>
-						<td><a href="freeBoard_view.jsp?writtenID=<%=list.get(i).getWrittenID() %>&replyID=<%=list.get(i).getReplyID()%>"><%=list.get(i).getTitle() %></a></td>
+						<td><a href="freeBoard_view.jsp?writtenID=<%=list.get(i).getWrittenID() %>&replyID=<%=list.get(i).getReplyID()%>&pageNumber=<%=pageNumber%>"><%=list.get(i).getTitle().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getReg_Date() %></td>
 					</tr>
@@ -213,7 +213,7 @@ a, a:hover {
 					%>
 					<tr>
 						<td><%=boardID %>-<%=replyCount %></td>
-						<td><a href="freeBoard_view.jsp?writtenID=<%=list.get(i).getWrittenID() %>&replyID=<%=list.get(i).getReplyID()%>"><%=list.get(i).getTitle() %></a></td>
+						<td><a href="freeBoard_view.jsp?writtenID=<%=list.get(i).getWrittenID() %>&replyID=<%=list.get(i).getReplyID()%>&pageNumber=<%=pageNumber%>"><%=list.get(i).getTitle().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getReg_Date() %></td>
 					</tr>
@@ -223,7 +223,7 @@ a, a:hover {
 					%>
 					<tr>
 						<td><%=boardID %>-<%=replyCount %></td>
-						<td><a href="freeBoard_view.jsp?writtenID=<%=list.get(i).getWrittenID() %>&replyID=<%=list.get(i).getReplyID()%>"><%=list.get(i).getTitle() %></a></td>
+						<td><a href="freeBoard_view.jsp?writtenID=<%=list.get(i).getWrittenID() %>&replyID=<%=list.get(i).getReplyID()%>&pageNumber=<%=pageNumber%>"><%=list.get(i).getTitle().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getReg_Date() %></td>
 					</tr>
@@ -233,7 +233,7 @@ a, a:hover {
 					%>
 					<tr>
 						<td><%=start+i %></td>
-						<td><a href="freeBoard_view.jsp?writtenID=<%=list.get(i).getWrittenID() %>&replyID=<%=list.get(i).getReplyID()%>"><%=list.get(i).getTitle() %></a></td>
+						<td><a href="freeBoard_view.jsp?writtenID=<%=list.get(i).getWrittenID() %>&replyID=<%=list.get(i).getReplyID()%>&pageNumber=<%=pageNumber%>"><%=list.get(i).getTitle().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getReg_Date() %></td>
 					</tr>

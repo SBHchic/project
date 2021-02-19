@@ -32,7 +32,7 @@ a, a:hover {
 %>
 	<script>
 		alert("로그인 이후 사용이 가능합니다.");
-		window.history.back();
+		location.href="loginForm.jsp";
 	</script>
 	<%
 	} else if (grade < 1) {
@@ -96,13 +96,7 @@ a, a:hover {
 					<ul class="dropdown-menu">
 						<li><a href="freeBoard.jsp">자유 게시판</a></li>
 						<li><a href="boardQnA.jsp">QnA</a></li>
-						<%
-							if (grade >= 1){
-						%>
 						<li class="active"><a href="guildBoard.jsp">길드원 게시판</a></li>
-						<%
-							}
-						%>
 					</ul>
 				</li>
 				<li class="dropdown">
@@ -111,13 +105,7 @@ a, a:hover {
 						aria-expanded="false">길드원<span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="guildMembers.jsp">길드 구성원</a></li>
-						<%
-							if (grade >= 1){
-						%>
 						<li><a href="nobelesseTable.jsp">길드원 노블표</a></li>
-						<%
-							}
-						%>
 					</ul>
 				</li>
 			</ul>
@@ -144,8 +132,18 @@ a, a:hover {
 	<div class="container">
 		<div class="jumbotron" style="padding-top: 20px;">
 			<nav class="navbar navbar-default">
-				<div class="collapse navbar-collapse">
-					<ul class="nav navbar-nav">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed"
+							data-toggle="collapse" data-target="#bs-example-navbar-collapse-2"
+							aria-expanded="false">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="javascript:;">길드 게시판</a>
+					</div>
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+						<ul class="nav navbar-nav">
 						<li><a href="guildBoard.jsp">길드원 게시판</a></li>
 						<li class="active"><a href="guildNoticeBoard.jsp">길드원 공지사항</a></li>
 						<%
@@ -171,12 +169,11 @@ a, a:hover {
 				</thead>
 				<tbody>
 					<%
-					int boardID = start;
 					for (int i = 0; i < list.size(); i++){
 						%>
 					<tr>
 						<td><b>공지</b></td>
-						<td><a href="guildNoticeBoard_view.jsp?writtenID=<%=list.get(i).getWrittenID() %>"><%=list.get(i).getTitle() %></a></td>
+						<td><a href="guildNoticeBoard_view.jsp?writtenID=<%=list.get(i).getWrittenID() %>&pageNumber=<%=pageNumber%>"><%=list.get(i).getTitle().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getReg_Date() %></td>
 					</tr>

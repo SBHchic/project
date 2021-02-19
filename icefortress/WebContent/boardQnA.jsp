@@ -32,7 +32,7 @@ a, a:hover {
 %>
 	<script>
 		alert("로그인 이후 사용이 가능합니다.");
-		window.history.back();
+		location.href="loginForm.jsp";
 	</script>
 	<%
 	}
@@ -156,7 +156,7 @@ a, a:hover {
 					%>
 					<tr>
 						<td><b>공지</b></td>
-						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=noticeList.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=noticeList.get(i).getBoardQnA_ReplyID()%>"><%=noticeList.get(i).getBoardQnA_Title() %></a></td>
+						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=noticeList.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=noticeList.get(i).getBoardQnA_ReplyID()%>&pageNumber=<%=pageNumber%>"><%=noticeList.get(i).getBoardQnA_Title().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></a></td>
 						<td><%=noticeList.get(i).getUserID() %></td>
 						<td><%=noticeList.get(i).getBoardQnA_Reg_Date() %></td>
 					</tr>
@@ -173,7 +173,7 @@ a, a:hover {
 					%>
 					<tr>
 						<td><%=boardID %>-<%=replyCount %></td>
-						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>"><%=list.get(i).getBoardQnA_Title() %></a></td>
+						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>&pageNumber=<%=pageNumber%>"><%=list.get(i).getBoardQnA_Title().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getBoardQnA_Reg_Date() %></td>
 					</tr>
@@ -191,7 +191,7 @@ a, a:hover {
 					%>
 					<tr>
 						<td><%=boardID %>-<%=replyCount %></td>
-						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>"><%=list.get(i).getBoardQnA_Title() %></a></td>
+						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>&pageNumber=<%=pageNumber%>"><%=list.get(i).getBoardQnA_Title().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getBoardQnA_Reg_Date() %></td>
 					</tr>
@@ -202,7 +202,7 @@ a, a:hover {
 					%>
 					<tr>
 						<td><%=boardID %>-<%=replyCount %></td>
-						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>"><%=list.get(i).getBoardQnA_Title() %></a></td>
+						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>&pageNumber=<%=pageNumber%>"><%=list.get(i).getBoardQnA_Title().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getBoardQnA_Reg_Date() %></td>
 					</tr>
@@ -220,7 +220,7 @@ a, a:hover {
 					%>
 					<tr>
 						<td><%=boardID %>-<%=replyCount %></td>
-						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>"><%=list.get(i).getBoardQnA_Title() %></a></td>
+						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>&pageNumber=<%=pageNumber%>"><%=list.get(i).getBoardQnA_Title().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getBoardQnA_Reg_Date() %></td>
 					</tr>
@@ -230,7 +230,7 @@ a, a:hover {
 					%>
 					<tr>
 						<td><%=boardID %>-<%=replyCount %></td>
-						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>"><%=list.get(i).getBoardQnA_Title() %></a></td>
+						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>&pageNumber=<%=pageNumber%>"><%=list.get(i).getBoardQnA_Title().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getBoardQnA_Reg_Date() %></td>
 					</tr>
@@ -240,7 +240,7 @@ a, a:hover {
 					%>
 					<tr>
 						<td><%=start+i %></td>
-						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>"><%=list.get(i).getBoardQnA_Title() %></a></td>
+						<td><a href="boardQnA_view.jsp?boardQnA_ID=<%=list.get(i).getBoardQnA_ID() %>&boardQnA_ReplyID=<%=list.get(i).getBoardQnA_ReplyID()%>&pageNumber=<%=pageNumber%>"><%=list.get(i).getBoardQnA_Title().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getBoardQnA_Reg_Date() %></td>
 					</tr>
@@ -308,8 +308,8 @@ a, a:hover {
 			</div><br>
 		</div>
 		<div style="text-align: right">
-				<a href="writeQnAForm.jsp" class="btn btn-primary pull-right">글쓰기</a>
-			</div>
+			<a href="writeQnAForm.jsp" class="btn btn-primary pull-right">글쓰기</a>
+		</div>
 	</div>
 <script src="js/jquery-3.5.1.min.js"></script>
 <script src="js/bootstrap.js"></script>
