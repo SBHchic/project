@@ -10,7 +10,7 @@
 	String userID = (String)session.getAttribute("userID");
 	byte notice = 0;
 	if (request.getParameter("notice") != null){
-		notice = 1;
+		notice = Byte.parseByte(request.getParameter("notice"));
 	}
 	
 	FreeBoardDBBean manager = FreeBoardDBBean.getInstance();
