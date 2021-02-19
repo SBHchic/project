@@ -26,7 +26,7 @@
 	%>
 	<script>
 		alert("로그인 이후 사용이 가능합니다.");
-		window.history.back();
+		location.href="loginForm.jsp";
 	</script>
 	<%
 	} else if (grade < 1) {
@@ -40,7 +40,11 @@
 
 	int writtenID = 0;
 	if (request.getParameter("writtenID") != null) {
-	writtenID = Integer.parseInt(request.getParameter("writtenID"));
+		writtenID = Integer.parseInt(request.getParameter("writtenID"));
+	}
+	int pageNumber = 1;
+	if (request.getParameter("pageNumber") != null){
+		pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
 	}
 
 	GuildBoard_NoticeAndMeetingLogDBBean manager2 = GuildBoard_NoticeAndMeetingLogDBBean.getInstance();
@@ -49,7 +53,7 @@
 	if (writtenID == 0 || written.getAvailable() == 0 || written.getLocation() != 1) {
 	%>
 	<script>
-		alert("유효하지 않은 글입니다.");
+		alert("존재하지 않는 글입니다.");
 		window.history.back();
 	</script>
 	<%
@@ -86,13 +90,7 @@
 					<ul class="dropdown-menu">
 						<li><a href="freeBoard.jsp">자유 게시판</a></li>
 						<li><a href="boardQnA.jsp">QnA</a></li>
-						<%
-							if (grade >= 1){
-						%>
 						<li class="active"><a href="guildBoard.jsp">길드원 게시판</a></li>
-						<%
-							}
-						%>
 					</ul>
 				</li>
 				<li class="dropdown">
@@ -101,13 +99,7 @@
 						aria-expanded="false">길드원<span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="guildMembers.jsp">길드 구성원</a></li>
-						<%
-							if (grade >= 1){
-						%>
 						<li><a href="nobelesseTable.jsp">길드원 노블표</a></li>
-						<%
-							}
-						%>
 					</ul>
 				</li>
 				
@@ -135,8 +127,18 @@
 	<div class="container">
 		<div class="jumbotron" style="padding-top: 20px;">
 			<nav class="navbar navbar-default">
-				<div class="collapse navbar-collapse">
-					<ul class="nav navbar-nav">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed"
+							data-toggle="collapse" data-target="#bs-example-navbar-collapse-2"
+							aria-expanded="false">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="javascript:;">길드 게시판</a>
+					</div>
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+						<ul class="nav navbar-nav">
 						<li><a href="guildBoard.jsp">길드원 게시판</a></li>
 						<li class="active"><a href="guildNoticeBoard.jsp">길드원 공지사항</a></li>
 						<%
@@ -169,20 +171,20 @@
 					</tr>
 				</tbody>
 			</table>
-			<button id="previous" type="button" class="btn btn-primary">목록</button>
+			<a href="guildNoticeBoard.jsp?pageNumber=<%=pageNumber %>" class="btn btn-primary">목록</a>
 			<%
 			if (userID.equals(written.getUserID())) {
 			%>
 			<a
-				href="guildNoticeBoard_updateWrittenForm.jsp?writtenID=<%=written.getWrittenID()%>"
+				href="guildNoticeBoard_updateWrittenForm.jsp?writtenID=<%=written.getWrittenID()%>&pageNumber=<%=pageNumber %>"
 				class="btn btn-primary">수정</a>
-			<button id="deleteWritten" name="<%=written.getWrittenID()%>_<%=written.getLocation() %>" type="button"
-				class="btn btn-primary">삭제</button>
+			<button id="deleteWritten" name="<%=written.getWrittenID()%>_<%=written.getLocation() %>_<%=pageNumber %>" type="button"
+				class="btn btn-danger">삭제</button>
 			<%
 			} else if (grade > 1) {
 			%>
-			<button id="deleteWritten" name="<%=written.getWrittenID()%>_<%=written.getLocation() %>" type="button"
-				class="btn btn-primary">삭제</button>
+			<button id="deleteWritten" name="<%=written.getWrittenID()%>_<%=written.getLocation() %>_<%=pageNumber %>" type="button"
+				class="btn btn-danger">삭제</button>
 			<%
 			}
 			%>

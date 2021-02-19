@@ -26,18 +26,23 @@
 	%>
 	<script>
 		alert("로그인 이후 사용이 가능합니다.");
-		window.history.back();
+		location.href="loginForm.jsp";
 	</script>
 	<%
 	}
 
 	int boardQnA_ID = 0;
 	if (request.getParameter("boardQnA_ID") != null) {
-	boardQnA_ID = Integer.parseInt(request.getParameter("boardQnA_ID"));
+		boardQnA_ID = Integer.parseInt(request.getParameter("boardQnA_ID"));
 	}
 	int boardQnA_ReplyID = -1;
 	if (request.getParameter("boardQnA_ReplyID") != null) {
-	boardQnA_ReplyID = Integer.parseInt(request.getParameter("boardQnA_ReplyID"));
+		boardQnA_ReplyID = Integer.parseInt(request.getParameter("boardQnA_ReplyID"));
+	}
+	
+	int pageNumber = 1;
+	if (request.getParameter("pageNumber") != null){
+		pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
 	}
 
 	BoardQnADBBean manager2 = BoardQnADBBean.getInstance();
@@ -46,7 +51,7 @@
 	if (boardQnA_ID == 0 || boardQnA_ReplyID == -1 || written.getAvailable() == 0) {
 	%>
 	<script>
-		alert("유효하지 않은 글입니다.");
+		alert("존재 하지 않는 글입니다.");
 		window.history.back();
 	</script>
 	<%
@@ -161,26 +166,26 @@
 					</tr>
 				</tbody>
 			</table>
-			<button id="previous" type="button" class="btn btn-primary">목록</button>
+			<a href="boardQnA.jsp?pageNumber=<%=pageNumber %>" class="btn btn-primary">목록</a>
 			<%
-			if (userID != null && userID.equals(written.getUserID())) {
+			if (userID.equals(written.getUserID())) {
 			%>
 			<a
-				href="boardQnA_updateWrittenForm.jsp?boardQnA_ID=<%=written.getBoardQnA_ID()%>&boardQnA_ReplyID=<%=written.getBoardQnA_ReplyID()%>"
+				href="boardQnA_updateWrittenForm.jsp?boardQnA_ID=<%=written.getBoardQnA_ID()%>&boardQnA_ReplyID=<%=written.getBoardQnA_ReplyID()%>&pageNumber=<%=pageNumber %>"
 				class="btn btn-primary">수정</a>
-			<button id="deleteWritten" name="<%=written.getBoardQnA_ID()%>,<%=written.getBoardQnA_ReplyID()%>" type="button"
-				class="btn btn-primary">삭제</button>
+			<button id="deleteWritten" name="<%=written.getBoardQnA_ID()%>,<%=written.getBoardQnA_ReplyID()%>,<%=pageNumber %>" type="button"
+				class="btn btn-danger">삭제</button>
 			<%
 			} else if (grade > 1) {
 			%>
-			<button id="deleteWritten" name="<%=written.getBoardQnA_ID()%>,<%=written.getBoardQnA_ReplyID()%>" type="button"
-				class="btn btn-primary">삭제</button>
+			<button id="deleteWritten" name="<%=written.getBoardQnA_ID()%>,<%=written.getBoardQnA_ReplyID()%>,<%=pageNumber %>" type="button"
+				class="btn btn-danger">삭제</button>
 			<%
 			}
 			
 			if (!(written.getNotice() == 1)){
 			%>
-			<a href="boardQnA_writeReplyForm.jsp?boardQnA_ID=<%=written.getBoardQnA_ID()%>" class="btn btn-primary pull-right">답글쓰기</a>
+			<a href="boardQnA_writeReplyForm.jsp?boardQnA_ID=<%=written.getBoardQnA_ID()%>&pageNumber=<%=pageNumber %>" class="btn btn-primary pull-right">답글쓰기</a>
 			<%
 			}
 			%>

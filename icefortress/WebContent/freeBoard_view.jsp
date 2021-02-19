@@ -26,7 +26,7 @@
 	%>
 	<script>
 		alert("로그인 이후 사용이 가능합니다.");
-		window.history.back();
+		location.href="loginForm.jsp":
 	</script>
 	<%
 	}
@@ -39,6 +39,10 @@
 	if (request.getParameter("replyID") != null) {
 	replyID = Integer.parseInt(request.getParameter("replyID"));
 	}
+	int pageNumber = 1;
+	if (request.getParameter("pageNumber") != null){
+		pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
+	}
 
 	FreeBoardDBBean manager2 = FreeBoardDBBean.getInstance();
 	FreeBoardDataBean written = manager2.viewWritten(writtenID, replyID);
@@ -46,7 +50,7 @@
 	if (writtenID == 0 || replyID == -1 || written.getAvailable() == 0) {
 	%>
 	<script>
-		alert("유효하지 않은 글입니다.");
+		alert("존재하지 않는 글입니다.");
 		window.history.back();
 	</script>
 	<%
@@ -151,26 +155,26 @@
 					</tr>
 				</tbody>
 			</table>
-			<button id="previous" type="button" class="btn btn-primary">목록</button>
+			<a href="freeBoard.jsp?pageNumber=<%=pageNumber %>" class="btn btn-primary">목록</a>
 			<%
 			if (userID.equals(written.getUserID())) {
 			%>
 			<a
-				href="freeBoard_updateWrittenForm.jsp?writtenID=<%=written.getWrittenID()%>&replyID=<%=written.getReplyID()%>"
+				href="freeBoard_updateWrittenForm.jsp?writtenID=<%=written.getWrittenID()%>&replyID=<%=written.getReplyID()%>&pageNumber=<%=pageNumber %>"
 				class="btn btn-primary">수정</a>
-			<button id="deleteWritten" name="<%=written.getWrittenID()%>,<%=written.getReplyID()%>" type="button"
-				class="btn btn-primary">삭제</button>
+			<button id="deleteWritten" name="<%=written.getWrittenID()%>,<%=written.getReplyID()%>,<%=pageNumber %>" type="button"
+				class="btn btn-danger">삭제</button>
 			<%
 			} else if (grade > 1) {
 			%>
-			<button id="deleteWritten" name="<%=written.getWrittenID()%>,<%=written.getReplyID()%>" type="button"
-				class="btn btn-primary">삭제</button>
+			<button id="deleteWritten" name="<%=written.getWrittenID()%>,<%=written.getReplyID()%>,<%=pageNumber %>" type="button"
+				class="btn btn-danger">삭제</button>
 			<%
 			}
 			
 			if (!(written.getNotice() == 1)){
 			%>
-			<a href="freeBoard_writeReplyForm.jsp?writtenID=<%=written.getWrittenID()%>" class="btn btn-primary pull-right">답글쓰기</a>
+			<a href="freeBoard_writeReplyForm.jsp?writtenID=<%=written.getWrittenID()%>&pageNumber=<%=pageNumber %>" class="btn btn-primary pull-right">답글쓰기</a>
 			<%
 			}
 			%>
