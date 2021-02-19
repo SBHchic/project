@@ -18,9 +18,9 @@ $(document).ready(function(){
 				success:function(data){
 					if (data == 1){
 						if ($("#submit_write").attr("name") == 1){
-							location.href("guildNoticeBoard.jsp");
+							location.href="guildNoticeBoard.jsp";
 						} else if ($("#submit_write").attr("name") == 0){
-							location.href("meetingLogBoard.jsp");
+							location.href="meetingLogBoard.jsp";
 						} else {
 							alert("알수 없는 오류가 발생했습니다.");
 						}
@@ -47,9 +47,9 @@ $(document).ready(function(){
 				success:function(data){
 					if (data == 1){
 						if (arr[1] == 1){
-							location.href("guildNoticeBoard.jsp");
+							location.href="guildNoticeBoard.jsp?pageNumber="+arr[2];
 						} else if (arr[1] == 0){
-							location.href("meetingLogBoard.jsp");
+							location.href="meetingLogBoard.jsp?pageNumber="+arr[2];
 						} else {
 							alert("알수 없는 오류가 발생했습니다.");
 						}
@@ -84,9 +84,9 @@ $(document).ready(function(){
 				success:function(data){
 					if (data == 1){
 						if(arr[1] == 1){
-							location.href("guildNoticeBoard_view.jsp?writtenID="+arr[0]);
+							location.href="guildNoticeBoard_view.jsp?writtenID="+arr[0]+"&pageNumber="+arr[2];
 						} else if (arr[1] == 0){
-							location.href("meetingLogBoard_view.jsp?writtenID="+arr[0]);
+							location.href="meetingLogBoard_view.jsp?writtenID="+arr[0]+"&pageNumber="+arr[2];
 						} else {
 							alert("알 수 없는 오류가 발생했습니다.");
 						}
@@ -109,9 +109,9 @@ function page(pageBtn){
 	var pageNum = arr[0];
 	var location = arr[1];
 	if(location == 1){
-		location.href("guildNoticeBoard.jsp?pageNumber="+pageNum);
+		location.href="guildNoticeBoard.jsp?pageNumber="+pageNum;
 	} else {
-		location.href("meetingLogBoard.jsp?pageNumber="+pageNum);
+		location.href="meetingLogBoard.jsp?pageNumber="+pageNum;
 	}
 	
 }

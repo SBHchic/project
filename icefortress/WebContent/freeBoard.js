@@ -17,7 +17,7 @@ $(document).ready(function(){
 				data:query,
 				success:function(data){
 					if (data == 1){
-						location.href("freeBoard.jsp");
+						location.href="freeBoard.jsp";
 					} else {
 						alert("작성에 실패했습니다.");
 					}
@@ -41,7 +41,7 @@ $(document).ready(function(){
 				data:query,
 				success:function(data){
 					if (data == 1){
-						location.href("freeBoard.jsp");
+						location.href="freeBoard.jsp?pageNumber="+arr[2];
 					} else if (data == 0){
 						alert("접근 권한이 없습니다.");
 					} else {
@@ -74,8 +74,7 @@ $(document).ready(function(){
 				data:query,
 				success:function(data){
 					if (data == 1){
-						
-						location.href("freeBoard_view.jsp?writtenID="+arr[0]+"&replyID="+arr[1]);
+						location.href="freeBoard_view.jsp?writtenID="+arr[0]+"&replyID="+arr[1]+"&pageNumber="+arr[2];
 					} else {
 						alert("수정에 실패했습니다.");
 					}
@@ -87,12 +86,14 @@ $(document).ready(function(){
 	// freeBoard_writeReplyForm.jsp 에서 답글쓰기 버튼을 눌렀을 때
 	$("#submit_writeReply").click(function(){
 		checkWrite();
+		var tmp = $("#submit_writeReply").attr("name");
+		var arr = tmp.split(",");
 		
 		if (status) {
 			var query = {
 					title:$("#title").val(),
 					content:$("#content").val(),
-					writtenID:$("#submit_writeReply").attr("name")
+					writtenID:arr[0]
 			};
 			$.ajax({
 				type:"post",
@@ -100,7 +101,7 @@ $(document).ready(function(){
 				data:query,
 				success:function(data){
 					if (data == 1){
-						location.href("freeBoard.jsp");
+						location.href="freeBoard.jsp?pageNumber="+arr[1];
 					} else {
 						alert("작성에 실패했습니다.");
 					}
@@ -143,7 +144,7 @@ $(document).ready(function(){
 
 function page(pageBtn){
 	var pageNum = pageBtn.name;
-	location.href("freeBoard.jsp?pageNumber="+pageNum);
+	location.href="freeBoard.jsp?pageNumber="+pageNum;
 }
 
 function checkWrite(){

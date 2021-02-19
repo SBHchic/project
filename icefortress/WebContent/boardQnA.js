@@ -17,7 +17,7 @@ $(document).ready(function(){
 				data:query,
 				success:function(data){
 					if (data == 1){
-						location.href("boardQnA.jsp");
+						location.href="boardQnA.jsp";
 					} else {
 						alert("작성에 실패했습니다.");
 					}
@@ -46,8 +46,7 @@ $(document).ready(function(){
 				data:query,
 				success:function(data){
 					if (data == 1){
-						
-						location.href("boardQnA_view.jsp?boardQnA_ID="+arr[0]+"&boardQnA_ReplyID="+arr[1]);
+						location.href="boardQnA_view.jsp?boardQnA_ID="+arr[0]+"&boardQnA_ReplyID="+arr[1]+"&pageNumber="+arr[2];
 					} else {
 						alert("수정에 실패했습니다.");
 					}
@@ -71,7 +70,7 @@ $(document).ready(function(){
 				data:query,
 				success:function(data){
 					if (data == 1){
-						location.href("boardQnA.jsp");
+						location.href="boardQnA.jsp?pageNumber="+arr[2];
 					} else if (data == 0){
 						alert("접근 권한이 없습니다.");
 					} else {
@@ -113,12 +112,14 @@ $(document).ready(function(){
 	// boardQnA_writeReplyForm.jsp 에서 답글쓰기 버튼을 눌렀을 때
 	$("#submit_writeReply").click(function(){
 		checkWrite();
+		var tmp = $("#submit_writeReply").attr("name");
+		var arr = tmp.split(",");
 		
 		if (status) {
 			var query = {
 					boardQnA_Title:$("#boardQnA_Title").val(),
 					boardQnA_Content:$("#boardQnA_Content").val(),
-					boardQnA_ID:$("#submit_writeReply").attr("name")
+					boardQnA_ID:arr[0]
 			};
 			$.ajax({
 				type:"post",
@@ -126,7 +127,7 @@ $(document).ready(function(){
 				data:query,
 				success:function(data){
 					if (data == 1){
-						location.href("boardQnA.jsp");
+						location.href="boardQnA.jsp?pageNumber="+arr[1];
 					} else {
 						alert("작성에 실패했습니다.");
 					}
@@ -284,6 +285,6 @@ function updateComment(updateComment){
 
 function p(pageBtn){
 	var pageNum = pageBtn.name;
-	location.href("boardQnA.jsp?pageNumber="+pageNum);
+	location.href="boardQnA.jsp?pageNumber="+pageNum;
 }
 	
