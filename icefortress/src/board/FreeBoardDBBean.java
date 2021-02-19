@@ -154,7 +154,7 @@ public class FreeBoardDBBean {
         ArrayList<FreeBoardDataBean> list = new ArrayList<FreeBoardDataBean>();
     	try {
     		conn = getConnection();
-    		String SQL = "select * from freeBoard where commentID = 0 and available = 1 order by writtenID desc, replyID asc";
+    		String SQL = "select * from freeBoard where commentID = 0 and available = 1 and notice = 0 order by writtenID desc, replyID asc";
     		pstmt = conn.prepareStatement(SQL);
     		rs = pstmt.executeQuery();
     		while (rs.next()) {
@@ -168,8 +168,6 @@ public class FreeBoardDBBean {
         		tmp.setReg_Date(rs.getString(7));
         		tmp.setContent(rs.getString(8));
         		tmp.setAvailable(rs.getByte(9));
-        		tmp.setDeleteReg_Date(rs.getString(10));
-        		tmp.setNotice(rs.getByte(11));
         		list.add(tmp);
     		}
     	} catch (Exception e) {
@@ -254,8 +252,6 @@ public class FreeBoardDBBean {
         		tmp.setReg_Date(rs.getString(7));
         		tmp.setContent(rs.getString(8));
         		tmp.setAvailable(rs.getByte(9));
-        		tmp.setDeleteReg_Date(rs.getString(10));
-        		tmp.setNotice(rs.getByte(11));
         		list.add(tmp);
     		}
     	} catch (Exception e) {
@@ -317,8 +313,6 @@ public class FreeBoardDBBean {
         		tmp.setReg_Date(rs.getString(7));
         		tmp.setContent(rs.getString(8));
         		tmp.setAvailable(rs.getByte(9));
-        		tmp.setDeleteReg_Date(rs.getString(10));
-        		tmp.setNotice(rs.getByte(11));
         		list.add(tmp);
     		}
     	} catch (Exception e) {
