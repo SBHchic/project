@@ -209,7 +209,7 @@ private static GuildBoard_NoticeAndMeetingLogDBBean instance = new GuildBoard_No
         	rs = pstmt.executeQuery();
         	while(rs.next()) {
         		pstmt = conn.prepareStatement("update guildBoard_noticeAndMeetingLog set available = 0 where writtenID = ?");
-        		pstmt.setInt(2, rs.getInt("writtenID"));
+        		pstmt.setInt(1, rs.getInt("writtenID"));
         		pstmt.executeUpdate();
         	}
         	return 1; // 삭제 성공
