@@ -25,7 +25,7 @@
 %>
 <script>
 	alert("로그인 이후 사용이 가능합니다.");
-	window.history.back();
+	location.href="loginForm.jsp";
 </script>
 <%
 	} else if (grade < 1) {
@@ -45,17 +45,22 @@
 	if (request.getParameter("replyID") != null){
 		replyID = Integer.parseInt(request.getParameter("replyID"));
 	}
+	int pageNumber = 1;
+	if (request.getParameter("pageNumber") != null){
+		pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
+	}
 	
-	if (writtenID == 0 || replyID == -1){
+	GuildBoardDBBean manager2 = GuildBoardDBBean.getInstance();
+	GuildBoardDataBean written = manager2.viewWritten(writtenID, replyID);
+
+	if (writtenID == 0 || replyID == -1 || written.getAvailable() == 0){
 %>
 <script>
-	alert("유효하지 않은 글입니다.");
+	alert("존재하지 않는 글입니다.");
 	window.history.back();
 </script>
 <%
 	}
-	GuildBoardDBBean manager2 = GuildBoardDBBean.getInstance();
-	GuildBoardDataBean written = manager2.viewWritten(writtenID, replyID);
 	
 	if (!(userID.equals(written.getUserID()))) { 
 %>
@@ -97,13 +102,7 @@
 					<ul class="dropdown-menu">
 						<li><a href="freeBoard.jsp">자유 게시판</a></li>
 						<li><a href="boardQnA.jsp">QnA</a></li>
-						<%
-							if (grade >= 1){
-						%>
 						<li class="active"><a href="guildBoard.jsp">길드원 게시판</a></li>
-						<%
-							}
-						%>
 					</ul>
 				</li>
 				<li class="dropdown">
@@ -112,13 +111,7 @@
 						aria-expanded="false">길드원<span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="guildMembers.jsp">길드 구성원</a></li>
-						<%
-							if (grade >= 1){
-						%>
 						<li><a href="nobelesseTable.jsp">길드원 노블표</a></li>
-						<%
-							}
-						%>
 					</ul>
 				</li>
 			</ul>
@@ -146,7 +139,7 @@
 				<table class="table table-striped" style="text-align: center; border: 1px solid #dddddd">
 					<thead>
 						<tr>
-							<th colspan="2" style="background-color: #eeeeeee; text-align: center">글 수정</th>
+							<th style="background-color: #eeeeeee; text-align: center">글 수정</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -162,7 +155,17 @@
 						<tr>
 							<td>
 								<div class="form-check">
+									<%
+									if (written.getNotice() == 1){
+								%>
+									<input type="checkbox" class="form-check-input" id="notice" value="1" checked>
+								<%
+									} else {
+								%>
 									<input type="checkbox" class="form-check-input" id="notice" value="1">
+								<%
+									}
+								%>
 									<label class="form-check-label" for="notice">공지사항으로 작성</label>
 								</div>
 							</td>
@@ -173,7 +176,7 @@
 					</tbody>
 				</table>
 				<button id="previous" type="button" class="btn btn-primary">이전</button>
-				<button id="submit_update" type="button" name="<%=written.getWrittenID() %>,<%=written.getReplyID() %>" class="btn btn-primary pull-right">수정</button>
+				<button id="submit_update" type="button" name="<%=written.getWrittenID() %>,<%=written.getReplyID() %>,<%=pageNumber %>" class="btn btn-primary pull-right">수정</button>
 			</form>
 		</div>
 	</div>
